@@ -10,26 +10,40 @@
   <link href="{% static 'humanresources/styles.css' %}"  rel="stylesheet">
   <title>{% block title %}ABC{% endblock %}</title>
   {% block script %}
+    <script src="{% static 'humanresources/script.js' %}"></script>
   {% endblock %}
 </head>
 <body>
+  {% comment %} This is Nav {% endcomment %}
+  <nav class="nav">
+    <ul class="nav-list-1">
+      <li class="nav-item">
+        <a href="#">Dashboard</a>
+      </li>
+      <li class="nav-item">
+        <a href="#">Search</a>
+      </li>
+      <li class="nav-item register">
+        <a href="#">Register</a>
+        <ul class="nav-list-sub invisible">
+          <li class="nav-item-sub">
+            <a href="#">Add Employee</a>
+          </li>
+          <li class="nav-item-sub">
+            <a href="#">Add Employer</a>
+          </li>
+          <hr class="hr">
+          <li class="nav-item-sub">
+            <a href="#">Employee register</a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item nav-dropdown">
+        <a href="#">Work Arrange</a>
+      </li>
+    </ul>
+  </nav>
   {% block body %}
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">ABC</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-            <a class="nav-link" href="#">Features</a>
-            <a class="nav-link" href="#">Pricing</a>
-            <a class="nav-link disabled">Disabled</a>
-          </div>
-        </div>
-      </div>
-    </nav>
   {% endblock %}
 </body>
 </html>

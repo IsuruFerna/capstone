@@ -7,7 +7,7 @@ from django.urls import reverse
 # Create your views here.
 
 
-@login_required
+@login_required(login_url="login")
 def index(request):
     return render(request, 'humanresources/index.html')
 
