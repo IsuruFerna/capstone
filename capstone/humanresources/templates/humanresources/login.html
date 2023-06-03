@@ -1,0 +1,29 @@
+{% extends "humanresources/layout.html" %}
+
+{% block title %}
+  Login
+{% endblock %}
+
+{% block body %}
+  <div class="container-form-login">
+    <h1 class="g-col-6">Hello ABC</h1>
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <input type="text" class="form-control" name="username" placeholder="Username">
+      </div>
+      <div class="mb-3">
+        <input type="password" class="form-control" name="password" placeholder="Password">
+      </div>
+
+      {% if message %}
+        <p class="msg-warning">{{ message }}</p>
+      {% endif %}
+      <a id="link-forgot-password" href="#">Forgot password?</a><br>
+      <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}
