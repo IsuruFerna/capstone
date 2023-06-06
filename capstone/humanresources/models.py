@@ -14,7 +14,7 @@ class User(AbstractUser):
         (EMPLOYEE, "Employee")
     ]
 
-    account_type = models.CharField(max_length=8, blank=False,
+    account_type = models.CharField(max_length=1, blank=False,
                                     null=False, choices=ACCOUNT_TYPE_CHOICES, default=EMPLOYEE)
     password_reset = models.BooleanField(default=False)
 
