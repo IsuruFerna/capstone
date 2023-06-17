@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const targetElement = event.target.parentElement;
 
     if (btnDropdown.contains(targetElement)) {
-      console.log('dropdown', navListSub);
+      // console.log('dropdown', navListSub);
 
       // toggle visibility
       if (navListSub.classList.contains('visible')) {

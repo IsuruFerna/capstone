@@ -6,7 +6,9 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
   <link href="{% static 'humanresources/styles.css' %}"  rel="stylesheet">
   <title>{% block title %}ABC{% endblock %}</title>
   {% block script %}
@@ -16,13 +18,13 @@
 <body>
   {% if user.is_authenticated  %}
     {% comment %} This is Nav {% endcomment %}
-    <nav class="nav">
+    {% comment %} <nav class="nav">
       <ul class="nav-list-1">
         <li class="nav-item">
-          <a href="#">Dashboard</a>
+          <a href="{% url 'index' %}">Dashboard</a>
         </li>
         <li class="nav-item">
-          <a href="#">Search</a>
+          <a href="{% url 'search' %}">Search</a>
         </li>
         <li class="nav-item register">
           <a href="#">Register</a>
@@ -43,9 +45,45 @@
           <a href="#">Work Arrange</a>
         </li>
       </ul>
+    </nav> {% endcomment %}
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">ABC</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Search</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Register
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Add Employee</a></li>
+                <li><a class="dropdown-item" href="#">Add Employer</a></li>
+                <hr>
+                <li><a class="dropdown-item" href="#">Employee Register</a></li>
+              </ul>
+            </li>
+           <li class="nav-item">
+              <a class="nav-link" href="#">Work Arrange</a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </nav>
+
   {% endif %}
   {% block body %}
   {% endblock %}
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </body>
 </html>
