@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+from .forms import AddEmployee, FormEmployeeDetails, User_email
+
 # Create your views here.
 
 
@@ -43,3 +45,37 @@ def search(request):
 
 def register(request):
     return render(request, 'humanresources/register.html')
+
+
+def add_employee(request):
+
+    if request.method == "POST":
+        form_email = User_email(request.POST)
+        form_user_details = FormEmployeeDetails(request.POST)
+
+        # data validation to save in database
+        if form_email.is_valid():
+            email_instance = form_email.save()
+
+            # email has used as forginKey to form_user_details
+            if form_user_details.is_valid():
+                user_details_instance = form_user_details.save(commit=False)
+                user_details_instance.user = email_instance
+                user_details_instance.save()
+
+                return HttpResponseRedirect(reverse('index'))
+
+        # else return the site with the typed data
+        else:
+            return render(request, 'humanresources/addEmployee.html', {
+                'form': AddEmployee,
+                'user_details': FormEmployeeDetails,
+                'form_email': User_email
+            })
+
+    # otherwise render new forms
+    return render(request, 'humanresources/addEmployee.html', {
+        'form': AddEmployee(),
+        'user_details': FormEmployeeDetails(),
+        'form_email': User_email()
+    })

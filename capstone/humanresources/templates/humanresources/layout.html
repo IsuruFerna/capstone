@@ -47,7 +47,7 @@
       </ul>
     </nav> {% endcomment %}
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary nav">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">ABC</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,19 +56,19 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+              <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Dashboard</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Search</a>
+              <a class="nav-link" href="{% url 'search' %}">Search</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Register
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Add Employee</a></li>
+                <li><a class="dropdown-item" href="{% url 'add_employee' %}">Add Employee</a></li>
                 <li><a class="dropdown-item" href="#">Add Employer</a></li>
-                <hr>
+                <hr class="hr">
                 <li><a class="dropdown-item" href="#">Employee Register</a></li>
               </ul>
             </li>

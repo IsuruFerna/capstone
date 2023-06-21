@@ -1,7 +1,63 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User
+from .models import User, User_details, Email
 
+DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
+
+
+class AddEmployee(UserCreationForm):
+    password1 = forms.CharField(label="Password",
+                                strip=False,
+                                widget=forms.PasswordInput(attrs={'class': 'form-control',
+                                                                  'placeholder': 'Password'}))
+    password2 = forms.CharField(label="Confirm Password",
+                                strip=False,
+                                widget=forms.PasswordInput(attrs={'class': 'form-control',
+                                                                  'placeholder': 'Confirm Password'}))
+
+    class Meta:
+        model = User
+        fields = ('email', 'password1', 'password2', 'account_type')
+
+        widgets = {
+            'email': forms.TextInput(attrs={'class': 'form-control',
+                                            'placeholder': 'Email'}),
+            # account_type is selected automatically by backend
+        }
+
+
+class FormEmployeeDetails(forms.ModelForm):
+    class Meta:
+        model = User_details
+        fields = ('first_name', 'last_name', 'surname', 'birthday',
+                  'phone', 'address1', 'address2', 'city', 'state', 'zip')
+
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last name'}),
+            'surname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Surname'}),
+            'birthday': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Birthday', 'type': 'date'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone number'}),
+            'address1': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '1234 Main St'}),
+            'address2': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Apartment, studio or floor'}),
+            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
+            'state': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'State'}),
+            'zip': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zip'}),
+        }
+
+
+class User_email(forms.ModelForm):
+    class Meta:
+        model = Email
+        fields = ('email',)
+
+        widgets = {
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+        }
+
+
+class TestForm(forms.Form):
+    text = forms.CharField(max_length=64)
 # class CustomUserCreationForm(UserCreationForm):
 #     # Define the choices for the account type field
 #     MAIN = '1'
