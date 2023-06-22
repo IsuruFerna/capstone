@@ -1,23 +1,26 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.password_validation import validate_password
 from .models import User, User_details, Email
 
 DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
 
 
-class AddEmployee(UserCreationForm):
-    password1 = forms.CharField(label="Password",
+class RegisterUser(UserCreationForm):
+    password1 = forms.CharField(min_length=8, label="Password",
                                 strip=False,
+                                validators=[validate_password],
+                                help_text="Your password must contain atleast one Uppercase letter, one lowercase letter, one digit and symbol!",
                                 widget=forms.PasswordInput(attrs={'class': 'form-control',
                                                                   'placeholder': 'Password'}))
-    password2 = forms.CharField(label="Confirm Password",
+    password2 = forms.CharField(min_length=8, label="Confirm Password",
                                 strip=False,
                                 widget=forms.PasswordInput(attrs={'class': 'form-control',
                                                                   'placeholder': 'Confirm Password'}))
 
     class Meta:
         model = User
-        fields = ('email', 'password1', 'password2', 'account_type')
+        fields = ('email', 'password1', 'password2')
 
         widgets = {
             'email': forms.TextInput(attrs={'class': 'form-control',
@@ -49,52 +52,9 @@ class FormEmployeeDetails(forms.ModelForm):
 class User_email(forms.ModelForm):
     class Meta:
         model = Email
-        fields = ('email',)
+        fields = ('email', 'account_type')
 
         widgets = {
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+            'account_type': forms.Select(attrs={'class': 'form-select form-select-lg mb-3', 'aria-label': '.form-select-lg example'})
         }
-
-
-class TestForm(forms.Form):
-    text = forms.CharField(max_length=64)
-# class CustomUserCreationForm(UserCreationForm):
-#     # Define the choices for the account type field
-#     MAIN = '1'
-#     EMPLOYER = '2'
-#     EMPLOYEE = '3'
-#     ACCOUNT_TYPE_CHOICES = [
-#         (MAIN, "Main"),
-#         (EMPLOYER, "Employer"),
-#         (EMPLOYEE, "Employee")
-#     ]
-
-#     account_type = forms.ChoiceField(choices=ACCOUNT_TYPE_CHOICES)
-#     password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
-#     password2 = forms.CharField(label="Password Confirmation", widget=forms.PasswordInput)
-
-#     class Meta:
-#         model = User
-#         fields = ["account_type", "username", "password1", "password2"]
-
-#     def clean_password2(self):
-#         # Check that the two password entries match
-#         password1 = self.cleaned_data.get("password1")
-#         password2 = self.cleaned_data.get("password2")
-#         if password1 and password2 and password1 != password2:
-#             raise forms.ValidationError("Passwords don't match")
-#         return password2
-
-#     def account_type_choice(self):
-#         choice = self.cleaned_data.get("account_type")
-#         if not int(choice) in range(1, 4):
-#             raise forms.ValidationError("Account type doesn't match any of the available choices")
-#         return choice
-
-#     def save(self, commit=True):
-#         # Save the provided password in hashed format
-#         user = super().save(commit=False)
-#         user.set_password(self.cleaned_data["password1"])
-#         if commit:
-#             user.save()
-#         return user

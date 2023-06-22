@@ -17,36 +17,7 @@
 </head>
 <body>
   {% if user.is_authenticated  %}
-    {% comment %} This is Nav {% endcomment %}
-    {% comment %} <nav class="nav">
-      <ul class="nav-list-1">
-        <li class="nav-item">
-          <a href="{% url 'index' %}">Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a href="{% url 'search' %}">Search</a>
-        </li>
-        <li class="nav-item register">
-          <a href="#">Register</a>
-          <ul class="nav-list-sub invisible">
-            <li class="nav-item-sub">
-              <a href="#">Add Employee</a>
-            </li>
-            <li class="nav-item-sub">
-              <a href="#">Add Employer</a>
-            </li>
-            <hr class="hr">
-            <li class="nav-item-sub">
-              <a href="#">Employee register</a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item nav-dropdown">
-          <a href="#">Work Arrange</a>
-        </li>
-      </ul>
-    </nav> {% endcomment %}
-
+  
     <nav class="navbar navbar-expand-lg bg-body-tertiary nav">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">ABC</a>
@@ -81,6 +52,7 @@
     </nav>
 
   {% endif %}
+  {{ request.user }}
   {% block body %}
   {% endblock %}
 

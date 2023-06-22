@@ -9,7 +9,16 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    # pass
+    email = models.EmailField(unique=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
+    def __str__(self):
+        return f"email: {self.email}"
+
+
+class Email(models.Model):
     MAIN = '1'
     EMPLOYER = '2'
     EMPLOYEE = '3'
@@ -19,20 +28,12 @@ class User(AbstractUser):
         (EMPLOYEE, "Employee")
     ]
 
-    email = models.EmailField(unique=True)
     account_type = models.CharField(max_length=1, blank=False,
                                     null=False, choices=ACCOUNT_TYPE_CHOICES, default=EMPLOYEE)
-    password_reset = models.BooleanField(default=False)
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    email = models.EmailField(unique=True)
 
     def __str__(self):
-        return f"Account Type:{self.account_type}: {self.email}, password reseted: {self.password_reset}"
-
-
-class Email(models.Model):
-    email = models.EmailField(unique=True)
+        return f"{self.email}: {self.account_type}"
 
 
 class User_details(models.Model):

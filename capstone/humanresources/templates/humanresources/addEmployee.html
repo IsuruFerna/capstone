@@ -1,55 +1,9 @@
 {% extends 'humanresources/layout.html' %}
 
 {% block body %} 
-  <h1>A form for register</h1>
-
   <form action="{% url 'add_employee' %}" method="POST" class="form-add-employee">
     {% csrf_token %}
-
-
-    {% comment %} <div class="row mb-3">
-      <div class="col-mb-6">{{ user_details.city }}</div>
-      <div class="col-mb-4">{{ user_details.state }}</div>
-      <div class="col-mb-2">{{ user_details.zip}}</div>
-    </div>
-
-
-
-    <div class="row mb-3">
-      <div class="col-md-12">{{ form.password1 }}</div>
-      <div class="col-md-12">{{ form.password2 }}</div>    
-    </div>
-
-
-    <div class="row mb-3">
-      <div class="col-md-6">{{ user_details.first_name }}</div>
-      <div class="col-mb-6">{{ user_details.last_name }}</div>
-    </div>
-
-    <div class="row mb-3">
-      <div class="col-mb-12">{{ user_details.surname }}</div>
-    </div>
-
-    <div class="row mb-3">
-      <div class="col-mb-12">{{ user_details.birthday }}</div>
-    </div>
-
-    <div class="row mb-3">
-      <div class="col-mb-12">{{ user_details.phone }}</div>
-    </div>
-
-    <div class="row mb-3">
-      <div class="col-md-12">{{ form.email }}</div>
-    </div>
     
-    <div class="row mb-3">
-      <div class="col-mb-12">{{ user_details.address1 }}</div>
-    </div>
-
-    <div class="row mb-3">
-      <div class="col-mb-12">{{ user_details.address2 }}</div>
-    </div> {% endcomment %}
-
     {{ form_email }}
     <br>
     {{ user_details }}

@@ -3,8 +3,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 
-from .forms import AddEmployee, FormEmployeeDetails, User_email
+from .forms import RegisterUser, FormEmployeeDetails, User_email
+from .models import Email, User
 
 # Create your views here.
 
@@ -44,6 +47,42 @@ def search(request):
 
 
 def register(request):
+
+    if request.method == 'POST':
+        email = request.POST["email"]
+        # check if the email is already listed, if so user able to register to the website
+        try:
+            Email.objects.get(email=email)
+            able = True
+        except ObjectDoesNotExist:
+            able = False
+            message = "You can't register to this website. Please contact authority for more info!"
+
+        if able:
+            # Ensure password matches confirmation
+            password = request.POST["password"]
+            confirmation = request.POST["confirmation"]
+            if password != confirmation:
+                return render(request, 'humanresources/register.html', {
+                    'message': "Passwords must match."
+                })
+
+            # Attempt to create new user
+            try:
+                user = User.objects.create_user(email, password)
+                user.save()
+            except IntegrityError:
+                return render(request, "network/register.html", {
+                    "message": "Username already taken."
+                })
+            login(request, user)
+
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            return render(request, "humanresources/register.html", {
+                'message': message
+            })
+
     return render(request, 'humanresources/register.html')
 
 
@@ -68,14 +107,12 @@ def add_employee(request):
         # else return the site with the typed data
         else:
             return render(request, 'humanresources/addEmployee.html', {
-                'form': AddEmployee,
                 'user_details': FormEmployeeDetails,
                 'form_email': User_email
             })
 
     # otherwise render new forms
     return render(request, 'humanresources/addEmployee.html', {
-        'form': AddEmployee(),
         'user_details': FormEmployeeDetails(),
         'form_email': User_email()
     })
