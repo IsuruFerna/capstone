@@ -51,3 +51,17 @@ class User_details(models.Model):
 
     def __str__(self):
         return f"{self.first_name}, City: {self.city}, Phone: {self.phone}"
+
+
+class Employer(models.Model):
+    company = models.CharField(max_length=64, blank=False)
+    email = models.EmailField(unique=True)
+    phone1 = models.IntegerField(null=False, blank=False)
+    phone2 = models.IntegerField(blank=True, null=True)
+    address = models.CharField(max_length=254, blank=False)
+    city = models.CharField(max_length=64, blank=False)
+    state = models.CharField(max_length=64, blank=False)
+    zip = models.CharField(max_length=10, blank=False)
+
+    def __str__(self):
+        return f"{self.company}, email: {self.email}"

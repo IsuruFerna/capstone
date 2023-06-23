@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 
-from .forms import RegisterUser, FormEmployeeDetails, User_email
+from .forms import RegisterUser, FormEmployeeDetails, User_email, Form_employer
 from .models import Email, User
 
 # Create your views here.
@@ -29,6 +29,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             return HttpResponseRedirect(reverse('index'))
+
         else:
             return render(request, 'humanresources/login.html', {
                 "message": "Invalid username and/or password."
@@ -115,4 +116,24 @@ def add_employee(request):
     return render(request, 'humanresources/addEmployee.html', {
         'user_details': FormEmployeeDetails(),
         'form_email': User_email()
+    })
+
+
+def add_employer(request):
+    if request.method == "POST":
+        form = Form_employer(request.POST)
+
+        # validate form and save into databass
+        if form.is_valid():
+            form.save()
+
+            return HttpResponseRedirect(reverse('index'))
+
+        else:
+            return render(request, "humanresources/addEmployer.html", {
+                'form_employer': Form_employer
+            })
+
+    return render(request, "humanresources/addEmployer.html", {
+        'form_employer': Form_employer()
     })

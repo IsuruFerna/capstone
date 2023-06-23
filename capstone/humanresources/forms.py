@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.password_validation import validate_password
-from .models import User, User_details, Email
+from .models import User, User_details, Email, Employer
 
 DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
 
@@ -57,4 +57,30 @@ class User_email(forms.ModelForm):
         widgets = {
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
             'account_type': forms.Select(attrs={'class': 'form-select form-select-lg mb-3', 'aria-label': '.form-select-lg example'})
+        }
+
+
+class Form_employer(forms.ModelForm):
+    class Meta:
+        model = Employer
+        fields = (
+            'company',
+            'email',
+            'phone1',
+            'phone2',
+            'address',
+            'city',
+            'state',
+            'zip'
+        )
+
+        widgets = {
+            'company': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Company name'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+            'phone1': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone number'}),
+            'phone2': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Additional phone number'}),
+            'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '1234 Main St'}),
+            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
+            'state': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'State'}),
+            'zip': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zip'}),
         }

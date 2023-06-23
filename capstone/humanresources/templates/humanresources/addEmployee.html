@@ -4,7 +4,9 @@
   <form action="{% url 'add_employee' %}" method="POST" class="form-add-employee">
     {% csrf_token %}
     
-    {{ form_email }}
+    {% comment %} {{ form_email }} {% endcomment %}
+    {{ form_email.email.label_tag }}
+    {{ form_email.email }}
     <br>
     {{ user_details }}
     <br>

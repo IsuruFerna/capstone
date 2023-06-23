@@ -38,7 +38,7 @@
               </a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="{% url 'add_employee' %}">Add Employee</a></li>
-                <li><a class="dropdown-item" href="#">Add Employer</a></li>
+                <li><a class="dropdown-item" href="{% url 'add_employer' %}">Add Employer</a></li>
                 <hr class="hr">
                 <li><a class="dropdown-item" href="#">Employee Register</a></li>
               </ul>
@@ -52,7 +52,6 @@
     </nav>
 
   {% endif %}
-  {{ request.user }}
   {% block body %}
   {% endblock %}
 
