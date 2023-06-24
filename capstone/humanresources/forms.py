@@ -65,7 +65,6 @@ class Form_employer(forms.ModelForm):
         model = Employer
         fields = (
             'company',
-            'email',
             'phone1',
             'phone2',
             'address',
@@ -76,7 +75,6 @@ class Form_employer(forms.ModelForm):
 
         widgets = {
             'company': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Company name'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
             'phone1': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone number'}),
             'phone2': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Additional phone number'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '1234 Main St'}),

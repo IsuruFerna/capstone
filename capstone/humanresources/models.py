@@ -33,7 +33,7 @@ class Email(models.Model):
     email = models.EmailField(unique=True)
 
     def __str__(self):
-        return f"{self.email}: {self.account_type}"
+        return f"{self.email}: Account type: {self.account_type}"
 
 
 class User_details(models.Model):
@@ -54,8 +54,8 @@ class User_details(models.Model):
 
 
 class Employer(models.Model):
-    company = models.CharField(max_length=64, blank=False)
-    email = models.EmailField(unique=True)
+    email = models.ForeignKey(Email, on_delete=models.CASCADE)
+    company = models.CharField(max_length=64, blank=False, unique=True)
     phone1 = models.IntegerField(null=False, blank=False)
     phone2 = models.IntegerField(blank=True, null=True)
     address = models.CharField(max_length=254, blank=False)
@@ -64,4 +64,13 @@ class Employer(models.Model):
     zip = models.CharField(max_length=10, blank=False)
 
     def __str__(self):
-        return f"{self.company}, email: {self.email}"
+        return f"{self.company}"
+
+
+class Task(models.Model):
+    company = models.ManyToManyField(Employer)
+    task = models.CharField(max_length=254)
+    description = models.CharField(max_length=600)
+
+    def __str__(self):
+        return f"{self.company}: {self.task}"

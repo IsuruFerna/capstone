@@ -14,16 +14,19 @@ from .models import Email, User
 
 @login_required(login_url="login")
 def index(request):
-    return render(request, 'humanresources/index.html')
+
+    return render(request, 'humanresources/index.html', {
+        "account_type": Email.objects.get(email=request.user.username).account_type
+    })
 
 
 def login_view(request):
     if request.method == 'POST':
 
         # attempt to sign in
-        username = request.POST["username"]
+        email = request.POST["email"]
         password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, email=email, password=password)
 
         # check if the authentication successful
         if user is not None:
@@ -105,12 +108,18 @@ def add_employee(request):
 
                 return HttpResponseRedirect(reverse('index'))
 
-        # else return the site with the typed data
+            else:
+                message = "Something is wrong with the inserted data. Please recheck the form!"
+
         else:
-            return render(request, 'humanresources/addEmployee.html', {
-                'user_details': FormEmployeeDetails,
-                'form_email': User_email
-            })
+            message = "Email is already taken!"
+
+        # render site with error messages if any of form isn't valid
+        return render(request, 'humanresources/addEmployee.html', {
+            'message': message,
+            'user_details': FormEmployeeDetails,
+            'form_email': User_email
+        })
 
     # otherwise render new forms
     return render(request, 'humanresources/addEmployee.html', {
@@ -122,18 +131,38 @@ def add_employee(request):
 def add_employer(request):
     if request.method == "POST":
         form = Form_employer(request.POST)
+        form_email = User_email(request.POST)
 
         # validate form and save into databass
-        if form.is_valid():
-            form.save()
+        if form_email.is_valid():
 
-            return HttpResponseRedirect(reverse('index'))
+            if form.is_valid():
+
+                # changing account type to Employer and save
+                form_email.account_type = '2'
+                email_instance = form_email.save()
+
+                # save form. since it requred ID because of forginkey, we use 'email_instance'
+                company_instance = form.save(commit=False)
+                company_instance.email = email_instance
+                company_instance.save()
+
+                return HttpResponseRedirect(reverse('index'))
+
+            else:
+                message = "Something is wrong with the inserted data or the Company already registered. Please recheck the form!"
 
         else:
-            return render(request, "humanresources/addEmployer.html", {
-                'form_employer': Form_employer
-            })
+            message = "Email is already taken. Company might already registered!"
+
+        # render site with error messages if any of form isn't valid
+        return render(request, "humanresources/addEmployer.html", {
+            'message': message,
+            'form_employer': Form_employer,
+            'form_email': User_email
+        })
 
     return render(request, "humanresources/addEmployer.html", {
-        'form_employer': Form_employer()
+        'form_employer': Form_employer(),
+        'form_email': User_email()
     })

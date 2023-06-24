@@ -1,5 +1,11 @@
 {% extends 'humanresources/layout.html' %}
 
 {% block body %}
-  hello abc this is dash board
+  hello {{ request.user.username }} this is dash board
+  account type: {{ account_type }}
+
+  {% if account_type == '3' %}
+    i'm acc 3
+  {% endif %}
+
 {% endblock %}

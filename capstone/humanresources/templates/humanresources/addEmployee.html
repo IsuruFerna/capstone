@@ -1,13 +1,11 @@
 {% extends 'humanresources/layout.html' %}
 
 {% block body %} 
-  <form action="{% url 'add_employee' %}" method="POST" class="form-add-employee">
+  <form action="{% url 'add_employee' %}" method="POST" class="form-add">
     {% csrf_token %}
     
-    {% comment %} {{ form_email }} {% endcomment %}
     {{ form_email.email.label_tag }}
     {{ form_email.email }}
-    <br>
     {{ user_details }}
     <br>
     <button class="btn btn-primary" type="submit">Save</button>
