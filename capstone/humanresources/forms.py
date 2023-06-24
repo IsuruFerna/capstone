@@ -1,32 +1,31 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.password_validation import validate_password
-from .models import User, User_details, Email, Employer
+from .models import User, User_details, Email, Employer, Task
 
-DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
+# DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
 
 
-class RegisterUser(UserCreationForm):
-    password1 = forms.CharField(min_length=8, label="Password",
-                                strip=False,
-                                validators=[validate_password],
-                                help_text="Your password must contain atleast one Uppercase letter, one lowercase letter, one digit and symbol!",
-                                widget=forms.PasswordInput(attrs={'class': 'form-control',
-                                                                  'placeholder': 'Password'}))
-    password2 = forms.CharField(min_length=8, label="Confirm Password",
-                                strip=False,
-                                widget=forms.PasswordInput(attrs={'class': 'form-control',
-                                                                  'placeholder': 'Confirm Password'}))
+# class RegisterUser(UserCreationForm):
+#     password1 = forms.CharField(min_length=8, label="Password",
+#                                 strip=False,
+#                                 validators=[validate_password],
+#                                 help_text="Your password must contain atleast one Uppercase letter, one lowercase letter, one digit and symbol!",
+#                                 widget=forms.PasswordInput(attrs={'class': 'form-control',
+#                                                                   'placeholder': 'Password'}))
+#     password2 = forms.CharField(min_length=8, label="Confirm Password",
+#                                 strip=False,
+#                                 widget=forms.PasswordInput(attrs={'class': 'form-control',
+#                                                                   'placeholder': 'Confirm Password'}))
 
-    class Meta:
-        model = User
-        fields = ('email', 'password1', 'password2')
+#     class Meta:
+#         model = User
+#         fields = ('email', 'password1', 'password2')
 
-        widgets = {
-            'email': forms.TextInput(attrs={'class': 'form-control',
-                                            'placeholder': 'Email'}),
-            # account_type is selected automatically by backend
-        }
+#         widgets = {
+#             'email': forms.TextInput(attrs={'class': 'form-control',
+#                                             'placeholder': 'Email'}),
+#             # account_type is selected automatically by backend
+#         }
 
 
 class FormEmployeeDetails(forms.ModelForm):
@@ -81,4 +80,17 @@ class Form_employer(forms.ModelForm):
             'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
             'state': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'State'}),
             'zip': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zip'}),
+        }
+
+
+class FormTask(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = (
+            'task', 'description'
+        )
+
+        widgets = {
+            'task': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Task, Zone, Area'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Describe the work or task'})
         }

@@ -6,18 +6,15 @@ from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 
-from .forms import RegisterUser, FormEmployeeDetails, User_email, Form_employer
-from .models import Email, User
+from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask
+from .models import Email, User, Employer
 
 # Create your views here.
 
 
 @login_required(login_url="login")
 def index(request):
-
-    return render(request, 'humanresources/index.html', {
-        "account_type": Email.objects.get(email=request.user.username).account_type
-    })
+    return render(request, 'humanresources/index.html')
 
 
 def login_view(request):
@@ -98,9 +95,12 @@ def add_employee(request):
 
         # data validation to save in database
         if form_email.is_valid():
+
+            # form default account_type has setted to employee account type. so we don't have to modify it hereù
+            # save email and account_type into db
             email_instance = form_email.save()
 
-            # email has used as forginKey to form_user_details
+            # Email(form_email.email) is a forginKey to form_user_details.user, so we use instances to save correctly
             if form_user_details.is_valid():
                 user_details_instance = form_user_details.save(commit=False)
                 user_details_instance.user = email_instance
@@ -165,4 +165,32 @@ def add_employer(request):
     return render(request, "humanresources/addEmployer.html", {
         'form_employer': Form_employer(),
         'form_email': User_email()
+    })
+
+
+def work_arrange(request):
+    if request.method == 'POST':
+
+        # select the employer to complete the model of Task's manytomany field
+        user = Email.objects.get(email=request.user.username)
+        employer = Employer.objects.get(email=user)
+
+        form = FormTask(request.POST)
+        form.company = employer
+
+        print(employer)
+
+        # if form.is_valid():
+        #     form.save()
+        #     print("saved")
+
+        # else:
+        #     print("not saved")
+        #     return render(request, "humanresources/workArrange.html", {
+        #         'message': "Something wrong with your inserted data. Please recheck and try again!",
+        #         'form_task': FormTask
+        #     })
+
+    return render(request, "humanresources/workArrange.html", {
+        'form_task': FormTask()
     })

@@ -8,16 +8,6 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 
-class User(AbstractUser):
-    email = models.EmailField(unique=True)
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
-
-    def __str__(self):
-        return f"email: {self.email}"
-
-
 class Email(models.Model):
     MAIN = '1'
     EMPLOYER = '2'
@@ -34,6 +24,20 @@ class Email(models.Model):
 
     def __str__(self):
         return f"{self.email}: Account type: {self.account_type}"
+
+
+class User(AbstractUser):
+    email = models.EmailField(unique=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
+    # to get the account type directly into layout
+    def acc_type(self):
+        return Email.objects.get(email=self.username).account_type
+
+    def __str__(self):
+        return f"email: {self.email}"
 
 
 class User_details(models.Model):
@@ -68,9 +72,9 @@ class Employer(models.Model):
 
 
 class Task(models.Model):
-    company = models.ManyToManyField(Employer)
-    task = models.CharField(max_length=254)
-    description = models.CharField(max_length=600)
+    company = models.ManyToManyField(Employer, related_name="employer")
+    task = models.CharField(max_length=254, blank=False, null=False)
+    description = models.CharField(max_length=600, blank=False, null=False)
 
     def __str__(self):
         return f"{self.company}: {self.task}"
