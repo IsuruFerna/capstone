@@ -18,8 +18,8 @@ class Email(models.Model):
         (EMPLOYEE, "Employee")
     ]
 
-    account_type = models.CharField(max_length=1, blank=False,
-                                    null=False, choices=ACCOUNT_TYPE_CHOICES, default=EMPLOYEE)
+    account_type = models.CharField(
+        max_length=1, choices=ACCOUNT_TYPE_CHOICES, default=EMPLOYEE)
     email = models.EmailField(unique=True)
 
     def __str__(self):
@@ -72,7 +72,7 @@ class Employer(models.Model):
 
 
 class Task(models.Model):
-    company = models.ManyToManyField(Employer, related_name="employer")
+    company = models.ForeignKey(Employer, on_delete=models.CASCADE)
     task = models.CharField(max_length=254, blank=False, null=False)
     description = models.CharField(max_length=600, blank=False, null=False)
 

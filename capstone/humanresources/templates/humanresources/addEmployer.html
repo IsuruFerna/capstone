@@ -8,9 +8,8 @@
     </div>
   {% endif %}
   <form action="{% url 'add_employer' %}" method="post" class="form-add">
-    {%csrf_token %}
-    {{ form_email.email.label_tag }}
-    {{ form_email.email }}
+    {% csrf_token %}
+    {{ form_email }}
     {{ form_employer }}
     <br>
     <button class="btn btn-primary" type="submit">Save</button>

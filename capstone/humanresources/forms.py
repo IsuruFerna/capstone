@@ -55,7 +55,9 @@ class User_email(forms.ModelForm):
 
         widgets = {
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
-            'account_type': forms.Select(attrs={'class': 'form-select form-select-lg mb-3', 'aria-label': '.form-select-lg example'})
+            'account_type': forms.HiddenInput(),
+            # 'account_type': forms.Select(attrs={'class': 'form-select form-select-lg mb-3', 'aria-label': '.form-select-lg example', 'visibility': 'hidden'})
+
         }
 
 
@@ -83,14 +85,24 @@ class Form_employer(forms.ModelForm):
         }
 
 
-class FormTask(forms.ModelForm):
-    class Meta:
-        model = Task
-        fields = (
-            'task', 'description'
-        )
+class FormTask(forms.Form):
+    task = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Task, Zone, Area'}))
+    description = forms.CharField(widget=forms.Textarea(
+        attrs={'class': 'form-control', 'placeholder': 'Describe the work or task'}))
 
-        widgets = {
-            'task': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Task, Zone, Area'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Describe the work or task'})
-        }
+    # class Meta:
+    #     model = Task
+    #     fields = (
+    #         'task', 'description'
+    #     )
+
+    #     widgets = {
+    #         'task': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Task, Zone, Area'}),
+    #         'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Describe the work or task'}),
+    #     }
+
+
+# class NewForm(forms.Form):
+#     task = forms.CharField(widget=forms.TextInput, attrs={
+#                            'class': 'form-control', 'placeholder': 'Task, Zone, Area'})

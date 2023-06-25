@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 
 from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask
-from .models import Email, User, Employer
+from .models import Email, User, Employer, Task
 
 # Create your views here.
 
@@ -132,15 +132,21 @@ def add_employer(request):
     if request.method == "POST":
         form = Form_employer(request.POST)
         form_email = User_email(request.POST)
+        print("User_email: ", form_email)
 
         # validate form and save into databass
         if form_email.is_valid():
+            print('form_email is valid')
+
+            # changing account type to Employer and save
+            form_email.account_type = '2'
+            email_instance = form_email.save()
+
+            email = form_email.cleaned_data['email']
+            print("email: ", email)
 
             if form.is_valid():
-
-                # changing account type to Employer and save
-                form_email.account_type = '2'
-                email_instance = form_email.save()
+                print("form is valid")
 
                 # save form. since it requred ID because of forginkey, we use 'email_instance'
                 company_instance = form.save(commit=False)
@@ -150,12 +156,15 @@ def add_employer(request):
                 return HttpResponseRedirect(reverse('index'))
 
             else:
+                print("form isn't valid")
                 message = "Something is wrong with the inserted data or the Company already registered. Please recheck the form!"
 
         else:
+            print("form_email isn't valid")
             message = "Email is already taken. Company might already registered!"
 
         # render site with error messages if any of form isn't valid
+        print("passed to render")
         return render(request, "humanresources/addEmployer.html", {
             'message': message,
             'form_employer': Form_employer,
@@ -176,20 +185,23 @@ def work_arrange(request):
         employer = Employer.objects.get(email=user)
 
         form = FormTask(request.POST)
-        form.company = employer
 
-        print(employer)
+        # validate form and save into database
+        if form.is_valid():
 
-        # if form.is_valid():
-        #     form.save()
-        #     print("saved")
+            task = Task.objects.create(
+                company=employer,
+                task=form.cleaned_data['task'],
+                description=form.cleaned_data['description']
+            )
+            task.save()
 
-        # else:
-        #     print("not saved")
-        #     return render(request, "humanresources/workArrange.html", {
-        #         'message': "Something wrong with your inserted data. Please recheck and try again!",
-        #         'form_task': FormTask
-        #     })
+        else:
+            print("not saved")
+            return render(request, "humanresources/workArrange.html", {
+                'message': "Something wrong with your inserted data. Please recheck and try again!",
+                'form_task': FormTask
+            })
 
     return render(request, "humanresources/workArrange.html", {
         'form_task': FormTask()
