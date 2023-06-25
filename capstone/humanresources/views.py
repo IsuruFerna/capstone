@@ -70,7 +70,8 @@ def register(request):
 
             # Attempt to create new user
             try:
-                user = User.objects.create_user(email, password)
+                user = User.objects.create_user(username=email,
+                                                email=email, password=password)
                 user.save()
             except IntegrityError:
                 return render(request, "network/register.html", {
@@ -196,8 +197,9 @@ def work_arrange(request):
             )
             task.save()
 
+            return HttpResponseRedirect(reverse('index'))
+
         else:
-            print("not saved")
             return render(request, "humanresources/workArrange.html", {
                 'message': "Something wrong with your inserted data. Please recheck and try again!",
                 'form_task': FormTask

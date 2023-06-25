@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Task, Employer
+from .models import User, Task, Employer, Email
 
 
 class CustomUserAdmin(UserAdmin):
@@ -12,3 +12,4 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(User, CustomUserAdmin,)
 admin.site.register(Task)
 admin.site.register(Employer)
+admin.site.register(Email)
