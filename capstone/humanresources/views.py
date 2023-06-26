@@ -5,6 +5,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask
 from .models import Email, User, Employer, Task
@@ -181,7 +183,7 @@ def add_employer(request):
 def work_arrange(request):
     if request.method == 'POST':
 
-        # select the employer to complete the model of Task's manytomany field
+        # select the employer to complete the model Task
         user = Email.objects.get(email=request.user.username)
         employer = Employer.objects.get(email=user)
 
@@ -193,7 +195,8 @@ def work_arrange(request):
             task = Task.objects.create(
                 company=employer,
                 task=form.cleaned_data['task'],
-                description=form.cleaned_data['description']
+                description=form.cleaned_data['description'],
+                amount=form.cleaned_data['amount']
             )
             task.save()
 
@@ -208,3 +211,18 @@ def work_arrange(request):
     return render(request, "humanresources/workArrange.html", {
         'form_task': FormTask()
     })
+
+
+@csrf_exempt
+@login_required
+def employer_tasks(request):
+    # select the employer to complete the model Task
+
+    # make sure it doesn't return null by try
+    user = Email.objects.get(email=request.user.username)
+    employer = Employer.objects.get(email=user)
+    tasks = Task.objects.filter(company=employer)
+
+    # tasks = tasks.order_by("-timestamp").all()
+    return JsonResponse([task.serialize() for task in tasks], safe=False)
+    print(tasks)

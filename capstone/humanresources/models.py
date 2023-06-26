@@ -75,6 +75,16 @@ class Task(models.Model):
     company = models.ForeignKey(Employer, on_delete=models.CASCADE)
     task = models.CharField(max_length=254, blank=False, null=False)
     description = models.CharField(max_length=600, blank=False, null=False)
+    amount = models.IntegerField()
+
+    def serialize(self):
+        return {
+            "id": self.pk,
+            "company": self.company.company,
+            "task": self.task,
+            "description": self.description,
+            "amount": self.amount
+        }
 
     def __str__(self):
         return f"{self.company}: {self.task}"

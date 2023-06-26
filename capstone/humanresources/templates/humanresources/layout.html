@@ -11,9 +11,11 @@
 
   <link href="{% static 'humanresources/styles.css' %}"  rel="stylesheet">
   <title>{% block title %}ABC{% endblock %}</title>
+  <script src="{% static 'humanresources/script.js' %}"></script>
+
   {% block script %}
-    <script src="{% static 'humanresources/script.js' %}"></script>
   {% endblock %}
+  
 </head>
 <body>
   {% if user.is_authenticated  %}

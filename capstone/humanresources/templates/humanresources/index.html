@@ -2,10 +2,12 @@
 
 {% block body %}
   hello {{ request.user.username }} this is dash board
-  account type: {{ account_type }}
+  account type: {{ user.acc_type }}
 
   {% if account_type == '3' %}
     i'm acc 3
   {% endif %}
+
+  <div id="tasks" data-account="{{ user.acc_type }}"></div>
 
 {% endblock %}

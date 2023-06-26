@@ -88,6 +88,8 @@ class Form_employer(forms.ModelForm):
 class FormTask(forms.Form):
     task = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Task, Zone, Area'}))
+    amount = forms.IntegerField(min_value=1, widget=forms.NumberInput(
+        attrs={'class': 'form-control', 'placeholder': 'Number of workers'}))
     description = forms.CharField(widget=forms.Textarea(
         attrs={'class': 'form-control', 'placeholder': 'Describe the work or task'}))
 
