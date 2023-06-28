@@ -84,3 +84,21 @@ body {
   width: 90%;
   margin-top: 3rem;
 }
+
+.form-request {
+  /* background-color: rebeccapurple; */
+  /* height: 300px; */
+  width: 500px;
+  /* position: absolute; */
+  /* top: 50%;
+  left: 50%; */
+}
+
+.stop-scrolling {
+  height: 100%;
+  overflow: hidden;
+}
+
+.blur {
+  filter: blur(1.5rem);
+}
