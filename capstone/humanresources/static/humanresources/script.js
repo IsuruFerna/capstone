@@ -1,31 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // const btnDropdown = document.querySelector('.register');
-  // const navListSub = document.querySelector('.nav-list-sub');
-  
-  // // dropdown menu: check every click event
-  // document.addEventListener('click', function(event) {
-  //   const targetElement = event.target.parentElement;
-
-  //   if (btnDropdown.contains(targetElement)) {
-  //     // console.log('dropdown', navListSub);
-
-  //     // toggle visibility
-  //     if (navListSub.classList.contains('visible')) {
-  //       console.log('reading hide');
-  //       navListSub.classList.remove('visible');
-  //       navListSub.classList.add('invisible');
-  //     } else {
-  //       console.log('reading add');
-  //       navListSub.classList.remove('invisible');
-  //       navListSub.classList.add('visible');
-  //     }
-  //   } else {
-
-  //     // if user click out of dropdown menu, hide it
-  //     navListSub.classList.remove('visible');
-  //     navListSub.classList.add('invisible');
-  //   }
-  // })
   const taskContainer = document.querySelector('#tasks');
 
   // if this is a Employer account
@@ -46,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                   <h5 id="task-name" class="card-title">${task.task}</h5>
                                   <p id="task-amount"><strong>Amount: ${task.amount === 1 ? task.amount + ' worker' : task.amount + ' workers'}</strong></p>
                                   <p id="task-description" class="card-text">${task.description}</p>
-                                  <a href="#" id="requestBtn" class="btn-request btn btn-primary">Request</a>
+                                  <button type="button" id="requestBtn" class="btn-request btn btn-primary">not-1</button>
                                 </div>
                               </div>
                               `;
@@ -59,9 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("clicked", );
         const parentElement = event.target.parentElement;
         const requestTask = document.createElement('div');
-        const height = window.innerHeight;
-
-
 
         // getting values of clicked request
         const taskName = parentElement.querySelector('#task-name').innerHTML;
@@ -118,19 +88,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const body = document.querySelector('body');
         body.append(requestTask);
         
+        // disable each button when request form is appears
         const btnRequest = document.querySelectorAll('.btn-request');
-        btnRequest.forEach(btn => {
-          btn.addEventListener('click', event => {
-            // event.stopPropagation();
-            // event.preventDefault();
-            event.disabled = true;
-          })
+        btnRequest.forEach(element => {
+          element.disabled = true;
         });
-
         
-        // applying style to make center the form
-        const toast = document.querySelector('#toast');
-        // toast.classList.add("show");
+        // applying style to make center the form and disable scroll
         const topRequestTask = (window.innerHeight / 2) - (requestTask.offsetHeight / 2) + 'px';
         const leftRequestTask = (window.innerWidth / 2) - (requestTask.offsetWidth / 2) + 'px';
         requestTask.style.top = topRequestTask;
@@ -142,7 +106,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // a function to add or remove blur to background
         function blur(property, cards) {
           cards.forEach(element => {
-
             if (property === 'add') {
               element.classList.add('blur');
             } if (property === 'remove') {
@@ -153,27 +116,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         blur('add', cards);
 
-
         btnToast.addEventListener('click', function() {
           // toast.classList.remove("show");
           blur('remove', cards);
           requestTask.remove();
           body.classList.remove('stop-scrolling');
+
+          // re-enable buttons after request form is closed
+          btnRequest.forEach(element => {
+            element.disabled = false;
+          });
         })
       }
     })
-
-    // function isInPage(node) {
-    //   return node === document.body ? false : document.body.contains(node);
-    // }
-
-    // const toast = document.querySelector('#toast');
-    // console.log(ta);
-
-    // console.log(isInPage(toast));
-    // toast.classList.remove("show");
-
   }
-
-
 });
