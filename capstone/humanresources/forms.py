@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User, User_details, Email, Employer, Task
+from .models import User, User_details, Email, Employer, Task, RequestWorker
 
 # DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
 
@@ -93,18 +93,24 @@ class FormTask(forms.Form):
     description = forms.CharField(widget=forms.Textarea(
         attrs={'class': 'form-control', 'placeholder': 'Describe the work or task'}))
 
-    # class Meta:
-    #     model = Task
-    #     fields = (
-    #         'task', 'description'
-    #     )
 
-    #     widgets = {
-    #         'task': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Task, Zone, Area'}),
-    #         'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Describe the work or task'}),
-    #     }
+class Form_RequestWorker(forms.ModelForm):
+    class Meta:
+        model = RequestWorker
+        fields = (
+            'amount',
+            'start_date',
+            'end_date',
+            'start_time',
+            'end_time',
+            'description'
+        )
 
-
-# class NewForm(forms.Form):
-#     task = forms.CharField(widget=forms.TextInput, attrs={
-#                            'class': 'form-control', 'placeholder': 'Task, Zone, Area'})
+        widgets = {
+            'amount': forms.NumberInput(attrs={'class': 'form-control', 'id': 'req-w-amount', 'min': '1'}),
+            'start_date': forms.DateInput(attrs={'class': 'form-control', 'id': 'req-w-start_date', 'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'class': 'form-control', 'id': 'req-w-end_date', 'type': 'date'}),
+            'start_time': forms.TimeInput(attrs={'class': 'form-control', 'id': 'req-w-start_time', 'type': 'time'}),
+            'end_time': forms.TimeInput(attrs={'class': 'form-control', 'id': 'req-w-end_time', 'type': 'time'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'id': 'req-w-description'})
+        }

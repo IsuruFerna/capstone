@@ -8,7 +8,7 @@ from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
-from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask
+from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask, Form_RequestWorker
 from .models import Email, User, Employer, Task
 
 # Create your views here.
@@ -16,7 +16,9 @@ from .models import Email, User, Employer, Task
 
 @login_required(login_url="login")
 def index(request):
-    return render(request, 'humanresources/index.html')
+    return render(request, 'humanresources/index.html', {
+        'form': Form_RequestWorker()
+    })
 
 
 def login_view(request):
@@ -213,7 +215,7 @@ def work_arrange(request):
     })
 
 
-@csrf_exempt
+# @csrf_exempt
 @login_required
 def employer_tasks(request):
     # select the employer to complete the model Task
@@ -225,4 +227,3 @@ def employer_tasks(request):
 
     # tasks = tasks.order_by("-timestamp").all()
     return JsonResponse([task.serialize() for task in tasks], safe=False)
-    print(tasks)

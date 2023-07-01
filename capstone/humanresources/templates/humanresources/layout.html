@@ -30,7 +30,7 @@
           <ul class="navbar-nav">
 
             {% comment %} Employer profile {% endcomment %}
-            {% if user.acc_type == '3' %}
+            {% if user.acc_email.account_type == '3' %}
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
               </li>

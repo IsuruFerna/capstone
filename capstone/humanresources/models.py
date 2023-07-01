@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+
+from datetime import date
 # from phonenumber_field.modelfields import PhoneNumberField
 
 # automatically generate passwords for employee for the first time
@@ -32,9 +34,12 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
-    # to get the account type directly into layout
-    def acc_type(self):
-        return Email.objects.get(email=self.username).account_type
+    # to get the account info directly to layout
+    def acc_email(self):
+        return Email.objects.get(email=self.username)
+
+    # def acc_type(self):
+    #     return Email.objects.get(email=self.username).account_type
 
     def __str__(self):
         return f"email: {self.email}"
@@ -88,3 +93,14 @@ class Task(models.Model):
 
     def __str__(self):
         return f"{self.company}: {self.task}"
+
+
+class RequestWorker(models.Model):
+    requseted_by = models.ForeignKey(Employer, on_delete=models.CASCADE)
+    amount = models.IntegerField()
+    start_date = models.DateField(default=date.today)
+    end_date = models.DateField(default=date.today)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    description = models.CharField(max_length=600)
+    created = models.DateTimeField(auto_now=True)
