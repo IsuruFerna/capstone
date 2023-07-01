@@ -112,5 +112,5 @@ class Form_RequestWorker(forms.ModelForm):
             'end_date': forms.DateInput(attrs={'class': 'form-control', 'id': 'req-w-end_date', 'type': 'date'}),
             'start_time': forms.TimeInput(attrs={'class': 'form-control', 'id': 'req-w-start_time', 'type': 'time'}),
             'end_time': forms.TimeInput(attrs={'class': 'form-control', 'id': 'req-w-end_time', 'type': 'time'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'id': 'req-w-description'})
+            'description': forms.Textarea(attrs={'class': 'form-control text-area_height', 'id': 'req-w-description'})
         }

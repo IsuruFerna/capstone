@@ -94,6 +94,10 @@ body {
   left: 50%; */
 }
 
+.text-area_height {
+  height: 100px;
+}
+
 .stop-scrolling {
   height: 100%;
   overflow: hidden;
