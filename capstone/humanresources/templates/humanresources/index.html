@@ -2,14 +2,68 @@
 
 {% block body %}
   hello {{ request.user.username }} this is dash board
-  account type: {{ user.acc_type }}
+  account type: {{ user.acc_email.account_type }}
 
-  {% if account_type == '3' %}
+  {% if user.acc_email.account_type == '3' %}
     i'm acc 3
+
+
+
   {% endif %}
 
+  <div id="tasks" data-account="{{ user.acc_email.account_type }}"></div>
 
-  <div id="tasks" data-account="{{ user.acc_type }}"></div>
+
+
+  {% comment %} <h1>This is accout id: {{ user.acc_email.pk }}</h1> {% endcomment %}
+
+      <!-- Flexbox container for aligning the toasts -->
+    <div id="request-task" aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
+    
+      <!-- Then put toasts within -->
+      <div id="toast" class="toast form-request" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong id="toast-header-title" class="me-auto">Sample</strong>
+          <button type="button" id="btn-toast" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          <form method="post">
+
+            <div class="mb-3">
+              <label for="req-w-amount" class="form-label">Amount of workers</label>
+              {{ form.amount }}
+            </div>
+
+            <div class="mb-3">
+              <label for="req-w-start_date" class="form-label">Start date</label>
+              {{ form.start_date }}
+            </div>
+
+            <div class="mb-3">
+              <label for="req-w-end_date" class="form-label">End date</label>
+              {{ form.end_date }}
+            </div>
+
+            <div class="mb-3">
+              <label for="req-w-start_time" class="form-label">Start time</label>
+              {{ form.start_time }}
+            </div>
+
+            <div class="mb-3">
+              <label for="req-w-end_time" class="form-label">End time</label>
+              {{ form.end_time }}
+            </div>
+
+            <div class="mb-3">
+              <label for="req-w-description" class="form-label">Description</label>
+              {{ form.description }}
+            </div>
+
+            <button class="btn btn-primary" type="submit">Request</button>
+          </form>
+        </div>
+      </div>
+    </div>
 
 
   
