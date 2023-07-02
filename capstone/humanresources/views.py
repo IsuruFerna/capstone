@@ -9,13 +9,42 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
 from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask, Form_RequestWorker
-from .models import Email, User, Employer, Task
+from .models import Email, User, Employer, Task, RequestWorker
 
 # Create your views here.
 
 
 @login_required(login_url="login")
 def index(request):
+
+    # check the worker request form
+    if request.method == "POST":
+
+        # get Email -> Employer to save data into RequestWorker table
+        user = Email.objects.get(email=request.user.email)
+        employer = Employer.objects.get(email=user)
+        form = Form_RequestWorker(request.POST)
+
+        if form.is_valid():
+
+            # save data into the database
+            form_data = RequestWorker(
+                requested_by=employer,
+                amount=form.cleaned_data['amount'],
+                start_date=form.cleaned_data['start_date'],
+                end_date=form.cleaned_data['end_date'],
+                start_time=form.cleaned_data['start_time'],
+                end_time=form.cleaned_data['end_time'],
+                description=form.cleaned_data['description']
+            )
+            form_data.save()
+
+        else:
+            # retreave with inserted invalid data
+            return render(request, 'humanresources/index.html', {
+                'form': form
+            })
+
     return render(request, 'humanresources/index.html', {
         'form': Form_RequestWorker()
     })
@@ -227,3 +256,9 @@ def employer_tasks(request):
 
     # tasks = tasks.order_by("-timestamp").all()
     return JsonResponse([task.serialize() for task in tasks], safe=False)
+
+
+@login_required
+def request_workers(request):
+    print("requested")
+    return HttpResponseRedirect(reverse('index'))

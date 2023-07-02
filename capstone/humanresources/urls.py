@@ -11,6 +11,7 @@ urlpatterns = [
     path("addEmployer", views.add_employer, name="add_employer"),
     path("workArrange", views.work_arrange, name="work_arrange"),
 
+
     # API
     path("tasks", views.employer_tasks, name="employer_tasks")
 ]

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import User, User_details, Email, Employer, Task, RequestWorker
+from django.http import request
 
 # DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
 
@@ -94,23 +95,49 @@ class FormTask(forms.Form):
         attrs={'class': 'form-control', 'placeholder': 'Describe the work or task'}))
 
 
-class Form_RequestWorker(forms.ModelForm):
-    class Meta:
-        model = RequestWorker
-        fields = (
-            'amount',
-            'start_date',
-            'end_date',
-            'start_time',
-            'end_time',
-            'description'
-        )
+# class Form_RequestWorker(forms.ModelForm):
 
-        widgets = {
-            'amount': forms.NumberInput(attrs={'class': 'form-control', 'id': 'req-w-amount', 'min': '1'}),
-            'start_date': forms.DateInput(attrs={'class': 'form-control', 'id': 'req-w-start_date', 'type': 'date'}),
-            'end_date': forms.DateInput(attrs={'class': 'form-control', 'id': 'req-w-end_date', 'type': 'date'}),
-            'start_time': forms.TimeInput(attrs={'class': 'form-control', 'id': 'req-w-start_time', 'type': 'time'}),
-            'end_time': forms.TimeInput(attrs={'class': 'form-control', 'id': 'req-w-end_time', 'type': 'time'}),
-            'description': forms.Textarea(attrs={'class': 'form-control text-area_height', 'id': 'req-w-description'})
-        }
+    # class Meta:
+    #     model = RequestWorker
+    #     # fields = (
+    #     #     'amount',
+    #     #     'start_date',
+    #     #     'end_date',
+    #     #     'start_time',
+    #     #     'end_time',
+    #     #     'description',
+    #     #     'requseted_by'
+    #     # )
+    #     # exclude = ["created"]
+    #     fields = '__all__'
+
+    #     widgets = {
+    #         'amount': forms.NumberInput(attrs={'class': 'form-control', 'id': 'req-w-amount', 'min': '1'}),
+    #         'start_date': forms.DateInput(attrs={'class': 'form-control', 'id': 'req-w-start_date', 'type': 'date'}),
+    #         'end_date': forms.DateInput(attrs={'class': 'form-control', 'id': 'req-w-end_date', 'type': 'date'}),
+    #         'start_time': forms.TimeInput(attrs={'class': 'form-control', 'id': 'req-w-start_time', 'type': 'time'}),
+    #         'end_time': forms.TimeInput(attrs={'class': 'form-control', 'id': 'req-w-end_time', 'type': 'time'}),
+    #         'description': forms.Textarea(attrs={'class': 'form-control text-area_height', 'id': 'req-w-description'}),
+    #         'requested_by': forms.HiddenInput(),
+    #         'created': forms.HiddenInput()
+    #     }
+
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     employer = Employer.objects.first()
+    #     self.fields['requested_by'].initial = employer
+
+
+class Form_RequestWorker(forms.Form):
+    amount = forms.IntegerField(widget=forms.NumberInput(
+        attrs={'class': 'form-control', 'id': 'req-w-amount', 'min': '1'}))
+    start_date = forms.DateField(widget=forms.DateInput(
+        attrs={'class': 'form-control', 'id': 'req-w-start_date', 'type': 'date'}))
+    end_date = forms.DateField(widget=forms.DateInput(
+        attrs={'class': 'form-control', 'id': 'req-w-end_date', 'type': 'date'}))
+    start_time = forms.TimeField(widget=forms.TimeInput(
+        attrs={'class': 'form-control', 'id': 'req-w-start_time', 'type': 'time'}))
+    end_time = forms.TimeField(widget=forms.TimeInput(
+        attrs={'class': 'form-control', 'id': 'req-w-end_time', 'type': 'time'}))
+    description = forms.CharField(widget=forms.Textarea(
+        attrs={'class': 'form-control text-area_height', 'id': 'req-w-description'}))
