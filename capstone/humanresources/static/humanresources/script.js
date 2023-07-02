@@ -1,10 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-   
-  // document.addEventListener('scroll', function() {
-  //   const scrollAmountY = window.scrollY;
-  // })
-
-  
+    
   const taskContainer = document.querySelector('#tasks');
 
   // if this is a Employer account
@@ -32,8 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
           taskContainer.append(element);
         });
     });
-
-
 
     taskContainer.addEventListener('click', event => {
       if(event.target.matches('#requestBtn')){

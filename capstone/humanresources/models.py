@@ -96,7 +96,7 @@ class Task(models.Model):
 
 
 class RequestWorker(models.Model):
-    requseted_by = models.ForeignKey(Employer, on_delete=models.CASCADE)
+    requested_by = models.ForeignKey(Employer, on_delete=models.CASCADE)
     amount = models.IntegerField()
     start_date = models.DateField(default=date.today)
     end_date = models.DateField(default=date.today)

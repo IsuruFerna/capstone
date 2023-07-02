@@ -27,7 +27,8 @@
           <button type="button" id="btn-toast" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-          <form method="post">
+          <form method="post" action="{% url 'index' %}">
+            {% csrf_token %}
 
             <div class="mb-3">
               <label for="req-w-amount" class="form-label">Amount of workers</label>
