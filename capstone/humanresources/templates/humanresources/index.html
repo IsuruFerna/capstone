@@ -1,8 +1,10 @@
 {% extends 'humanresources/layout.html' %}
 
 {% block body %}
-  hello {{ request.user.username }} this is dash board
+  hello {{ request.user.email }} this is dash board
   account type: {{ user.acc_email.account_type }}
+  employer id: {{ user.acc_email.id }}
+
 
   {% if user.acc_email.account_type == '3' %}
     i'm acc 3
@@ -11,7 +13,13 @@
 
   {% endif %}
 
+  
+
   <div id="tasks" data-account="{{ user.acc_email.account_type }}"></div>
+
+  <div id="view-requested">
+    Hello this is requested div
+  </div>
 
 
 
@@ -58,6 +66,11 @@
             <div class="mb-3">
               <label for="req-w-description" class="form-label">Description</label>
               {{ form.description }}
+            </div>
+
+            <div class="mb-3">
+              {% comment %} <label for="req-w-description" class="form-label">Description</label> {% endcomment %}
+              {{ form.task }}
             </div>
 
             <button class="btn btn-primary" type="submit">Request</button>

@@ -30,6 +30,7 @@ def index(request):
             # save data into the database
             form_data = RequestWorker(
                 requested_by=employer,
+                task=form.cleaned_data['task'],
                 amount=form.cleaned_data['amount'],
                 start_date=form.cleaned_data['start_date'],
                 end_date=form.cleaned_data['end_date'],
@@ -212,10 +213,11 @@ def add_employer(request):
 
 
 def work_arrange(request):
+
     if request.method == 'POST':
 
         # select the employer to complete the model Task
-        user = Email.objects.get(email=request.user.username)
+        user = Email.objects.get(email=request.user.email)
         employer = Employer.objects.get(email=user)
 
         form = FormTask(request.POST)
@@ -223,7 +225,7 @@ def work_arrange(request):
         # validate form and save into database
         if form.is_valid():
 
-            task = Task.objects.create(
+            task = Task(
                 company=employer,
                 task=form.cleaned_data['task'],
                 description=form.cleaned_data['description'],
@@ -258,7 +260,13 @@ def employer_tasks(request):
     return JsonResponse([task.serialize() for task in tasks], safe=False)
 
 
+@csrf_exempt
 @login_required
-def request_workers(request):
-    print("requested")
-    return HttpResponseRedirect(reverse('index'))
+def requested(request, acc_id):
+
+    # get the employer and their requests for work
+    employer = Employer.objects.get(pk=acc_id)
+    requested_workers = RequestWorker.objects.filter(requested_by=employer)
+
+    print("requested employer id", employer)
+    return JsonResponse([requested_worker.serialize() for requested_worker in requested_workers], safe=False)

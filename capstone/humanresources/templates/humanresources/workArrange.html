@@ -3,7 +3,7 @@
 {% block body %}
   <h1>Work Arrange</h1>
 
-  {% if user.acc_type == '3' %}
+  {% if user.acc_email.account_type == '3' %}
     {% if message %}
       <div class="alert alert-danger" role="alert">
         {{ message }}

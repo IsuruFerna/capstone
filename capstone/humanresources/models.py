@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-from datetime import date
 # from phonenumber_field.modelfields import PhoneNumberField
 
 # automatically generate passwords for employee for the first time
@@ -36,7 +35,7 @@ class User(AbstractUser):
 
     # to get the account info directly to layout
     def acc_email(self):
-        return Email.objects.get(email=self.username)
+        return Email.objects.get(email=self.email)
 
     # def acc_type(self):
     #     return Email.objects.get(email=self.username).account_type
@@ -97,10 +96,23 @@ class Task(models.Model):
 
 class RequestWorker(models.Model):
     requested_by = models.ForeignKey(Employer, on_delete=models.CASCADE)
+    task = models.CharField(max_length=254)
     amount = models.IntegerField()
-    start_date = models.DateField(default=date.today)
-    end_date = models.DateField(default=date.today)
+    start_date = models.DateField()
+    end_date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
     description = models.CharField(max_length=600)
     created = models.DateTimeField(auto_now=True)
+
+    def serialize(self):
+        return {
+            "task": self.task,
+            "amount": self.amount,
+            "start_date": self.start_date.strftime("%b %d %Y"),
+            "end_date": self.end_date.strftime("%b %d %Y"),
+            "start_time": self.start_time.strftime("%I:%M %p"),
+            "end_time": self.end_time.strftime("%I:%M %p"),
+            "description": self.description,
+            "created": self.created.strftime("%b %d %Y, %I:%M %p")
+        }
