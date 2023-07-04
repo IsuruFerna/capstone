@@ -32,14 +32,18 @@
             {% comment %} Employer profile {% endcomment %}
             {% if user.acc_email.account_type == '3' %}
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Register</a>
+                <a id="home" class="nav-link active" aria-current="page" href="#">Home</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'work_arrange' %}">Work Arrange</a>
               </li>
+              <li class="nav-item">
+                <a id="requested" class="nav-link active" aria-current="page" href="#">Requested</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Register</a>
+              </li>
+
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Labour request</a>
               </li>
@@ -72,7 +76,7 @@
         </div>
       </div>
     </nav>
-
+    <div id="info" data-accountid="{{ user.acc_email.id }}" data-account="{{ user.acc_email.account_type }}" hidden></div>
   {% endif %}
   {% block body %}
   {% endblock %}

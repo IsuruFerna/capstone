@@ -13,5 +13,7 @@ urlpatterns = [
 
 
     # API
-    path("tasks", views.employer_tasks, name="employer_tasks")
+    path("tasks", views.employer_tasks, name="employer_tasks"),
+    path("requested/<int:acc_id>", views.requested, name="requested"),
+
 ]

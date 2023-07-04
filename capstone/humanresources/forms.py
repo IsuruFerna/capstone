@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import User, User_details, Email, Employer, Task, RequestWorker
 from django.http import request
+import datetime
 
 # DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
 
@@ -129,15 +130,17 @@ class FormTask(forms.Form):
 
 
 class Form_RequestWorker(forms.Form):
+    task = forms.CharField(max_length=254, widget=forms.HiddenInput(
+        attrs={'class': 'form-control', 'id': 'req-w-task'}))
     amount = forms.IntegerField(widget=forms.NumberInput(
         attrs={'class': 'form-control', 'id': 'req-w-amount', 'min': '1'}))
-    start_date = forms.DateField(widget=forms.DateInput(
+    start_date = forms.DateField(initial=datetime.date.today, widget=forms.DateInput(
         attrs={'class': 'form-control', 'id': 'req-w-start_date', 'type': 'date'}))
-    end_date = forms.DateField(widget=forms.DateInput(
+    end_date = forms.DateField(initial=datetime.date.today, widget=forms.DateInput(
         attrs={'class': 'form-control', 'id': 'req-w-end_date', 'type': 'date'}))
     start_time = forms.TimeField(widget=forms.TimeInput(
         attrs={'class': 'form-control', 'id': 'req-w-start_time', 'type': 'time'}))
     end_time = forms.TimeField(widget=forms.TimeInput(
         attrs={'class': 'form-control', 'id': 'req-w-end_time', 'type': 'time'}))
-    description = forms.CharField(widget=forms.Textarea(
+    description = forms.CharField(max_length=600, widget=forms.Textarea(
         attrs={'class': 'form-control text-area_height', 'id': 'req-w-description'}))
