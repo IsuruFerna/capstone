@@ -10,7 +10,7 @@
       </div>
     {% endif %}
 
-    <form action="{% url 'work_arrange' %}" method="post" class="form-add">
+    <form action="{% url 'work_arrange' %}" method="post" id="work-arrange" class="form-add">
       {% csrf_token %}
       {{ form_task }}
       <br>

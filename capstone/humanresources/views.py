@@ -16,6 +16,7 @@ from .models import Email, User, Employer, Task, RequestWorker
 
 @login_required(login_url="login")
 def index(request):
+    print("this is index")
 
     # check the worker request form
     if request.method == "POST":
@@ -23,31 +24,62 @@ def index(request):
         # get Email -> Employer to save data into RequestWorker table
         user = Email.objects.get(email=request.user.email)
         employer = Employer.objects.get(email=user)
-        form = Form_RequestWorker(request.POST)
 
-        if form.is_valid():
+        # forms
+        form_req = Form_RequestWorker(request.POST, prefix="requestWorkers")
+        form = FormTask(request.POST, prefix="taskArrange")
 
-            # save data into the database
-            form_data = RequestWorker(
-                requested_by=employer,
-                task=form.cleaned_data['task'],
-                amount=form.cleaned_data['amount'],
-                start_date=form.cleaned_data['start_date'],
-                end_date=form.cleaned_data['end_date'],
-                start_time=form.cleaned_data['start_time'],
-                end_time=form.cleaned_data['end_time'],
-                description=form.cleaned_data['description']
-            )
-            form_data.save()
+        # this form handle request workers
+        if 'requestWorkers' in request.POST:
 
-        else:
-            # retreave with inserted invalid data
-            return render(request, 'humanresources/index.html', {
-                'form': form
-            })
+            if form_req.is_valid():
+
+                # save data into the database
+                form_data = RequestWorker(
+                    requested_by=employer,
+                    task=form_req.cleaned_data['task'],
+                    amount=form_req.cleaned_data['amount'],
+                    start_date=form_req.cleaned_data['start_date'],
+                    end_date=form_req.cleaned_data['end_date'],
+                    start_time=form_req.cleaned_data['start_time'],
+                    end_time=form_req.cleaned_data['end_time'],
+                    description=form_req.cleaned_data['description']
+                )
+                form_data.save()
+
+                return HttpResponseRedirect(reverse('index'))
+
+            else:
+                # retreave with inserted invalid data
+                return render(request, 'humanresources/index.html', {
+                    'form': form_req
+                })
+
+        # this form handle work arrangement/tasks
+        if 'taskArrange' in request.POST:
+
+            # validate form and save into database
+            if form.is_valid():
+
+                task = Task(
+                    company=employer,
+                    task=form.cleaned_data['task'],
+                    description=form.cleaned_data['description'],
+                    amount=form.cleaned_data['amount']
+                )
+                task.save()
+
+                return HttpResponseRedirect(reverse('index'))
+
+            else:
+                return render(request, "humanresources/index.html", {
+                    'message': "Something wrong with your inserted data. Please recheck and try again!",
+                    'form_task': form
+                })
 
     return render(request, 'humanresources/index.html', {
-        'form': Form_RequestWorker()
+        'form': Form_RequestWorker(prefix="requestWorkers"),
+        'form_task': FormTask(prefix="taskArrange")
     })
 
 
