@@ -106,3 +106,9 @@ body {
 .blur {
   filter: blur(1.5rem);
 }
+
+a.disabled {
+  pointer-events: none;
+  cursor: pointer;
+  color: rebeccapurple;
+}
