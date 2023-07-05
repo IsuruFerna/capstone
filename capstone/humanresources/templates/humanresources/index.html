@@ -21,6 +21,20 @@
     Hello this is requested div
   </div>
 
+  <div id="form-work-arrange">
+    {% if message %}
+      <div class="alert alert-danger" role="alert">
+        {{ message }}
+      </div>
+    {% endif %}
+
+    <form action="{% url 'index' %}" method="post" class="form-add">
+      {% csrf_token %}
+      {{ form_task }}
+      <br>
+      <button class="btn btn-primary" name="taskArrange" type="submit">Save</button>
+    </form>
+  </div>
 
 
   {% comment %} <h1>This is accout id: {{ user.acc_email.pk }}</h1> {% endcomment %}
@@ -37,6 +51,7 @@
         <div class="toast-body">
           <form method="post" action="{% url 'index' %}">
             {% csrf_token %}
+            {{ form.prefix }}
 
             <div class="mb-3">
               <label for="req-w-amount" class="form-label">Amount of workers</label>
@@ -73,7 +88,7 @@
               {{ form.task }}
             </div>
 
-            <button class="btn btn-primary" type="submit">Request</button>
+            <button class="btn btn-primary" name="requestWorkers" type="submit">Request</button>
           </form>
         </div>
       </div>

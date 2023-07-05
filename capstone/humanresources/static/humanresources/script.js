@@ -11,12 +11,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // use buttons to toggle between views
   const btnHome =  document.querySelector('#home');
-  btnHome.addEventListener('click', ()=> load_view('created'));
-  document.querySelector('#requested').addEventListener('click', ()=> load_view('requested'));
+  btnHome.addEventListener('click', e => load_view('created', e));
+  document.querySelector('#requested').addEventListener('click', e => load_view('requested', e));
+  document.querySelector('#work-arrange').addEventListener('click', e => {
+    console.log("clicked on work arrange");
+    load_view('work-arrange', e);
+  });
 
   console.log('befoer', dataCreatedTasks);
 
-  load_view('created');
+  dataFetch('created');
   // btnHome.removeAttribute('href');
   console.log("after", dataCreatedTasks);
   btnHome.classList.add('disabled');
@@ -35,7 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // for testing
-function load_view(view) {
+function load_view(view, e) {
+  e.preventDefault();
   dataFetch(view);
 }
 
@@ -46,14 +51,21 @@ let dataRequestedTasks = null;
 function dataFetch(input) {
   const containerCreatedTasks = document.querySelector('#tasks');
   const containerRequestedTasks = document.querySelector('#view-requested');
+  const formWorkArrange = document.querySelector('#form-work-arrange');
   
   if (input !== 'created') {
     document.querySelector('#home').classList.remove('disabled');
   }
 
+  if (input === 'work-arrange') {
+    console.log("this is work arrange");
+    containerCreatedTasks.style.display = 'none';
+    containerRequestedTasks.style.display = 'none';
+    formWorkArrange.style.display = 'block';
+  }
 
   // if the global variables are null, then fetch data
-  if (!dataCreatedTasks || !dataRequestedTasks) {
+  if (!dataCreatedTasks || !dataRequestedTasks  && input !== 'work-arrange') {
     fetch(`tasks/${input}`)
     .then(response => response.json())
     .then(tasks => {
@@ -66,6 +78,7 @@ function dataFetch(input) {
         renderTasks(dataCreatedTasks, containerCreatedTasks);
         containerCreatedTasks.style.display = 'block';
         containerRequestedTasks.style.display = 'none';
+        formWorkArrange.style.display = 'none';
 
         // once click on 'request button' a form appears to request workers
         requestTask(containerCreatedTasks);
@@ -74,6 +87,7 @@ function dataFetch(input) {
         dataRequestedTasks = tasks;
         containerCreatedTasks.style.display = 'none';
         containerRequestedTasks.style.display = 'block';
+        formWorkArrange.style.display = 'none';
       }
     })
   }
@@ -82,10 +96,15 @@ function dataFetch(input) {
   if (dataCreatedTasks && input === 'created') {
     containerCreatedTasks.style.display = 'block';
     containerRequestedTasks.style.display = 'none';
+    formWorkArrange.style.display = 'none';
+
   } else if (dataRequestedTasks && input === 'requested') {
     containerCreatedTasks.style.display = 'none';
     containerRequestedTasks.style.display = 'block';
-  }
+    formWorkArrange.style.display = 'none';
+
+  } 
+  
 
 }
 
