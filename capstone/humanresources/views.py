@@ -262,10 +262,11 @@ def employer_tasks(request):
 
 @csrf_exempt
 @login_required
-def requested(request, acc_id):
+def requested(request):
 
     # get the employer and their requests for work
-    employer = Employer.objects.get(pk=acc_id)
+    user = Email.objects.get(email=request.user.email)
+    employer = Employer.objects.get(email=user)
     requested_workers = RequestWorker.objects.filter(requested_by=employer)
 
     print("requested employer id", employer)
