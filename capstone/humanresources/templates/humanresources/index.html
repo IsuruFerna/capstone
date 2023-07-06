@@ -1,45 +1,44 @@
 {% extends 'humanresources/layout.html' %}
+{% load static %}
+
+{% block script %}
+  <script src="{% static 'humanresources/script.js' %}"></script>
+{% endblock %}
 
 {% block body %}
   hello {{ request.user.email }} this is dash board
   account type: {{ user.acc_email.account_type }}
   employer id: {{ user.acc_email.id }}
 
+  <div id="profile" data-account="{{ user.acc_email.account_type }}"></div>
 
+
+  {% comment %} Employer account {% endcomment %}
   {% if user.acc_email.account_type == '3' %}
-    i'm acc 3
+ 
+    <div id="tasks" data-account="{{ user.acc_email.account_type }}"></div>
+
+    <div id="view-requested"></div>
+
+    <div id="form-work-arrange">
+      {% if message %}
+        <div class="alert alert-danger" role="alert">
+          {{ message }}
+        </div>
+      {% endif %}
+
+      <form action="{% url 'index' %}" method="post" class="form-add">
+        {% csrf_token %}
+        {{ form_task }}
+        <br>
+        <button class="btn btn-primary" name="taskArrange" type="submit">Save</button>
+      </form>
+    </div>
 
 
+    {% comment %} <h1>This is accout id: {{ user.acc_email.pk }}</h1> {% endcomment %}
 
-  {% endif %}
-
-  
-
-  <div id="tasks" data-account="{{ user.acc_email.account_type }}"></div>
-
-  <div id="view-requested">
-    Hello this is requested div
-  </div>
-
-  <div id="form-work-arrange">
-    {% if message %}
-      <div class="alert alert-danger" role="alert">
-        {{ message }}
-      </div>
-    {% endif %}
-
-    <form action="{% url 'index' %}" method="post" class="form-add">
-      {% csrf_token %}
-      {{ form_task }}
-      <br>
-      <button class="btn btn-primary" name="taskArrange" type="submit">Save</button>
-    </form>
-  </div>
-
-
-  {% comment %} <h1>This is accout id: {{ user.acc_email.pk }}</h1> {% endcomment %}
-
-      <!-- Flexbox container for aligning the toasts -->
+    <!-- Flexbox container for aligning the toasts -->
     <div id="request-task" aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
     
       <!-- Then put toasts within -->
@@ -93,6 +92,11 @@
         </div>
       </div>
     </div>
+
+  {% elif user.acc_email.account_type == '2' %}
+  {% else %}
+    <div id="view-dashboard"></div>
+  {% endif %}
 
 
   
