@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.db.models import Q
 
 from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask, Form_RequestWorker
 from .models import Email, User, Employer, Task, RequestWorker
@@ -317,3 +318,14 @@ def requested(request):
 def requested_workers(request):
     works = RequestWorker.objects.all()
     return JsonResponse([work.serialize() for work in works], safe=False)
+
+
+def available_workers(request, task_id):
+    tasks = RequestWorker.objects.get(pk=task_id)
+
+    # get available employee
+    available_workers = Email.objects.filter(
+        ~Q(workers__isnull=False), account_type='2')
+    print(tasks, available_workers)
+    # [worker.serialize() for worker in available_workers]
+    return JsonResponse([worker.serialize() for worker in available_workers], safe=False)

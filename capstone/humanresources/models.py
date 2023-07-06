@@ -26,6 +26,11 @@ class Email(models.Model):
     def __str__(self):
         return f"{self.email}: Account type: {self.account_type}"
 
+    def serialize(self):
+        return {
+            "email": self.email
+        }
+
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)
@@ -104,9 +109,11 @@ class RequestWorker(models.Model):
     end_time = models.TimeField()
     description = models.CharField(max_length=600)
     created = models.DateTimeField(auto_now=True)
+    workers = models.ManyToManyField(Email, related_name="workers")
 
     def serialize(self):
         return {
+            "id": self.pk,
             "employer": self.requested_by.company,
             "task": self.task,
             "amount": self.amount,
@@ -117,3 +124,11 @@ class RequestWorker(models.Model):
             "description": self.description,
             "created": self.created.strftime("%b %d %Y, %I:%M %p")
         }
+
+
+# class WorkAvailability(models.Model):
+#     employee = models.ForeignKey(Email, on_delete=models.CASCADE)
+#     start_date = models.DateField()
+#     end_date = models.DateField()
+#     start_time = models.TimeField()
+#     end_time = models.TimeField()
