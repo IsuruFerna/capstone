@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.db.models import Q
 
 from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask, Form_RequestWorker
 from .models import Email, User, Employer, Task, RequestWorker
@@ -163,9 +164,13 @@ def add_employee(request):
         # data validation to save in database
         if form_email.is_valid():
 
-            # form default account_type has setted to employee account type. so we don't have to modify it hereù
+            email_instance = form_email.save(commit=False)
+
+            # set account type to employee
+            email_instance.account_type = '2'
+
             # save email and account_type into db
-            email_instance = form_email.save()
+            email_instance.save()
 
             # Email(form_email.email) is a forginKey to form_user_details.user, so we use instances to save correctly
             if form_user_details.is_valid():
@@ -173,19 +178,21 @@ def add_employee(request):
                 user_details_instance.user = email_instance
                 user_details_instance.save()
 
+                print("employee saved")
                 return HttpResponseRedirect(reverse('index'))
 
             else:
                 message = "Something is wrong with the inserted data. Please recheck the form!"
 
         else:
+            print(form_email.errors)
             message = "Email is already taken!"
 
         # render site with error messages if any of form isn't valid
         return render(request, 'humanresources/addEmployee.html', {
             'message': message,
-            'user_details': FormEmployeeDetails,
-            'form_email': User_email
+            'user_details': form_user_details,
+            'form_email': form_email
         })
 
     # otherwise render new forms
@@ -206,8 +213,9 @@ def add_employer(request):
             print('form_email is valid')
 
             # changing account type to Employer and save
-            form_email.account_type = '2'
-            email_instance = form_email.save()
+            email_instance = form_email.save(commit=False)
+            email_instance.account_type = '3'
+            email_instance.save()
 
             email = form_email.cleaned_data['email']
             print("email: ", email)
@@ -310,3 +318,14 @@ def requested(request):
 def requested_workers(request):
     works = RequestWorker.objects.all()
     return JsonResponse([work.serialize() for work in works], safe=False)
+
+
+def available_workers(request, task_id):
+    tasks = RequestWorker.objects.get(pk=task_id)
+
+    # get available employee
+    available_workers = Email.objects.filter(
+        ~Q(workers__isnull=False), account_type='2')
+    print(tasks, available_workers)
+    # [worker.serialize() for worker in available_workers]
+    return JsonResponse([worker.serialize() for worker in available_workers], safe=False)

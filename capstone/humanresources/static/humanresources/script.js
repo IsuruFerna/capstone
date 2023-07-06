@@ -29,6 +29,24 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('#dashboard').addEventListener('click', e => load_view_main('requestedWorker', e));
 
     load_view_main('requestedWorker');
+    const taskContainer = document.querySelector('#view-dashboard');
+    taskContainer.addEventListener('click', event => {
+      if (event.target.matches('#btnArrange')) {
+        console.log("clicked on arrange button");
+        document.querySelector('#view-dashboard').style.display = 'none';
+        document.querySelector('#view-workArrange').style.display = 'block';
+
+        const parentElement = event.target.parentElement;
+        const requestedTaskId = parentElement.querySelector('#requested-task-id').textContent;
+        console.log(parentElement, requestedTaskId);
+
+        fetch(`/task/${requestedTaskId}`)
+        .then(response => response.json())
+        .then(task => {
+          console.log(task);
+        })
+      }
+    })
 
     console.log("this is main account");
   }
@@ -70,6 +88,7 @@ function load_view_main(view, e) {
                                       </ul>
                                     <li><small>Created: ${task.created}</small></li>
                                   </ul>
+                                  <p id="requested-task-id" hidden>${task.id}</p>
                                 
                                   <button type="button" id="btnArrange" class="btn-request btn btn-primary">Arrange</button>
                                 </div>
