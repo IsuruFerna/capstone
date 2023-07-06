@@ -1,6 +1,12 @@
 {% extends 'humanresources/layout.html' %}
 
 {% block body %} 
+  {% if message %}
+    <div class="alert alert-danger" role="alert">
+      {{ message }}
+    </div>
+  {% endif %}
+  
   <form action="{% url 'add_employee' %}" method="POST" class="form-add">
     {% csrf_token %}
     

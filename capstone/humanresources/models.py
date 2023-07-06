@@ -11,8 +11,8 @@ from django.contrib.auth.models import AbstractUser
 
 class Email(models.Model):
     MAIN = '1'
-    EMPLOYER = '2'
-    EMPLOYEE = '3'
+    EMPLOYEE = '2'
+    EMPLOYER = '3'
     ACCOUNT_TYPE_CHOICES = [
         (MAIN, "Main"),
         (EMPLOYER, "Employer"),
@@ -20,7 +20,7 @@ class Email(models.Model):
     ]
 
     account_type = models.CharField(
-        max_length=1, choices=ACCOUNT_TYPE_CHOICES, default=EMPLOYEE)
+        max_length=1, choices=ACCOUNT_TYPE_CHOICES, default=EMPLOYEE, blank=True)
     email = models.EmailField(unique=True)
 
     def __str__(self):
