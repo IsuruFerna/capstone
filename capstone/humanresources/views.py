@@ -322,10 +322,10 @@ def requested_workers(request):
 
 def available_workers(request, task_id):
     tasks = RequestWorker.objects.get(pk=task_id)
+    # I want to get the time and dates and check availability. ckeck the last date
 
     # get available employee
     available_workers = Email.objects.filter(
         ~Q(workers__isnull=False), account_type='2')
     print(tasks, available_workers)
-    # [worker.serialize() for worker in available_workers]
     return JsonResponse([worker.serialize() for worker in available_workers], safe=False)

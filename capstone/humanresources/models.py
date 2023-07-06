@@ -27,8 +27,15 @@ class Email(models.Model):
         return f"{self.email}: Account type: {self.account_type}"
 
     def serialize(self):
+        user = User_details.objects.get(user=self)
         return {
-            "email": self.email
+            "email": self.email,
+            "name": user.first_name,
+            "surname": user.surname,
+            "address": user.address1,
+            "city": user.city,
+            "zip": user.zip,
+            "phone": user.phone
         }
 
 
