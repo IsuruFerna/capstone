@@ -107,6 +107,7 @@ class RequestWorker(models.Model):
 
     def serialize(self):
         return {
+            "employer": self.requested_by.company,
             "task": self.task,
             "amount": self.amount,
             "start_date": self.start_date.strftime("%b %d %Y"),

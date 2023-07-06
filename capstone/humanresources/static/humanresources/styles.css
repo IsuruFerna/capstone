@@ -78,7 +78,7 @@ body {
   padding: 10%;
 }
 
-#tasks, #view-requested {
+#tasks, #view-requested, #view-dashboard {
   margin-left: auto;
   margin-right: auto;
   width: 90%;

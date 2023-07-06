@@ -15,5 +15,6 @@ urlpatterns = [
     # API
     path("tasks/created", views.employer_tasks, name="employer_tasks"),
     path("tasks/requested", views.requested, name="requested"),
+    path("task/requestedWorker", views.requested_workers, name="requested_workers")
 
 ]

@@ -303,3 +303,10 @@ def requested(request):
 
     print("requested employer id", employer)
     return JsonResponse([requested_worker.serialize() for requested_worker in requested_workers], safe=False)
+
+
+@csrf_exempt
+@login_required
+def requested_workers(request):
+    works = RequestWorker.objects.all()
+    return JsonResponse([work.serialize() for work in works], safe=False)

@@ -1,22 +1,90 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+  // getting the account type
+  const account = parseInt(document.querySelector('#profile').dataset.account);
+
+  // Employer account
+  if (account === 3) {
+
+    // use buttons to toggle between views
+    const btnHome =  document.querySelector('#home');
+    btnHome.addEventListener('click', e => load_view('created', e));
+    document.querySelector('#requested').addEventListener('click', e => load_view('requested', e));
+    document.querySelector('#work-arrange').addEventListener('click', e => load_view('work-arrange', e));
+  
+    // render home as default
+    dataFetch('created');
+  
+    // disable home anchor on the nav when page is loaded as default
+    // btnHome.removeAttribute('href');
+    btnHome.classList.add('disabled');
+
+  } else if (account === 2) {
+    // Employee account
+
+    console.log("this is a employee account");
+ 
+  } else {
+    // Main account
+    document.querySelector('#dashboard').addEventListener('click', e => load_view_main('requestedWorker', e));
+
+    load_view_main('requestedWorker');
+
+    console.log("this is main account");
+  }
     
-  // use buttons to toggle between views
-  const btnHome =  document.querySelector('#home');
-  btnHome.addEventListener('click', e => load_view('created', e));
-  document.querySelector('#requested').addEventListener('click', e => load_view('requested', e));
-  document.querySelector('#work-arrange').addEventListener('click', e => load_view('work-arrange', e));
-
-  // render home as default
-  dataFetch('created');
-
-  // disable home anchor on the nav when page is loaded as default
-  // btnHome.removeAttribute('href');
-  btnHome.classList.add('disabled');
 });
 
 // use global variables to store fetch data to avoid duplications
 let dataCreatedTasks = null;
 let dataRequestedTasks = null;
+let dataRequestedWorkers = null;
+
+
+// Main account dashboard
+function load_view_main(view, e) {
+  if (e) {
+    e.preventDefault();
+  }
+  const viewDashboard = document.querySelector('#view-dashboard');
+
+  if (view === 'requestedWorker' && !dataRequestedWorkers) {
+    fetch(`task/${view}`)
+    .then(response => response.json())
+    .then(tasks => {
+      
+      dataRequestedWorkers = tasks;
+      tasks.forEach(task => {
+        const element = document.createElement('div');
+        element.innerHTML = `<div class="card mb-3">
+                                <div class="card-body">
+                                  <div class="card-title d-flex justify-content-start">
+                                    <h5 class="text-capitalize fw-bold">${task.employer} <span class="align-bottom fw-normal fs-6">${task.task}</span></h5>
+                                  </div>
+                                  <p id="task-amount"><strong>Amount: ${task.amount === 1 ? task.amount + ' worker' : task.amount + ' workers'}</strong></p>
+                                  <ul class="list-unstyled">
+                                    <li>${task.description}</li>
+                                      <ul>
+                                        <li>Date: ${task.start_date} - ${task.end_date}</li>
+                                        <li>Time: ${task.start_time} - ${task.end_time}</li>
+                                      </ul>
+                                    <li><small>Created: ${task.created}</small></li>
+                                  </ul>
+                                
+                                  <button type="button" id="btnArrange" class="btn-request btn btn-primary">Arrange</button>
+                                </div>
+                              </div>`;
+        viewDashboard.append(element);
+      })
+    })
+  }
+
+  // if (dataRequestedWorkers) {
+  //   viewDashboard.style.display = 'block';
+  // }
+}
+
+
 
 // this function prevent default when click on an anchor on the nav and using the 'dataFetch' load the page via API
 function load_view(view, e) {
@@ -24,11 +92,13 @@ function load_view(view, e) {
   dataFetch(view);
 }
 
+// fetch data for Employer 
 function dataFetch(input) {
+ 
   const containerCreatedTasks = document.querySelector('#tasks');
   const containerRequestedTasks = document.querySelector('#view-requested');
   const formWorkArrange = document.querySelector('#form-work-arrange');
-  
+
   if (input !== 'created') {
     document.querySelector('#home').classList.remove('disabled');
   }
@@ -41,7 +111,7 @@ function dataFetch(input) {
   }
 
   // if the global variables are null, then fetch data
-  if (!dataCreatedTasks || !dataRequestedTasks  && input !== 'work-arrange') {
+  if (!dataCreatedTasks || !dataRequestedTasks && input !== 'work-arrange') {
     fetch(`tasks/${input}`)
     .then(response => response.json())
     .then(tasks => {
@@ -67,7 +137,7 @@ function dataFetch(input) {
         containerCreatedTasks.style.display = 'none';
         containerRequestedTasks.style.display = 'block';
         formWorkArrange.style.display = 'none';
-      }
+      } 
     })
   }
 
@@ -333,6 +403,7 @@ function renderRequestedTasks(tasks, viewRequested) {
                             </ul>
                           
                             <button type="button" id="btnRequestedEdit" class="btn-request btn btn-primary">Edit</button>
+                            <button type="button" class="btn btn-danger">Cancel</button>
                           </div>
                         </div>`;
   viewRequested.append(element);
