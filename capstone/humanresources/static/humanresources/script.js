@@ -1,52 +1,28 @@
 document.addEventListener('DOMContentLoaded', function() {
     
-  const btnRequested = document.querySelector('#requested');
-  // const btnHome = document.querySelector('#home');
-
-  // console.log("this is home btn", btnHome);
-  
-  let fetchHomeData = false;
-  let fetchRequestedWorkersData = false;
-  let dataHome = null;
-
   // use buttons to toggle between views
   const btnHome =  document.querySelector('#home');
   btnHome.addEventListener('click', e => load_view('created', e));
   document.querySelector('#requested').addEventListener('click', e => load_view('requested', e));
-  document.querySelector('#work-arrange').addEventListener('click', e => {
-    console.log("clicked on work arrange");
-    load_view('work-arrange', e);
-  });
+  document.querySelector('#work-arrange').addEventListener('click', e => load_view('work-arrange', e));
 
-  console.log('befoer', dataCreatedTasks);
-
+  // render home as default
   dataFetch('created');
+
+  // disable home anchor on the nav when page is loaded as default
   // btnHome.removeAttribute('href');
-  console.log("after", dataCreatedTasks);
   btnHome.classList.add('disabled');
-
-
-
-
-//   document.querySelector('#requested').addEventListener('click', (e)=> {
-//     e.preventDefault();
-//     if (!fetchRequestedWorkersData) {
-//       load_view('requested', dataHome);
-//       fetchRequestedWorkersData = true;
-//     }
-//     fetchHomeData = false;
-//   });
 });
-
-// for testing
-function load_view(view, e) {
-  e.preventDefault();
-  dataFetch(view);
-}
 
 // use global variables to store fetch data to avoid duplications
 let dataCreatedTasks = null;
 let dataRequestedTasks = null;
+
+// this function prevent default when click on an anchor on the nav and using the 'dataFetch' load the page via API
+function load_view(view, e) {
+  e.preventDefault();
+  dataFetch(view);
+}
 
 function dataFetch(input) {
   const containerCreatedTasks = document.querySelector('#tasks');
@@ -58,7 +34,7 @@ function dataFetch(input) {
   }
 
   if (input === 'work-arrange') {
-    console.log("this is work arrange");
+
     containerCreatedTasks.style.display = 'none';
     containerRequestedTasks.style.display = 'none';
     formWorkArrange.style.display = 'block';
@@ -85,6 +61,9 @@ function dataFetch(input) {
 
       } else if (input === 'requested') {
         dataRequestedTasks = tasks;
+
+        // render requested tasks and set visibility
+        renderRequestedTasks(dataRequestedTasks, containerRequestedTasks);
         containerCreatedTasks.style.display = 'none';
         containerRequestedTasks.style.display = 'block';
         formWorkArrange.style.display = 'none';
@@ -104,8 +83,6 @@ function dataFetch(input) {
     formWorkArrange.style.display = 'none';
 
   } 
-  
-
 }
 
 function requestTask(taskContainer) {
@@ -320,6 +297,7 @@ function requestTask(taskContainer) {
 
 // }
 
+// render each task created by the employer
 function renderTasks(dataHome, taskContainer) {
   dataHome.forEach(task => {
 
@@ -335,6 +313,30 @@ function renderTasks(dataHome, taskContainer) {
                         `;
     taskContainer.append(element);
   });
+}
+
+// render each requested workers requested by the employer
+function renderRequestedTasks(tasks, viewRequested) {
+  tasks.forEach(task => {
+  const element = document.createElement('div');
+  element.innerHTML = `<div class="card mb-3">
+                          <div class="card-body">
+                            <h5 id="task-name" class="card-title">${task.task}</h5>
+                            <p id="task-amount"><strong>Amount: ${task.amount === 1 ? task.amount + ' worker' : task.amount + ' workers'}</strong></p>
+                            <ul class="list-unstyled">
+                              <li>${task.description}</li>
+                                <ul>
+                                  <li>Date: ${task.start_date} - ${task.end_date}</li>
+                                  <li>Time: ${task.start_time} - ${task.end_time}</li>
+                                </ul>
+                              <li><small>Created: ${task.created}</small></li>
+                            </ul>
+                          
+                            <button type="button" id="btnRequestedEdit" class="btn-request btn btn-primary">Edit</button>
+                          </div>
+                        </div>`;
+  viewRequested.append(element);
+})
 }
 
 // // load requested
