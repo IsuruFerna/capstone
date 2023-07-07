@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.db.models import Q
 
-from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask, Form_RequestWorker
+from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask, Form_RequestWorker, Form_EmployeeMultipleChoice
 from .models import Email, User, Employer, Task, RequestWorker
 
 # Create your views here.
@@ -80,7 +80,8 @@ def index(request):
 
     return render(request, 'humanresources/index.html', {
         'form': Form_RequestWorker(prefix="requestWorkers"),
-        'form_task': FormTask(prefix="taskArrange")
+        'form_task': FormTask(prefix="taskArrange"),
+        'form_employee': Form_EmployeeMultipleChoice(prefix="employeeChoice")
     })
 
 
@@ -322,10 +323,10 @@ def requested_workers(request):
 
 def available_workers(request, task_id):
     tasks = RequestWorker.objects.get(pk=task_id)
+    # I want to get the time and dates and check availability. ckeck the last date
 
     # get available employee
     available_workers = Email.objects.filter(
         ~Q(workers__isnull=False), account_type='2')
     print(tasks, available_workers)
-    # [worker.serialize() for worker in available_workers]
     return JsonResponse([worker.serialize() for worker in available_workers], safe=False)

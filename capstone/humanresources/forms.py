@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import User, User_details, Email, Employer, Task, RequestWorker
 from django.http import request
 import datetime
+from django.db.models import Q
 
 # DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
 
@@ -144,3 +145,14 @@ class Form_RequestWorker(forms.Form):
         attrs={'class': 'form-control', 'id': 'req-w-end_time', 'type': 'time'}))
     description = forms.CharField(max_length=600, widget=forms.Textarea(
         attrs={'class': 'form-control text-area_height', 'id': 'req-w-description'}))
+
+
+class Form_EmployeeMultipleChoice(forms.ModelForm):
+
+    workers = forms.ModelMultipleChoiceField(queryset=Email.objects.filter(
+        ~Q(workers__isnull=False), account_type='2').distinct(), widget=forms.CheckboxSelectMultiple, required=False, to_field_name='id')
+
+    class Meta:
+        model = RequestWorker
+        fields = ['workers']
+        # i need ID
