@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.db.models import Q
 
-from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask, Form_RequestWorker
+from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask, Form_RequestWorker, Form_EmployeeMultipleChoice
 from .models import Email, User, Employer, Task, RequestWorker
 
 # Create your views here.
@@ -80,7 +80,8 @@ def index(request):
 
     return render(request, 'humanresources/index.html', {
         'form': Form_RequestWorker(prefix="requestWorkers"),
-        'form_task': FormTask(prefix="taskArrange")
+        'form_task': FormTask(prefix="taskArrange"),
+        'form_employee': Form_EmployeeMultipleChoice(prefix="employeeChoice")
     })
 
 

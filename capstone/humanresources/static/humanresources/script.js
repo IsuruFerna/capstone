@@ -38,7 +38,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const parentElement = event.target.parentElement;
         const requestedTaskId = parentElement.querySelector('#requested-task-id').textContent;
-        console.log(parentElement, requestedTaskId);
+
+        // const zone = parentElement.querySelector('#card-zone').textContent;
+        // let employer = parentElement.querySelector('#card-employer').innerHTML;
+        // employer = employer.substring(0, employer.indexOf('<')).trim();
+        // const amount = parseInt(parentElement.querySelector('#task-amount').textContent.match(/\d+/)[0]);
+        // const description = parentElement.querySelector('#card-description').textContent;
+        // const date = parentElement.querySelector('#card-date').textContent;
+        // const time = parentElement.querySelector('#card-time').textContent;
+        // const startDate = date.substring(date.indexOf(':') + 1, date.indexOf('-')).trim();
+        // const endDate = date.substring(date.indexOf('-') + 1, date.length).trim();
+        // const startTime = time.substring(time.indexOf(':') + 1, time.indexOf('-')).trim();
+        // const endTime = time.substring(time.indexOf('-') + 1, time.length).trim();
+        // const createdDate = parentElement.querySelector('#card-created').textContent;
+
+        // disable arrange button and insert the clicked parent element into page(left side)
+        parentElement.querySelector('#btnArrange').style.display = 'none';
+        const viewArrangeInfo = document.querySelector('#view-workArrange-info');
+        viewArrangeInfo.append(parentElement);
+        viewArrangeInfo.style.marginTop = '5%';
 
         fetch(`/task/${requestedTaskId}`)
         .then(response => response.json())
@@ -77,16 +95,16 @@ function load_view_main(view, e) {
         element.innerHTML = `<div class="card mb-3">
                                 <div class="card-body">
                                   <div class="card-title d-flex justify-content-start">
-                                    <h5 class="text-capitalize fw-bold">${task.employer} <span class="align-bottom fw-normal fs-6">${task.task}</span></h5>
+                                    <h5 id="card-employer" class="text-capitalize fw-bold">${task.employer} <span id="card-zone" class="align-bottom fw-normal fs-6">${task.task}</span></h5>
                                   </div>
                                   <p id="task-amount"><strong>Amount: ${task.amount === 1 ? task.amount + ' worker' : task.amount + ' workers'}</strong></p>
                                   <ul class="list-unstyled">
-                                    <li>${task.description}</li>
+                                    <li id="card-description">${task.description}</li>
                                       <ul>
-                                        <li>Date: ${task.start_date} - ${task.end_date}</li>
-                                        <li>Time: ${task.start_time} - ${task.end_time}</li>
+                                        <li id="card-date">Date: ${task.start_date} - ${task.end_date}</li>
+                                        <li id="card-time">Time: ${task.start_time} - ${task.end_time}</li>
                                       </ul>
-                                    <li><small>Created: ${task.created}</small></li>
+                                    <li id="card-created"><small>Created: ${task.created}</small></li>
                                   </ul>
                                   <p id="requested-task-id" hidden>${task.id}</p>
                                 
