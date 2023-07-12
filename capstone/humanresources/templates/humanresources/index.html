@@ -99,9 +99,11 @@
     <div id="view-workArrange" class="container">
       <div class="row">
         <div id="view-workArrange-info" class="col"></div>
-        <div class="col">
-          this is for choose
-          {{ form_employee }}
+        <div id="" class="col">
+          <form id="view-available-workers" action="{% url 'index' %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-primary btn-submit-workers" name="connectWorkersWithTasks" type="submit">Add</button>
+          </form>
         </div>
       </div>
     </div>

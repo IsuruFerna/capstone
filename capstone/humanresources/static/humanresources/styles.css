@@ -112,3 +112,13 @@ a.disabled {
   cursor: pointer;
   color: rebeccapurple;
 }
+
+.available-worker-view {
+  padding-left: 2rem;
+  padding-top: 1rem;
+}
+
+.btn-submit-workers {
+  position: absolute;
+  bottom: -3rem;
+}
