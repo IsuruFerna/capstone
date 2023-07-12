@@ -57,12 +57,48 @@ document.addEventListener('DOMContentLoaded', function() {
         const viewArrangeInfo = document.querySelector('#view-workArrange-info');
         viewArrangeInfo.append(parentElement);
         viewArrangeInfo.style.marginTop = '5%';
+        const viewAvailableWorkers = document.querySelector('#view-available-workers');
 
         fetch(`/task/${requestedTaskId}`)
         .then(response => response.json())
-        .then(task => {
-          console.log(task);
+        .then(workers => {
+          console.log(workers);
+          workers.forEach((worker, index) => {
+            const viewEmployee = document.createElement('div');
+            viewEmployee.innerHTML = `
+            <ul class="list-group">
+              <li class="list-group-item">
+                <input class="form-check-input me-1" type="checkbox" name="name-check-box" value="${worker.id}" id="Checkbox-${index}">
+                <label class="form-check-label" for="Checkbox-${index}">${ worker.email }</label>
+              </li>
+              <div class="available-worker-view bg-secondary bg-opacity-10">
+                <dl class="row text-capitalize">
+                  <dt class="col-sm-3">Name</dt>
+                  <dd class="col-sm-9">${worker.name}</dd>
+
+                  <dt class="col-sm-3">Surname</dt>
+                  <dd class="col-sm-9">${worker.surname}</dd>
+
+                  <dt class="col-sm-3">City</dt>
+                  <dd class="col-sm-9">${worker.city}</dd>
+
+                  <dt class="col-sm-3">Zip</dt>
+                  <dd class="col-sm-9">${worker.zip}</dd>
+
+                  <dt class="col-sm-3">Address</dt>
+                  <dd class="col-sm-9">${worker.address}</dd>
+
+                  <dt class="col-sm-3">Phone</dt>
+                  <dd class="col-sm-9">${worker.phone}</dd>
+
+                </div>
+            </ul>
+            `;
+            viewAvailableWorkers.append(viewEmployee);
+          })
         })
+
+        // save data via fetch
       }
     })
 

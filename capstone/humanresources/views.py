@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.db.models import Q
 
-from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask, Form_RequestWorker, Form_EmployeeMultipleChoice
+from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask, Form_RequestWorker
 from .models import Email, User, Employer, Task, RequestWorker
 
 # Create your views here.
@@ -22,13 +22,17 @@ def index(request):
     # check the worker request form
     if request.method == "POST":
 
-        # get Email -> Employer to save data into RequestWorker table
-        user = Email.objects.get(email=request.user.email)
-        employer = Employer.objects.get(email=user)
+        # to prevent unnecessary codes when 'connectWorkersWithTasks'
+        if 'connectWorkersWithTasks' not in request.POST:
 
-        # forms
-        form_req = Form_RequestWorker(request.POST, prefix="requestWorkers")
-        form = FormTask(request.POST, prefix="taskArrange")
+            # get Email -> Employer to save data into RequestWorker table
+            user = Email.objects.get(email=request.user.email)
+            employer = Employer.objects.get(email=user)
+
+            # forms
+            form_req = Form_RequestWorker(
+                request.POST, prefix="requestWorkers")
+            form = FormTask(request.POST, prefix="taskArrange")
 
         # this form handle request workers
         if 'requestWorkers' in request.POST:
@@ -78,10 +82,19 @@ def index(request):
                     'form_task': form
                 })
 
+        # connect workers with tasks(RequestWorker model)
+        if 'connectWorkersWithTasks' in request.POST:
+
+            # gettings the list of IDs of selected workers
+            values = request.POST.getlist('name-check-box')
+            print("now we are saving connectWorkersWithTasks", values)
+
+            # I have to do manual validation
+            return HttpResponseRedirect(reverse('index'))
+
     return render(request, 'humanresources/index.html', {
         'form': Form_RequestWorker(prefix="requestWorkers"),
-        'form_task': FormTask(prefix="taskArrange"),
-        'form_employee': Form_EmployeeMultipleChoice(prefix="employeeChoice")
+        'form_task': FormTask(prefix="taskArrange")
     })
 
 
@@ -322,11 +335,87 @@ def requested_workers(request):
 
 
 def available_workers(request, task_id):
-    tasks = RequestWorker.objects.get(pk=task_id)
+    # this_task = RequestWorker.objects.get(pk=task_id)
+    # tasks = RequestWorker.objects.all()
+    all_workers = Email.objects.all()
+
+    task = RequestWorker.objects.get(pk=task_id)
+    print("this is workers", task.workers)
+    workers = Email.objects.filter(account_type='2')
+
+    # get workers who are available for work that they haven't any relationship with requestWorker model
+    workers = Email.objects.filter(
+        Q(workers__isnull=True, account_type='2')
+    )
+
+    print("these are workers", workers)
+    available_workers = workers
+
+    # available_workers = all_workers
+
+    # start_date = this_task.start_date
+    # end_date = this_task.end_date
+
+    # # start_days = tasks.start_date
+    # for task in tasks:
+    #     day_start = task.start_date
+    #     day_end = task.end_date
+
+    #     if day_start <= start_date <= day_end or day_start <= end_date <= day_end:
+    #         available_workers = available_workers.exclude(
+    #             pk__in=task.workers.values_list('pk', flat=True))
+
+    #         # print('these are the available workers')
+
+    # for worker in available_workers:
+    #     print(worker)
+    # start_date = task.start_date
+    # end_date = task.end_date
+
+    # tasks = RequestWorker.objects.all()
+    # workers = Email.objects.filter(account_type='2').distinct()
+
+    # available = Email.objects.filter(
+    #     Q(requestworker__isnull=True, requestworker__pk=task_id) |
+    #     ~Q(requestworker__start_date__lte=end_date,
+    #        requestworker__end_date__gte=start_date)
+    # )
+
+    # # converting dates to required format
+    # def convert_date_format(date):
+    #     parse_date_string = datetime.strptime(date, "%b, %d, %Y")
+    #     formated__date = parse_date_string.strftime("%Y, %m, %d")
+    #     return formated__date
+
+    # available_workers = available
+
+    # # if workers are not already in the RequestedWorker object
+    # if not workers in related_workers:
+    #     print("we found some")
+    #     # they can be added without problem
+
+    #     # but we need to check their availability
+    #     if workers in tasks:
+    #         tasks.start_date
+
+    #         start_date = tasks.start_date
+    #         end_date = tasks.end_date
+    #         start_time = tasks.start_time
+    #         end_time = tasks.end_time
+
+    #         # task.start_date__range[start_date, end_date]
+    #         # task.end_date__range[start_date, end_date]
+
+    #         print("time")
+
+    # else:
+    #     print("there arn't related workers", tasks.start_time, tasks.end_time)
+    # available_workers = workers
+
     # I want to get the time and dates and check availability. ckeck the last date
 
     # get available employee
-    available_workers = Email.objects.filter(
-        ~Q(workers__isnull=False), account_type='2')
-    print(tasks, available_workers)
+    # available_workers = Email.objects.filter(
+    #     Q(account_type='2'), )
+    # print(tasks, available_workers)
     return JsonResponse([worker.serialize() for worker in available_workers], safe=False)

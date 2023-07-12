@@ -28,7 +28,9 @@ class Email(models.Model):
 
     def serialize(self):
         user = User_details.objects.get(user=self)
+        # print(user.first_name)
         return {
+            "id": self.pk,
             "email": self.email,
             "name": user.first_name,
             "surname": user.surname,

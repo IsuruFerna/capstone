@@ -147,12 +147,27 @@ class Form_RequestWorker(forms.Form):
         attrs={'class': 'form-control text-area_height', 'id': 'req-w-description'}))
 
 
-class Form_EmployeeMultipleChoice(forms.ModelForm):
+# class Form_EmployeeMultipleChoice(forms.ModelForm):
 
-    workers = forms.ModelMultipleChoiceField(queryset=Email.objects.filter(
-        ~Q(workers__isnull=False), account_type='2').distinct(), widget=forms.CheckboxSelectMultiple, required=False, to_field_name='id')
+#     workers = forms.ModelMultipleChoiceField(queryset=Email.objects.filter(
+#         ~Q(workers__isnull=False), account_type='2').distinct(), widget=forms.CheckboxSelectMultiple, required=False, to_field_name='id')
 
-    class Meta:
-        model = RequestWorker
-        fields = ['workers']
-        # i need ID
+#     class Meta:
+#         model = RequestWorker
+#         fields = ['workers']
+#         # i need ID
+
+#     def available_workers(self, start_date_str, end_date_str):
+
+#         # converting dates to required format
+#         def convert_date_format(date):
+#             parse_date_string = datetime.strptime(date, "%b, %d, %Y")
+#             formated__date = parse_date_string.strftime("%Y, %m, %d")
+#             return formated__date
+
+#         start_date = convert_date_format(start_date_str)
+#         end_date = convert_date_format(end_date_str)
+
+#         Email.objects.filter(
+#             ~Q(workers__isnull=False), ,account_type='2'
+#         )
