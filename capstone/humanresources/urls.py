@@ -16,6 +16,8 @@ urlpatterns = [
     path("tasks/created", views.employer_tasks, name="employer_tasks"),
     path("tasks/requested", views.requested, name="requested"),
     path("task/requestedWorker", views.requested_workers, name="requested_workers"),
-    path("task/<int:task_id>", views.available_workers, name="availableWorkers")
+    path("task/<int:task_id>", views.available_workers, name="availableWorkers"),
+    path("workers/<int:requestWorker_id>",
+         views.connect_workers, name="connectWorkers"),
 
 ]

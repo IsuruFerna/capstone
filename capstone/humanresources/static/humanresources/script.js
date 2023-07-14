@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // getting the account type
   const account = parseInt(document.querySelector('#profile').dataset.account);
+  document.querySelector('#btn-worker-connect').style.display = 'none';
 
   // Employer account
   if (account === 3) {
@@ -68,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
             viewEmployee.innerHTML = `
             <ul class="list-group">
               <li class="list-group-item">
-                <input class="form-check-input me-1" type="checkbox" name="name-check-box" value="${worker.id}" id="Checkbox-${index}">
+                <input class="form-check-input me-1 checkbox-values" type="checkbox" name="name-check-box" value="${worker.id}" id="Checkbox-${index}">
                 <label class="form-check-label" for="Checkbox-${index}">${ worker.email }</label>
               </li>
               <div class="available-worker-view bg-secondary bg-opacity-10">
@@ -95,10 +96,40 @@ document.addEventListener('DOMContentLoaded', function() {
             </ul>
             `;
             viewAvailableWorkers.append(viewEmployee);
-          })
+          });
+          document.querySelector('#btn-worker-connect').style.display = 'block';
         })
 
+        
         // save data via fetch
+        viewAvailableWorkers.addEventListener('submit', e => {
+          e.preventDefault();
+
+          // storing checked values(worker ids) into an array
+          let workerIds = [];
+          const checkboxValues = document.querySelectorAll('.checkbox-values:checked');
+          checkboxValues.forEach(checked => {
+            if (checked.value) {
+              workerIds.push(parseInt(checked.value));
+            }
+          });
+
+          console.log("this is task id", requestedTaskId);
+          console.log("this is checkbox value", workerIds);
+
+          fetch(`workers/${requestedTaskId}`, {
+            method: 'POST',
+            body: JSON.stringify({
+              workers: workerIds
+            })
+          })
+          .then(response => response.json())
+          .then(result => {
+            // print result
+            // load newly available workers
+            console.log(result);
+          })
+        })
       }
     })
 
