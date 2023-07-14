@@ -5,17 +5,21 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
-    path("search", views.search, name="search"),
+    path("search", views.search, name="search"),  # not available
     path("register", views.register, name="register"),
     path("addEmployee", views.add_employee, name="add_employee"),
     path("addEmployer", views.add_employer, name="add_employer"),
-    path("workArrange", views.work_arrange, name="work_arrange"),
+    path("workArrange", views.work_arrange,
+         name="work_arrange"),  # not available
+    path("employees", views.employees, name="employees"),
+    path("employers", views.employers, name="employers"),
 
 
     # API
     path("tasks/created", views.employer_tasks, name="employer_tasks"),
     path("tasks/requested", views.requested, name="requested"),
-    path("task/requestedWorker", views.requested_workers, name="requested_workers"),
+    path("task/requestedWorker", views.requested_workers,
+         name="requested_workers"),  # not available
     path("task/<int:task_id>", views.available_workers, name="availableWorkers"),
     path("workers/<int:requestWorker_id>",
          views.connect_workers, name="connectWorkers"),

@@ -60,7 +60,10 @@
               <a id="dashboard" class="nav-link active" aria-current="page" href="{% url 'index' %}">Dashboard</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'search' %}">Search</a>
+              <a class="nav-link" href="{% url 'employees' %}">Employees</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'employers' %}">Employers</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -72,9 +75,6 @@
                 <hr class="hr">
                 <li><a class="dropdown-item" href="#">Employee Register</a></li>
               </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'work_arrange' %}">Work Arrange</a>
             </li>
 
             {% endif %}

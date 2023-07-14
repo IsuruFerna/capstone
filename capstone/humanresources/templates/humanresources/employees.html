@@ -1,0 +1,33 @@
+{% extends 'humanresources/layout.html' %}
+{% load static %}
+
+{% block body %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Email</th>
+      <th scope="col">Phone</th>
+      <th scope="col">City</th>
+      <th scope="col">Zip</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for employee in employee_detail %}
+      <tr>
+        <th scope="row">{{ employee.user.id }}</th>
+        <td>{{ employee.first_name|title }}</td>
+        <td>{{ employee.last_name|title }}</td>
+        <td>{{ employee.user.email }}</td>
+        <td>{{ employee.phone }}</td>
+        <td>{{ employee.city }}</td>
+        <td>{{ employee.zip }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% endblock %}
