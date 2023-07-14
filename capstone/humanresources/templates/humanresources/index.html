@@ -100,9 +100,9 @@
       <div class="row">
         <div id="view-workArrange-info" class="col"></div>
         <div id="" class="col">
-          <form id="view-available-workers" action="{% url 'index' %}" method="post">
-            {% csrf_token %}
-            <button class="btn btn-primary btn-submit-workers" name="connectWorkersWithTasks" type="submit">Add</button>
+          <form id="view-available-workers" method="post">
+            {% comment %} {% csrf_token %} {% endcomment %}
+            <button id="btn-worker-connect" class="btn btn-primary btn-submit-workers" name="connectWorkersWithTasks" type="submit">Add</button>
           </form>
         </div>
       </div>

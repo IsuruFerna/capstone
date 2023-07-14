@@ -8,6 +8,7 @@ from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.db.models import Q
+import json
 
 from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask, Form_RequestWorker
 from .models import Email, User, Employer, Task, RequestWorker
@@ -334,6 +335,8 @@ def requested_workers(request):
     return JsonResponse([work.serialize() for work in works], safe=False)
 
 
+@csrf_exempt
+@login_required
 def available_workers(request, task_id):
     # this_task = RequestWorker.objects.get(pk=task_id)
     # tasks = RequestWorker.objects.all()
@@ -419,3 +422,27 @@ def available_workers(request, task_id):
     #     Q(account_type='2'), )
     # print(tasks, available_workers)
     return JsonResponse([worker.serialize() for worker in available_workers], safe=False)
+
+
+@login_required
+@csrf_exempt
+def connect_workers(request, requestWorker_id):
+
+    # getting workers IDs must be post
+    if request.method != 'POST':
+        return JsonResponse({"error": "Post request Required!"}, status=400)
+
+    # retreaving data
+    data = json.loads(request.body)
+    workers = data.get("workers", "")
+    task = RequestWorker.objects.get(id=requestWorker_id)
+
+    # user can not add more than required workers amount
+    if len(workers) > task.workers.count():
+        return JsonResponse({"error": "user can't add more than required amount"}, status=400)
+
+    # adding workers to RequestWorker table
+    employee = Email.objects.filter(id__in=workers)
+    task.workers.set(employee)
+
+    return JsonResponse({"message": "Workers connected to task successfully"}, status=201)
