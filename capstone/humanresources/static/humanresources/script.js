@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
           .then(response => response.json())
           .then(result => {
             // print result
-            // load newly available workers
+            // load newly available workers or to index page
             console.log(result);
           })
         })

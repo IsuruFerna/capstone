@@ -11,7 +11,7 @@ from django.db.models import Q
 import json
 
 from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask, Form_RequestWorker
-from .models import Email, User, Employer, Task, RequestWorker
+from .models import Email, User, Employer, Task, RequestWorker, User_details
 
 # Create your views here.
 
@@ -23,17 +23,14 @@ def index(request):
     # check the worker request form
     if request.method == "POST":
 
-        # to prevent unnecessary codes when 'connectWorkersWithTasks'
-        if 'connectWorkersWithTasks' not in request.POST:
+        # get Email -> Employer to save data into RequestWorker table
+        user = Email.objects.get(email=request.user.email)
+        employer = Employer.objects.get(email=user)
 
-            # get Email -> Employer to save data into RequestWorker table
-            user = Email.objects.get(email=request.user.email)
-            employer = Employer.objects.get(email=user)
-
-            # forms
-            form_req = Form_RequestWorker(
-                request.POST, prefix="requestWorkers")
-            form = FormTask(request.POST, prefix="taskArrange")
+        # forms
+        form_req = Form_RequestWorker(
+            request.POST, prefix="requestWorkers")
+        form = FormTask(request.POST, prefix="taskArrange")
 
         # this form handle request workers
         if 'requestWorkers' in request.POST:
@@ -82,16 +79,6 @@ def index(request):
                     'message': "Something wrong with your inserted data. Please recheck and try again!",
                     'form_task': form
                 })
-
-        # connect workers with tasks(RequestWorker model)
-        if 'connectWorkersWithTasks' in request.POST:
-
-            # gettings the list of IDs of selected workers
-            values = request.POST.getlist('name-check-box')
-            print("now we are saving connectWorkersWithTasks", values)
-
-            # I have to do manual validation
-            return HttpResponseRedirect(reverse('index'))
 
     return render(request, 'humanresources/index.html', {
         'form': Form_RequestWorker(prefix="requestWorkers"),
@@ -265,6 +252,21 @@ def add_employer(request):
         'form_employer': Form_employer(),
         'form_email': User_email()
     })
+
+
+@login_required
+def employees(request):
+    email = Email.objects.filter(account_type='2')
+    all_employees = User_details.objects.filter(user__in=email)
+
+    return render(request, "humanresources/employees.html", {
+        "employee_detail": all_employees
+    })
+
+
+@login_required
+def employers(request):
+    return render(request, "humanresources/employers.html")
 
 
 def work_arrange(request):
