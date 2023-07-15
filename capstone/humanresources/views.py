@@ -266,7 +266,12 @@ def employees(request):
 
 @login_required
 def employers(request):
-    return render(request, "humanresources/employers.html")
+    email = Email.objects.filter(account_type='3')
+    all_employers = Employer.objects.filter(email__in=email)
+
+    return render(request, "humanresources/employers.html", {
+        "employer_detail": all_employers
+    })
 
 
 def work_arrange(request):
