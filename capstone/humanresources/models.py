@@ -124,6 +124,9 @@ class RequestWorker(models.Model):
         return {
             "id": self.pk,
             "employer": self.requested_by.company,
+            "employer_address": self.requested_by.address,
+            "employer_city": self.requested_by.city,
+            "employer_zip": self.requested_by.zip,
             "task": self.task,
             "amount": self.amount,
             "start_date": self.start_date.strftime("%b %d %Y"),

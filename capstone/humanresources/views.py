@@ -453,3 +453,21 @@ def connect_workers(request, requestWorker_id):
     task.workers.set(employee)
 
     return JsonResponse({"message": "Workers connected to task successfully"}, status=201)
+
+
+@login_required
+@csrf_exempt
+def worker(request):
+    # retreave available works to the employee
+    tasks = Email.objects.get(email=request.user.email)
+    works = RequestWorker.objects.filter(workers=tasks)
+
+    return JsonResponse([work.serialize() for work in works], safe=False)
+
+
+@login_required
+@csrf_exempt
+def employer_details(request, workerRequest_id):
+    employer_task = RequestWorker.objects.get(pk=workerRequest_id)
+
+    return JsonResponse([employer.serialize() for employer in employer_task])

@@ -23,5 +23,8 @@ urlpatterns = [
     path("task/<int:task_id>", views.available_workers, name="availableWorkers"),
     path("workers/<int:requestWorker_id>",
          views.connect_workers, name="connectWorkers"),
+    path("worker", views.worker, name="worker"),
+    path("worker/<int:workerRequest_id>",
+         views.employer_details, name="employerDetails")
 
 ]
