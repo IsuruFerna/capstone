@@ -2,10 +2,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // getting the account type
   const account = parseInt(document.querySelector('#profile').dataset.account);
-  document.querySelector('#btn-worker-connect').style.display = 'none';
+  // document.querySelector('#btn-worker-connect').style.display = 'none';
 
   // Employer account
   if (account === 3) {
+    document.querySelector('#btn-worker-connect').style.display = 'none';
 
     // use buttons to toggle between views
     const btnHome =  document.querySelector('#home');
@@ -23,7 +24,61 @@ document.addEventListener('DOMContentLoaded', function() {
   } else if (account === 2) {
     // Employee account
 
-    console.log("this is a employee account");
+    // render available works for accept
+    const viewEmployee = document.querySelector('#view-employee');
+    const viewEmployerDetails = document.querySelector('#view-employer-details');
+    viewEmployee.style.display = 'block';
+    viewEmployerDetails.style.display = 'none';
+
+    fetch(`/worker`)
+    .then(response => response.json())
+    .then(works => {
+      works.forEach(work => {
+        console.log("create div");
+        
+        const element = document.createElement('div');
+        element.innerHTML = `<div class="card mb-3">
+                                <div class="card-body">
+                                  <div class="card-title d-flex justify-content-start">
+                                    <h5 id="card-employee" class="text-capitalize fw-bold"><a class="a-card-employee" href="#">${work.employer}</a> <span id="card-zone" class="align-bottom fw-normal fs-6">${work.task}</span></h5>
+                                  </div>
+                                  <p id="task-amount"><strong>Amount: ${work.amount === 1 ? work.amount + ' worker' : work.amount + ' workers'}</strong></p>
+                                  <ul class="list-unstyled">
+                                    <li>${work.description}</li>
+                                      <ul>
+                                        <li>Date: ${work.start_date} - ${work.end_date}</li>
+                                        <li>Time: ${work.start_time} - ${work.end_time}</li>
+                                      </ul>
+                                    <li class="list-skip"></li>
+                                    <li class="fw-semibold">Employer Details</li>
+                                      <ul class="text-capitalize">
+                                        <li>Address: ${work.employer_address}</li>
+                                        <li>City: ${work.employer_city}</li>
+                                        <li>Zip: ${work.employer_zip}</li>
+                                      </ul>
+                                    <li class="list-skip"></li>
+                                    <li id="card-created"><small>Created: ${work.created}</small></li>
+                                  </ul>
+                                  <p id="requested-task-id" hidden>${work.id}</p>
+                                
+                                  <button type="button" id="btnAccept" class="btn-request btn btn-success">Accept</button>
+                                  <button type="button" id="btnDecline" class="btn-request btn btn-outline-danger">Decline</button>
+                                </div>
+                              </div>`;
+        viewEmployee.append(element);
+      })
+    })
+
+    // when user click on company name show it's details
+    viewEmployee.addEventListener('click', event => {
+      if (event.target.matches('.a-card-employee')) {
+        console.log("clicked on anchor");
+
+        viewEmployee.style.display = 'none';
+        viewEmployerDetails.style.display = 'block';
+      }
+    })
+
  
   } else {
     // Main account

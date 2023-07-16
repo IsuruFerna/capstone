@@ -122,3 +122,8 @@ a.disabled {
   position: absolute;
   bottom: -3rem;
 }
+
+.list-skip {
+  display: block;
+  height: 1rem;
+}
