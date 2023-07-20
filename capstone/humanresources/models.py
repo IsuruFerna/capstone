@@ -119,6 +119,7 @@ class RequestWorker(models.Model):
     description = models.CharField(max_length=600)
     created = models.DateTimeField(auto_now=True)
     workers = models.ManyToManyField(Email, related_name="workers")
+    accepted = models.BooleanField(default=False, blank=True, null=True)
 
     def serialize(self):
         return {
