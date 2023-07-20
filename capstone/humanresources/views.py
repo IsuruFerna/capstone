@@ -347,24 +347,40 @@ def requested_workers(request):
 def available_workers(request, task_id):
     # this_task = RequestWorker.objects.get(pk=task_id)
     # tasks = RequestWorker.objects.all()
-    all_workers = Email.objects.all()
+    # all_workers = Email.objects.all()
 
     task = RequestWorker.objects.get(pk=task_id)
     print("this is workers", task.workers)
-    workers = Email.objects.filter(account_type='2')
+    all_workers = Email.objects.filter(account_type='2')
 
     # get workers who are available for work that they haven't any relationship with requestWorker model
-    workers = Email.objects.filter(
-        Q(workers__isnull=True, account_type='2')
-    )
+    # workers = Email.objects.filter(
+    #     Q(workers__isnull=True, account_type='2')
+    # )
 
-    print("these are workers", workers)
-    available_workers = workers
+    # print("these are workers", workers)
+    # available_workers = workers
 
     # available_workers = all_workers
 
-    # start_date = this_task.start_date
-    # end_date = this_task.end_date
+    start_date = task.start_date
+    end_date = task.end_date
+
+    # account type must be 2 which means workers
+    # they must be not include in any RequestWorker model or those who included one's start day must be less than current RequestWorker's end date
+    available = Email.objects.filter(
+        Q(account_type='2', workers__start_date__lt=end_date) | Q(
+            workers__isnull=True, account_type='2')
+    )
+
+    available_workers = available
+    # startdate must not -> stardate <= x <= endtate
+    # enddate must not -> startdate <= y <= endtate
+    # start date must be -> x > enddate
+    # end date must be -> y
+
+    # print("this start date and end date: ",
+    #       start_date, end_date, all_workers, "available: ", available)
 
     # # start_days = tasks.start_date
     # for task in tasks:
@@ -460,7 +476,7 @@ def connect_workers(request, requestWorker_id):
 def worker(request):
     # retreave available works to the employee
     tasks = Email.objects.get(email=request.user.email)
-    works = RequestWorker.objects.filter(workers=tasks)
+    works = RequestWorker.objects.filter(workers=tasks, accepted=False)
 
     return JsonResponse([work.serialize() for work in works], safe=False)
 

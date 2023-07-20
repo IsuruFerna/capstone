@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         element.innerHTML = `<div class="card mb-3">
                                 <div class="card-body">
                                   <div class="card-title d-flex justify-content-start">
-                                    <h5 id="card-employee" class="text-capitalize fw-bold"><a class="a-card-employee" href="#">${work.employer}</a> <span id="card-zone" class="align-bottom fw-normal fs-6">${work.task}</span></h5>
+                                    <h5 id="card-employee" class="text-capitalize fw-bold">${work.employer} <span id="card-zone" class="align-bottom fw-normal fs-6">${work.task}</span></h5>
                                   </div>
                                   <p id="task-amount"><strong>Amount: ${work.amount === 1 ? work.amount + ' worker' : work.amount + ' workers'}</strong></p>
                                   <ul class="list-unstyled">
@@ -61,23 +61,34 @@ document.addEventListener('DOMContentLoaded', function() {
                                   </ul>
                                   <p id="requested-task-id" hidden>${work.id}</p>
                                 
-                                  <button type="button" id="btnAccept" class="btn-request btn btn-success">Accept</button>
-                                  <button type="button" id="btnDecline" class="btn-request btn btn-outline-danger">Decline</button>
                                 </div>
                               </div>`;
         viewEmployee.append(element);
       })
     })
 
-    // when user click on company name show it's details
-    viewEmployee.addEventListener('click', event => {
-      if (event.target.matches('.a-card-employee')) {
-        console.log("clicked on anchor");
+    // when user click on logo, go to main view
+    const btnIndex = document.querySelector('#logo');
+    btnIndex.addEventListener('click', e => {
+      e.preventDefault();
 
-        viewEmployee.style.display = 'none';
-        viewEmployerDetails.style.display = 'block';
+      if (viewEmployerDetails.style.display === 'block') {
+        viewEmployee.style.display = 'block';
+        viewEmployerDetails.style.display = 'none';
+        console.log("must change now");
       }
     })
+
+    // when user click on company name show it's details
+    // I simplyfiy it and every detail is visible in view
+    // viewEmployee.addEventListener('click', event => {
+    //   if (event.target.matches('.a-card-employee')) {
+    //     console.log("clicked on anchor");
+
+    //     viewEmployee.style.display = 'none';
+    //     viewEmployerDetails.style.display = 'block';
+    //   }
+    // })
 
  
   } else {
