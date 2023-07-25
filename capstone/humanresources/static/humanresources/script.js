@@ -93,15 +93,23 @@ document.addEventListener('DOMContentLoaded', function() {
  
   } else {
     // Main account
-    document.querySelector('#dashboard').addEventListener('click', e => load_view_main('requestedWorker', e));
 
+    // load default page
     load_view_main('requestedWorker');
+
+    const dashboard = document.querySelector('#dashboard');
+    dashboard.addEventListener('click', e => load_view_main('requestedWorker', e));
+
+    // arrange works by connecting available users to the task
     const taskContainer = document.querySelector('#view-dashboard');
     taskContainer.addEventListener('click', event => {
       if (event.target.matches('#btnArrange')) {
-        console.log("clicked on arrange button");
+
         document.querySelector('#view-dashboard').style.display = 'none';
         document.querySelector('#view-workArrange').style.display = 'block';
+        // const btnWorkerConnect =  document.querySelector('#btn-worker-connect');
+        // console.log(btnWorkerConnect);
+        // btnWorkerConnect.style.display = 'block';
 
         const parentElement = event.target.parentElement;
         const requestedTaskId = parentElement.querySelector('#requested-task-id').textContent;
@@ -122,9 +130,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // disable arrange button and insert the clicked parent element into page(left side)
         parentElement.querySelector('#btnArrange').style.display = 'none';
         const viewArrangeInfo = document.querySelector('#view-workArrange-info');
+        const viewAvailableWorkers = document.querySelector('#view-available-workers');
         viewArrangeInfo.append(parentElement);
         viewArrangeInfo.style.marginTop = '5%';
-        const viewAvailableWorkers = document.querySelector('#view-available-workers');
 
         fetch(`/task/${requestedTaskId}`)
         .then(response => response.json())
@@ -163,8 +171,16 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             viewAvailableWorkers.append(viewEmployee);
           });
+          // document.querySelector('#btn-worker-connect').style.display = 'block';
           document.querySelector('#btn-worker-connect').style.display = 'block';
+          document.querySelector('#dashboard').addEventListener('click', (e)=> {
+            console.log("clicked on dashboard");
+            console.log(load_view_main);
+            load_view_main('requestedWorker', e);
+          })
+          
         })
+        
 
         
         // save data via fetch
@@ -194,6 +210,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // print result
             // load newly available workers or to index page
             console.log(result);
+
+            // go back to the default page
+            load_view_main('requestedWorker');
           })
         })
       }
@@ -218,6 +237,8 @@ function load_view_main(view, e) {
   const viewDashboard = document.querySelector('#view-dashboard');
 
   if (view === 'requestedWorker' && !dataRequestedWorkers) {
+    document.querySelector('#btn-worker-connect').style.display = 'none';
+
     fetch(`task/${view}`)
     .then(response => response.json())
     .then(tasks => {
@@ -225,7 +246,7 @@ function load_view_main(view, e) {
       dataRequestedWorkers = tasks;
       tasks.forEach(task => {
         const element = document.createElement('div');
-        element.innerHTML = `<div class="card mb-3">
+        element.innerHTML = `<div id="testing" class="card mb-3">
                                 <div class="card-body">
                                   <div class="card-title d-flex justify-content-start">
                                     <h5 id="card-employer" class="text-capitalize fw-bold">${task.employer} <span id="card-zone" class="align-bottom fw-normal fs-6">${task.task}</span></h5>
@@ -247,7 +268,12 @@ function load_view_main(view, e) {
         viewDashboard.append(element);
       })
     })
+  } else if (view === 'requestedWorker' && dataRequestedWorkers) {
+    viewDashboard.style.display = 'block';
+    document.querySelector('#view-workArrange').style.display = 'none';
+    document.querySelector('#testing').style.display = 'none';
   }
+
 
   // if (dataRequestedWorkers) {
   //   viewDashboard.style.display = 'block';
