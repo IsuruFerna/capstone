@@ -294,6 +294,7 @@ def work_arrange(request):
                 amount=form.cleaned_data['amount']
             )
             task.save()
+            print("saved successfully", task)
 
             return HttpResponseRedirect(reverse('index'))
 
@@ -329,7 +330,8 @@ def requested(request):
     # get the employer and their requests for work
     user = Email.objects.get(email=request.user.email)
     employer = Employer.objects.get(email=user)
-    requested_workers = RequestWorker.objects.filter(requested_by=employer)
+    requested_workers = RequestWorker.objects.filter(
+        requested_by=employer, filled=False)
 
     print("requested employer id", employer)
     return JsonResponse([requested_worker.serialize() for requested_worker in requested_workers], safe=False)
@@ -373,7 +375,7 @@ def available_workers(request, task_id):
             workers__isnull=True, account_type='2')
     )
 
-    available_workers = available
+    # available_workers = available
     # startdate must not -> stardate <= x <= endtate
     # enddate must not -> startdate <= y <= endtate
     # start date must be -> x > enddate
@@ -444,7 +446,7 @@ def available_workers(request, task_id):
     # available_workers = Email.objects.filter(
     #     Q(account_type='2'), )
     # print(tasks, available_workers)
-    return JsonResponse([worker.serialize() for worker in available_workers], safe=False)
+    return JsonResponse([worker.serialize() for worker in available], safe=False)
 
 
 @login_required
@@ -459,14 +461,23 @@ def connect_workers(request, requestWorker_id):
     data = json.loads(request.body)
     workers = data.get("workers", "")
     task = RequestWorker.objects.get(id=requestWorker_id)
+    max_workers_amount = task.amount - task.workers.count()
+    print(max_workers_amount, requestWorker_id, workers)
 
     # user can not add more than required workers amount
-    if len(workers) > task.workers.count():
+    if len(workers) > max_workers_amount:
         return JsonResponse({"error": "user can't add more than required amount"}, status=400)
 
     # adding workers to RequestWorker table
     employee = Email.objects.filter(id__in=workers)
     task.workers.set(employee)
+
+    if task.workers.count() == task.amount:
+        task.filled = True
+
+    task.save()
+
+    print(task.workers.count())
 
     return JsonResponse({"message": "Workers connected to task successfully"}, status=201)
 
