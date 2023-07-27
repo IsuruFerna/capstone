@@ -1,11 +1,14 @@
+import * as pack from './pack.js';
+
 document.addEventListener('DOMContentLoaded', function() {
 
   // getting the account type
-  const account = parseInt(document.querySelector('#profile').dataset.account);
+  // const account = parseInt(document.querySelector('#profile').dataset.account);
+  const account = pack.account;
 
   // Employer account
   if (account === 3) {
-    document.querySelector('#btn-worker-connect').style.display = 'none';
+    // document.querySelector('#btn-worker-connect').style.display = 'none';
 
     // use buttons to toggle between views
     const btnHome =  document.querySelector('#home');
@@ -14,8 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('#work-arrange').addEventListener('click', e => load_view('work-arrange', e));
   
     // render home as default
-    // dataFetch('created');
-    load_view('created');
+    dataFetch('created');
+    // load_view('created');
   
     // disable home anchor on the nav when page is loaded as default
     // btnHome.removeAttribute('href');
@@ -225,7 +228,10 @@ function load_view_main(view, e) {
   const viewDashboard = document.querySelector('#view-dashboard');
 
   if (view === 'requestedWorker' && !dataRequestedWorkers) {
-    document.querySelector('#btn-worker-connect').style.display = 'none';
+    const btnWorkerConnect = document.querySelector('#btn-worker-connect');
+    if (btnWorkerConnect) {
+      btnWorkerConnect.style.display = 'none';
+    }
 
     fetch(`task/${view}`)
     .then(response => response.json())
@@ -314,6 +320,9 @@ function dataFetch(input) {
         containerCreatedTasks.style.display = 'none';
         containerRequestedTasks.style.display = 'block';
         formWorkArrange.style.display = 'none';
+
+        // cancel button
+        cancel_task(containerRequestedTasks);
       } 
     })
   }
@@ -330,6 +339,31 @@ function dataFetch(input) {
     formWorkArrange.style.display = 'none';
 
   } 
+}
+
+// cancel task 
+function cancel_task(containerRequestedTasks) {
+  containerRequestedTasks.addEventListener('click', event => {
+    if(event.target.matches('#btnCancleRequest')) {
+
+      const parentElement = event.target.parentElement;
+      const taskId = parentElement.querySelector('#task-id').textContent;
+      
+      // fetch data to delete the following task
+      fetch(`/cancel/${taskId}`, {
+        method: 'DELETE'
+      })
+      .then(response => response.json())
+      .then(result => {
+
+        console.log(result);
+        // dataFetch('requested');
+        // redirecting to the index
+        // need to modify here
+        window.location.href = '/';
+      })
+    };
+  })
 }
 
 function requestTask(taskContainer) {
@@ -434,9 +468,10 @@ function renderRequestedTasks(tasks, viewRequested) {
                                 </ul>
                               <li><small>Created: ${task.created}</small></li>
                             </ul>
+
+                            <p id="task-id" hidden>${task.id}</p>
                           
-                            <button type="button" id="btnRequestedEdit" class="btn-request btn btn-primary">Edit</button>
-                            <button type="button" class="btn btn-danger">Cancel</button>
+                            <button type="button" id="btnCancleRequest" class="btn btn-danger">Cancel</button>
                           </div>
                         </div>`;
   viewRequested.append(element);
