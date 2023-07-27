@@ -18,7 +18,6 @@ from .models import Email, User, Employer, Task, RequestWorker, User_details
 
 @login_required(login_url="login")
 def index(request):
-    print("this is index")
 
     # check the worker request form
     if request.method == "POST":
@@ -294,6 +293,7 @@ def work_arrange(request):
                 amount=form.cleaned_data['amount']
             )
             task.save()
+            print("saved successfully", task)
 
             return HttpResponseRedirect(reverse('index'))
 
@@ -329,7 +329,8 @@ def requested(request):
     # get the employer and their requests for work
     user = Email.objects.get(email=request.user.email)
     employer = Employer.objects.get(email=user)
-    requested_workers = RequestWorker.objects.filter(requested_by=employer)
+    requested_workers = RequestWorker.objects.filter(
+        requested_by=employer, filled=False)
 
     print("requested employer id", employer)
     return JsonResponse([requested_worker.serialize() for requested_worker in requested_workers], safe=False)
@@ -345,25 +346,8 @@ def requested_workers(request):
 @csrf_exempt
 @login_required
 def available_workers(request, task_id):
-    # this_task = RequestWorker.objects.get(pk=task_id)
-    # tasks = RequestWorker.objects.all()
-    # all_workers = Email.objects.all()
 
     task = RequestWorker.objects.get(pk=task_id)
-    print("this is workers", task.workers)
-    all_workers = Email.objects.filter(account_type='2')
-
-    # get workers who are available for work that they haven't any relationship with requestWorker model
-    # workers = Email.objects.filter(
-    #     Q(workers__isnull=True, account_type='2')
-    # )
-
-    # print("these are workers", workers)
-    # available_workers = workers
-
-    # available_workers = all_workers
-
-    start_date = task.start_date
     end_date = task.end_date
 
     # account type must be 2 which means workers
@@ -373,78 +357,7 @@ def available_workers(request, task_id):
             workers__isnull=True, account_type='2')
     )
 
-    available_workers = available
-    # startdate must not -> stardate <= x <= endtate
-    # enddate must not -> startdate <= y <= endtate
-    # start date must be -> x > enddate
-    # end date must be -> y
-
-    # print("this start date and end date: ",
-    #       start_date, end_date, all_workers, "available: ", available)
-
-    # # start_days = tasks.start_date
-    # for task in tasks:
-    #     day_start = task.start_date
-    #     day_end = task.end_date
-
-    #     if day_start <= start_date <= day_end or day_start <= end_date <= day_end:
-    #         available_workers = available_workers.exclude(
-    #             pk__in=task.workers.values_list('pk', flat=True))
-
-    #         # print('these are the available workers')
-
-    # for worker in available_workers:
-    #     print(worker)
-    # start_date = task.start_date
-    # end_date = task.end_date
-
-    # tasks = RequestWorker.objects.all()
-    # workers = Email.objects.filter(account_type='2').distinct()
-
-    # available = Email.objects.filter(
-    #     Q(requestworker__isnull=True, requestworker__pk=task_id) |
-    #     ~Q(requestworker__start_date__lte=end_date,
-    #        requestworker__end_date__gte=start_date)
-    # )
-
-    # # converting dates to required format
-    # def convert_date_format(date):
-    #     parse_date_string = datetime.strptime(date, "%b, %d, %Y")
-    #     formated__date = parse_date_string.strftime("%Y, %m, %d")
-    #     return formated__date
-
-    # available_workers = available
-
-    # # if workers are not already in the RequestedWorker object
-    # if not workers in related_workers:
-    #     print("we found some")
-    #     # they can be added without problem
-
-    #     # but we need to check their availability
-    #     if workers in tasks:
-    #         tasks.start_date
-
-    #         start_date = tasks.start_date
-    #         end_date = tasks.end_date
-    #         start_time = tasks.start_time
-    #         end_time = tasks.end_time
-
-    #         # task.start_date__range[start_date, end_date]
-    #         # task.end_date__range[start_date, end_date]
-
-    #         print("time")
-
-    # else:
-    #     print("there arn't related workers", tasks.start_time, tasks.end_time)
-    # available_workers = workers
-
-    # I want to get the time and dates and check availability. ckeck the last date
-
-    # get available employee
-    # available_workers = Email.objects.filter(
-    #     Q(account_type='2'), )
-    # print(tasks, available_workers)
-    return JsonResponse([worker.serialize() for worker in available_workers], safe=False)
+    return JsonResponse([worker.serialize() for worker in available], safe=False)
 
 
 @login_required
@@ -459,16 +372,39 @@ def connect_workers(request, requestWorker_id):
     data = json.loads(request.body)
     workers = data.get("workers", "")
     task = RequestWorker.objects.get(id=requestWorker_id)
+    max_workers_amount = task.amount - task.workers.count()
+    print(max_workers_amount, requestWorker_id, workers)
 
     # user can not add more than required workers amount
-    if len(workers) > task.workers.count():
+    if len(workers) > max_workers_amount:
         return JsonResponse({"error": "user can't add more than required amount"}, status=400)
 
     # adding workers to RequestWorker table
     employee = Email.objects.filter(id__in=workers)
     task.workers.set(employee)
 
+    if task.workers.count() == task.amount:
+        task.filled = True
+
+    task.save()
+
+    print(task.workers.count())
+
     return JsonResponse({"message": "Workers connected to task successfully"}, status=201)
+
+
+@login_required
+@csrf_exempt
+def cancel_task(request, task_id):
+
+    # cancel task/ deleting the task
+    if request.method == 'DELETE':
+        task = RequestWorker.objects.get(pk=task_id)
+        task.delete()
+
+        return JsonResponse({"state": "successfully Deleted task request!"})
+
+    return JsonResponse({"state": "Delete method required!"})
 
 
 @login_required

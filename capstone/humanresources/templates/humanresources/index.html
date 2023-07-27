@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block script %}
-  <script src="{% static 'humanresources/script.js' %}"></script>
+  <script type="module" src="{% static 'humanresources/script.js' %}"></script>
 {% endblock %}
 
 {% block body %}
@@ -10,7 +10,7 @@
   account type: {{ user.acc_email.account_type }}
   employer id: {{ user.acc_email.id }}
 
-  <div id="profile" data-account="{{ user.acc_email.account_type }}"></div>
+  {% comment %} <div id="profile" data-account="{{ user.acc_email.account_type }}"></div> {% endcomment %}
 
 
   {% comment %} Employer account {% endcomment %}
