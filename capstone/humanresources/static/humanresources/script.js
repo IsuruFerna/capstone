@@ -70,18 +70,12 @@ document.addEventListener('DOMContentLoaded', function() {
       })
     })
 
-    // when user click on logo, go to main view
-    const btnIndex = document.querySelector('#logo');
-    btnIndex.addEventListener('click', e => {
-      e.preventDefault();
-
-      if (viewEmployerDetails.style.display === 'block') {
-        viewEmployee.style.display = 'block';
-        viewEmployerDetails.style.display = 'none';
-        console.log("must change now");
-      }
-    })
-
+    console.log(viewEmployee.innerHTML);
+    if (!viewEmployee.innerHTML) {
+      console.log("You haven't been asigned to any work yet!");
+      viewEmployee.innerHTML = `<div class="text-bg-warning p-3">You haven't been asigned to any work yet!</div>`;
+    }
+      
  
   } else {
     // Main account
@@ -159,8 +153,22 @@ document.addEventListener('DOMContentLoaded', function() {
               `;
               viewAvailableWorkers.append(viewEmployee);
             });
+
+            const btnWorkerConnect = document.querySelector('#btn-worker-connect');
+
+            // if there arn't available workers show a warning message
+            if (viewAvailableWorkers.querySelectorAll('.list-group').length === 0) {
+              
+              btnWorkerConnect.style.display = 'none';
+              viewAvailableWorkers.parentElement.style.position = 'relative';
+              viewAvailableWorkers.innerHTML = `<div>There arn't available workers!</div>`;
+              viewAvailableWorkers.classList.add('not-available');
+
+            } else {
+              btnWorkerConnect.style.display = 'block';
+            }
+
             // document.querySelector('#btn-worker-connect').style.display = 'block';
-            document.querySelector('#btn-worker-connect').style.display = 'block';
             // document.querySelector('#dashboard').addEventListener('click', (e)=> {
             //   console.log("clicked on dashboard");
             //   console.log(load_view_main);
@@ -210,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
       }
     })
-    console.log("this is main account");
+    // console.log("this is main account");
   }
     
 });
@@ -322,7 +330,7 @@ function dataFetch(input) {
         formWorkArrange.style.display = 'none';
 
         // cancel button
-        cancel_task(containerRequestedTasks);
+        pack.cancel_task(containerRequestedTasks, 'DELETE');
       } 
     })
   }
@@ -341,30 +349,30 @@ function dataFetch(input) {
   } 
 }
 
-// cancel task 
-function cancel_task(containerRequestedTasks) {
-  containerRequestedTasks.addEventListener('click', event => {
-    if(event.target.matches('#btnCancleRequest')) {
+// // cancel task 
+// function cancel_task(containerRequestedTasks) {
+//   containerRequestedTasks.addEventListener('click', event => {
+//     if(event.target.matches('#btnCancleRequest')) {
 
-      const parentElement = event.target.parentElement;
-      const taskId = parentElement.querySelector('#task-id').textContent;
+//       const parentElement = event.target.parentElement;
+//       const taskId = parentElement.querySelector('#task-id').textContent;
       
-      // fetch data to delete the following task
-      fetch(`/cancel/${taskId}`, {
-        method: 'DELETE'
-      })
-      .then(response => response.json())
-      .then(result => {
+//       // fetch data to delete the following task
+//       fetch(`/cancel/${taskId}`, {
+//         method: 'DELETE'
+//       })
+//       .then(response => response.json())
+//       .then(result => {
 
-        console.log(result);
-        // dataFetch('requested');
-        // redirecting to the index
-        // need to modify here
-        window.location.href = '/';
-      })
-    };
-  })
-}
+//         console.log(result);
+//         // dataFetch('requested');
+//         // redirecting to the index
+//         // need to modify here
+//         window.location.href = '/';
+//       })
+//     };
+//   })
+// }
 
 function requestTask(taskContainer) {
   taskContainer.addEventListener('click', event => {

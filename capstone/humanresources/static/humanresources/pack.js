@@ -11,6 +11,48 @@ document.addEventListener('DOMContentLoaded', function() {
   // }
 });
 
+// cancel task or delete task
+function cancel_task(containerRequestedTasks, action) {
+  containerRequestedTasks.addEventListener('click', event => {
+    if(event.target.matches('#btnCancleRequest')) {
+
+      const parentElement = event.target.parentElement;
+      const taskId = parentElement.querySelector('#task-id').textContent;
+      
+      // fetch data to delete the following task
+      if(action === 'DELETE') {
+        fetch(`/cancel/${taskId}`, {
+          method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(result => {
+  
+          console.log(result);
+          // dataFetch('requested');
+          // redirecting to the index
+          // need to modify here
+          window.location.href = '/';
+        })
+      
+      // cancel arranged task
+      } else if (action === 'PUT') {
+        fetch(`/cancel/${taskId}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            filled: false
+          })
+        })
+        .then(response => response.json())
+        .then(result => {
+          
+          console.log(result);
+          window.location.href = '/';
+        })
+      }
+    };
+  })
+}
+
 
 // // this function prevent default when click on an anchor on the nav and using the 'dataFetch' load the page via API
 // function load_view(view, e) {
@@ -83,4 +125,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-export {account}
+export {account, cancel_task}
