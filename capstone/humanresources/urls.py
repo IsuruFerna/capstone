@@ -13,6 +13,7 @@ urlpatterns = [
          name="work_arrange"),  # not available
     path("employees", views.employees, name="employees"),
     path("employers", views.employers, name="employers"),
+    path("arranged", views.arranged_works, name="arrangedWorks"),
 
 
     # API

@@ -339,7 +339,8 @@ def requested(request):
 @csrf_exempt
 @login_required
 def requested_workers(request):
-    works = RequestWorker.objects.all()
+    # works = RequestWorker.objects.all()
+    works = RequestWorker.objects.filter(filled=False)
     return JsonResponse([work.serialize() for work in works], safe=False)
 
 
@@ -397,14 +398,29 @@ def connect_workers(request, requestWorker_id):
 @csrf_exempt
 def cancel_task(request, task_id):
 
+    task = RequestWorker.objects.get(pk=task_id)
+
     # cancel task/ deleting the task
     if request.method == 'DELETE':
-        task = RequestWorker.objects.get(pk=task_id)
         task.delete()
 
         return JsonResponse({"state": "successfully Deleted task request!"})
 
-    return JsonResponse({"state": "Delete method required!"})
+    elif request.method == 'PUT':
+        # load data
+        data = json.loads(request.body)
+        filled = data.get("filled", "")
+
+        # set filled to false and remove workers from the model
+        task.filled = filled
+        task.workers.clear()
+        task.save()
+
+        print("this is data", filled, task)
+        return JsonResponse({"status": "successfully dismissed task request!"})
+        # return HttpResponseRedirect(reverse('index'))
+
+    return JsonResponse({"error": "Delete method required!"})
 
 
 @login_required
@@ -412,9 +428,18 @@ def cancel_task(request, task_id):
 def worker(request):
     # retreave available works to the employee
     tasks = Email.objects.get(email=request.user.email)
-    works = RequestWorker.objects.filter(workers=tasks, accepted=False)
+    works = RequestWorker.objects.filter(workers=tasks, filled=False)
 
     return JsonResponse([work.serialize() for work in works], safe=False)
+
+
+@login_required
+def arranged_works(request):
+    tasks = RequestWorker.objects.filter(filled=True)
+
+    return render(request, 'humanresources/arrangedWork.html', {
+        "tasks": tasks
+    })
 
 
 @login_required
