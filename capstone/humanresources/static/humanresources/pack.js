@@ -1,16 +1,9 @@
+// use strict version to load everything after the loding of DOM
+
 const account = parseInt(document.querySelector('#profile').dataset.account);
 
-// for layout.html
-document.addEventListener('DOMContentLoaded', function() {
-
-  // this is for menu specially for account type 3(employer)
-  // if (account === 3) {
-  //   // fix nav
-  //   const btnHome =  document.querySelector('#home');
-  //   btnHome.addEventListener('click', e => load_view('created', e));
-  // }
-});
-
+// i must optimize code removing repetition
+// after the cancelation re-fetch data via main functions instead of using re-directing pages to index
 // cancel task or delete task
 function cancel_task(containerRequestedTasks, action) {
   containerRequestedTasks.addEventListener('click', event => {
@@ -21,7 +14,7 @@ function cancel_task(containerRequestedTasks, action) {
       
       // fetch data to delete the following task
       if(action === 'DELETE') {
-        fetch(`/cancel/${taskId}`, {
+        fetch(`/cancel-workarrange/${taskId}`, {
           method: 'DELETE'
         })
         .then(response => response.json())
@@ -36,7 +29,7 @@ function cancel_task(containerRequestedTasks, action) {
       
       // cancel arranged task
       } else if (action === 'PUT') {
-        fetch(`/cancel/${taskId}`, {
+        fetch(`/cancel-workarrange/${taskId}`, {
           method: 'PUT',
           body: JSON.stringify({
             filled: false
@@ -45,6 +38,19 @@ function cancel_task(containerRequestedTasks, action) {
         .then(response => response.json())
         .then(result => {
           
+          console.log(result);
+          window.location.href = '/';
+        })
+      
+      // cancel created task
+      } else if (action === 'DELETE-task') {
+        console.log('clicked on cancel task button');
+        fetch(`/cancel-task/${taskId}`, {
+          method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(result => {
+
           console.log(result);
           window.location.href = '/';
         })
