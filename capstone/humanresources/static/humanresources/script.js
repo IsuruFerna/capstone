@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // btnHome.removeAttribute('href');
     btnHome.classList.add('disabled');
 
+
   } else if (account === 2) {
     // Employee account
 
@@ -161,8 +162,8 @@ document.addEventListener('DOMContentLoaded', function() {
               
               btnWorkerConnect.style.display = 'none';
               viewAvailableWorkers.parentElement.style.position = 'relative';
-              viewAvailableWorkers.innerHTML = `<div>There arn't available workers!</div>`;
-              viewAvailableWorkers.classList.add('not-available');
+              viewAvailableWorkers.innerHTML = `<div class="alert alert-warning" role="alert">There arn't available workers!</div>`;
+              // viewAvailableWorkers.classList.add('not-available');
 
             } else {
               btnWorkerConnect.style.display = 'block';
@@ -294,6 +295,7 @@ function dataFetch(input) {
     document.querySelector('#home').classList.remove('disabled');
   }
 
+  // change the view
   if (input === 'work-arrange') {
 
     containerCreatedTasks.style.display = 'none';
@@ -320,6 +322,12 @@ function dataFetch(input) {
         // once click on 'request button' a form appears to request workers
         requestTask(containerCreatedTasks);
 
+        // once clicked on 'cancel button' cancel/delete the task
+        pack.cancel_task(containerCreatedTasks, 'DELETE-task');
+
+        
+
+
       } else if (input === 'requested') {
         dataRequestedTasks = tasks;
 
@@ -328,6 +336,11 @@ function dataFetch(input) {
         containerCreatedTasks.style.display = 'none';
         containerRequestedTasks.style.display = 'block';
         formWorkArrange.style.display = 'none';
+        
+        // if there isn't any task notify user by rendering this message
+        if (dataRequestedTasks.length === 0) {
+          containerRequestedTasks.innerHTML = `<div class="alert alert-warning" role="alert">There arn't any requested workers! Navigate Home to request workers</div>`;
+        }
 
         // cancel button
         pack.cancel_task(containerRequestedTasks, 'DELETE');
@@ -452,7 +465,9 @@ function renderTasks(dataHome, taskContainer) {
                             <h5 id="task-name" class="card-title">${task.task}</h5>
                             <p id="task-amount"><strong>Amount: ${task.amount === 1 ? task.amount + ' worker' : task.amount + ' workers'}</strong></p>
                             <p id="task-description" class="card-text">${task.description}</p>
+                            <p id="task-id" hidden>${task.id}</p>
                             <button type="button" id="requestBtn" class="btn-request btn btn-primary">Request</button>
+                            <button type="button" id="btnCancleRequest" class="btn-request btn btn-outline-danger">Cancel</button>
                           </div>
                         </div>
                         `;

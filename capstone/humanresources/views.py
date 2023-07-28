@@ -396,7 +396,7 @@ def connect_workers(request, requestWorker_id):
 
 @login_required
 @csrf_exempt
-def cancel_task(request, task_id):
+def cancel_workarrange(request, task_id):
 
     task = RequestWorker.objects.get(pk=task_id)
 
@@ -421,6 +421,20 @@ def cancel_task(request, task_id):
         # return HttpResponseRedirect(reverse('index'))
 
     return JsonResponse({"error": "Delete method required!"})
+
+
+@login_required
+@csrf_exempt
+def cancel_task(request, task_id):
+
+    # retreaving data and delete task
+    if request.method == 'DELETE':
+        task = Task.objects.get(pk=task_id)
+        task.delete()
+
+        return JsonResponse({"status": "Task successfully cancelled!"})
+
+    return JsonResponse({"error": "Required DELETE request!"})
 
 
 @login_required

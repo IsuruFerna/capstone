@@ -7,26 +7,30 @@
 
 {% block body %}
   <div id="view-arranged">
-    {% for task in tasks %}
-      <div class="card mb-3">
-        <div class="card-body">
-          <h5 id="task-name" class="card-title">{{ task.task }}</h5>
-          <p id="task-amount"><strong>Amount: {% if task.amount == 1 %} {{ task.amount }} worker {% else %} {{task.amount}} workers {% endif %}</strong></p>
-          <ul class="list-unstyled">
-            <li>{{ task.description }}</li>
-              <ul>
-                <li>Date: {{ task.start_date }} - {{ task.end_date }}</li>
-                <li>Time: {{ task.start_time }} - {{ task.end_time }}</li>
-              </ul>
-            <li><small>Created: {{ task.created }}</small></li>
-          </ul>
+    {% if not tasks %}
+      <div class="alert alert-warning" role="alert">There arn't any arranged task! Go to Dashboard to arrange some</div>
+    {% else %}
+      {% for task in tasks %}
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 id="task-name" class="card-title">{{ task.task }}</h5>
+            <p id="task-amount"><strong>Amount: {% if task.amount == 1 %} {{ task.amount }} worker {% else %} {{task.amount}} workers {% endif %}</strong></p>
+            <ul class="list-unstyled">
+              <li>{{ task.description }}</li>
+                <ul>
+                  <li>Date: {{ task.start_date }} - {{ task.end_date }}</li>
+                  <li>Time: {{ task.start_time }} - {{ task.end_time }}</li>
+                </ul>
+              <li><small>Created: {{ task.created }}</small></li>
+            </ul>
 
-          <p id="task-id" hidden>{{ task.id }}</p>
-        
-          <button type="button" id="btnCancleRequest" class="btn btn-danger">Cancel</button>
+            <p id="task-id" hidden>{{ task.id }}</p>
+          
+            <button type="button" id="btnCancleRequest" class="btn btn-danger">Cancel</button>
+          </div>
         </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    {% endif %}
   </div>
 
 {% endblock %}
