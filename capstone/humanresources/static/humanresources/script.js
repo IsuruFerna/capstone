@@ -71,10 +71,11 @@ document.addEventListener('DOMContentLoaded', function() {
       })
     })
 
-    console.log(viewEmployee.innerHTML);
+    // console.log(viewEmployee.innerHTML);
+    // notify the user if them haven't assigend to any work by rendering a message
     if (!viewEmployee.innerHTML) {
       console.log("You haven't been asigned to any work yet!");
-      viewEmployee.innerHTML = `<div class="text-bg-warning p-3">You haven't been asigned to any work yet!</div>`;
+      viewEmployee.innerHTML = `<div class="alert alert-warning" role="alert">You haven't been asigned to any work yet!</div>`;
     }
       
  
@@ -90,6 +91,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // arrange works by connecting available users to the task
     const taskContainer = document.querySelector('#view-dashboard');
     let dataTaskContainer = false;
+
+    // notify user if there arn't any requested worker by any employer
+    // if (!taskContainer.innerHTML) {
+    //   taskContainer.innerHTML = `<div class="alert alert-warning" role="alert">There arn't any requested workers by any employer!</div>`;
+    // }
 
     taskContainer.addEventListener('click', event => {
       if (event.target.matches('#btnArrange')) {
@@ -168,13 +174,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
               btnWorkerConnect.style.display = 'block';
             }
-
-            // document.querySelector('#btn-worker-connect').style.display = 'block';
-            // document.querySelector('#dashboard').addEventListener('click', (e)=> {
-            //   console.log("clicked on dashboard");
-            //   console.log(load_view_main);
-            //   load_view_main('requestedWorker', e);
-            // })
             
           })
           dataTaskContainer = true;
@@ -183,8 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
           taskContainer.style.display = 'none';
           document.querySelector('#view-workArrange').style.display = 'block';
         }
-
-             
+            
         // save data via fetch
         viewAvailableWorkers.addEventListener('submit', e => {
           e.preventDefault();
@@ -197,9 +195,6 @@ document.addEventListener('DOMContentLoaded', function() {
               workerIds.push(parseInt(checked.value));
             }
           });
-
-          console.log("this is task id", requestedTaskId);
-          console.log("this is checkbox value", workerIds);
 
           fetch(`workers/${requestedTaskId}`, {
             method: 'POST',
@@ -219,9 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
       }
     })
-    // console.log("this is main account");
-  }
-    
+  }  
 });
 
 // use global variables to store fetch data to avoid duplications
@@ -242,6 +235,7 @@ function load_view_main(view, e) {
       btnWorkerConnect.style.display = 'none';
     }
 
+    // render requested workers by employers
     fetch(`task/${view}`)
     .then(response => response.json())
     .then(tasks => {
@@ -271,11 +265,17 @@ function load_view_main(view, e) {
         viewDashboard.append(element);
       })
     })
+
   } else if (view === 'requestedWorker' && dataRequestedWorkers) {
     viewDashboard.style.display = 'block';
     document.querySelector('#view-workArrange').style.display = 'none';
     document.querySelector('#testing').style.display = 'none';
   }
+
+  // // notify user if there arn't any requested worker by any employer
+  // if (!viewDashboard.querySelector('div')) {
+  //   viewDashboard.innerHTML = `<div class="alert alert-warning" role="alert">There arn't any requested workers by any employer!</div>`;
+  // }
 }
 
 // this function prevent default when click on an anchor on the nav and using the 'dataFetch' load the page via API
@@ -325,8 +325,10 @@ function dataFetch(input) {
         // once clicked on 'cancel button' cancel/delete the task
         pack.cancel_task(containerCreatedTasks, 'DELETE-task');
 
-        
-
+        // if there isn't any task notify user by rendering this message
+        if (dataCreatedTasks.length === 0) {
+          containerCreatedTasks.innerHTML = `<div class="alert alert-warning" role="alert">There arn't any created task! Click on Work Arrange to create tasks</div>`;
+        }
 
       } else if (input === 'requested') {
         dataRequestedTasks = tasks;
@@ -339,7 +341,7 @@ function dataFetch(input) {
         
         // if there isn't any task notify user by rendering this message
         if (dataRequestedTasks.length === 0) {
-          containerRequestedTasks.innerHTML = `<div class="alert alert-warning" role="alert">There arn't any requested workers! Navigate Home to request workers</div>`;
+          containerRequestedTasks.innerHTML = `<div class="alert alert-warning" role="alert">There arn't any requested workers! Click on Home to request workers</div>`;
         }
 
         // cancel button
