@@ -111,10 +111,6 @@ def logout_view(request):
     return HttpResponseRedirect(reverse('index'))
 
 
-def search(request):
-    return render(request, "humanresources/search.html")
-
-
 def register(request):
 
     if request.method == 'POST':
