@@ -214,7 +214,9 @@ document.addEventListener('DOMContentLoaded', function() {
         })
       }
     })
-  }  
+  };
+  
+  pack.activeButton();
 });
 
 // use global variables to store fetch data to avoid duplications
@@ -226,6 +228,7 @@ let dataRequestedWorkers = null;
 function load_view_main(view, e) {
   if (e) {
     e.preventDefault();
+    e.target.classList.add('active');
   }
   const viewDashboard = document.querySelector('#view-dashboard');
 
@@ -281,6 +284,8 @@ function load_view_main(view, e) {
 // this function prevent default when click on an anchor on the nav and using the 'dataFetch' load the page via API
 function load_view(view, e) {
   e.preventDefault();
+  e.target.classList.add('active');
+  console.log(e.target);
   dataFetch(view);
 }
 

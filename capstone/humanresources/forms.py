@@ -147,6 +147,17 @@ class Form_RequestWorker(forms.Form):
         attrs={'class': 'form-control text-area_height', 'id': 'req-w-description'}))
 
 
+class PasswordReset(forms.Form):
+    email = forms.CharField(widget=forms.EmailInput(
+        attrs={'class': 'form-control'}))
+    id = forms.IntegerField(widget=forms.NumberInput(
+        attrs={'class': 'form-control'}))
+    new_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+
 # class Form_EmployeeMultipleChoice(forms.ModelForm):
 
 #     workers = forms.ModelMultipleChoiceField(queryset=Email.objects.filter(

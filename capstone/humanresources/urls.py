@@ -5,7 +5,6 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
-    path("search", views.search, name="search"),  # not available
     path("register", views.register, name="register"),
     path("addEmployee", views.add_employee, name="add_employee"),
     path("addEmployer", views.add_employer, name="add_employer"),
@@ -14,6 +13,7 @@ urlpatterns = [
     path("employees", views.employees, name="employees"),
     path("employers", views.employers, name="employers"),
     path("arranged", views.arranged_works, name="arrangedWorks"),
+    path("setpassword", views.set_password, name="set_password"),
 
 
     # API

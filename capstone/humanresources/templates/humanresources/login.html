@@ -20,7 +20,8 @@
       {% if message %}
         <p class="msg-warning">{{ message }}</p>
       {% endif %}
-      <a id="link-forgot-password" href="#">Forgot password?</a><br>
+      <a id="link-register-user" class="href-register_forgot" href="{% url 'register' %}">Register/</a>
+      <a id="link-forgot-password" class="href-register_forgot" href="#">Forgot password?</a><br>
       <div class="d-flex justify-content-center">
         <button type="submit" class="btn btn-primary">Login</button>
       </div>

@@ -2,6 +2,23 @@
 
 const account = parseInt(document.querySelector('#profile').dataset.account);
 
+document.addEventListener('DOMContentLoaded', ()=> {
+  activeButton();
+})
+
+// highlight the clicked button on the nav
+function activeButton() {
+  const navLink = document.querySelectorAll('.nav-link');
+  console.log(navLink);
+
+  navLink.forEach(e => {
+    e.addEventListener('click', () => {
+      console.log(e);
+      e.classList.add('active');
+    })
+  })
+}
+
 // i must optimize code removing repetition
 // after the cancelation re-fetch data via main functions instead of using re-directing pages to index
 // cancel task or delete task
@@ -131,4 +148,4 @@ function cancel_task(containerRequestedTasks, action) {
 
 
 
-export {account, cancel_task}
+export {account, cancel_task, activeButton}

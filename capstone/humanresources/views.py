@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.db.models import Q
 import json
 
-from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask, Form_RequestWorker
+from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask, Form_RequestWorker, PasswordReset
 from .models import Email, User, Employer, Task, RequestWorker, User_details
 
 # Create your views here.
@@ -106,13 +106,66 @@ def login_view(request):
         return render(request, 'humanresources/login.html')
 
 
+@login_required
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
 
 
-def search(request):
-    return render(request, "humanresources/search.html")
+@login_required
+def set_password(request):
+    acc_type = ''
+
+    try:
+        acc_type = Email.objects.get(email=request.user.email).account_type
+    except ObjectDoesNotExist:
+        acc_type = 1
+
+    # only Main accounts can modify the password(accout type = 1)
+    if acc_type != 1:
+        return HttpResponseRedirect(reverse('index'))
+
+    # validate and reset password
+    if request.method == 'POST':
+
+        form = PasswordReset(request.POST)
+
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            id = form.cleaned_data['id']
+            new_password = form.cleaned_data['new_password']
+            confirm_password = form.cleaned_data['confirm_password']
+
+            # password validation
+            if new_password != confirm_password:
+                message = "Password doesn't match with the confirmation"
+
+                return render(request, 'humanresources/passwordSet.html', {
+                    'form': form,
+                    'message': message
+                })
+
+            # user validations
+            try:
+                Email.objects.get(email=email, id=id)
+            except ObjectDoesNotExist:
+                message = "There's an issue with the inserted data. Please recheck and try again!"
+
+                return render(request, 'humanresources/passwordSet.html', {
+                    'form': form,
+                    'message': message
+                })
+
+            # set new password
+            set_user = User.objects.get(email=email)
+            set_user.set_password(new_password)
+            set_user.save()
+
+            return HttpResponseRedirect(reverse('index'))
+
+    return render(request, 'humanresources/passwordSet.html', {
+        'form': PasswordReset(),
+    })
 
 
 def register(request):

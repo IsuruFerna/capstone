@@ -10,20 +10,25 @@
     <div class="alert alert-danger" role="alert">{{ message }}</div>
   {% endif %}
 
-  <form action="{% url 'register' %}" method="post">
-      {% csrf_token %}
-      <div class="form-group">
-          <input class="form-control" type="email" name="email" placeholder="Email Address">
-      </div>
-      <div class="form-group">
-          <input class="form-control" type="password" name="password" placeholder="Password">
-      </div>
-      <div class="form-group">
-          <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
-      </div>
-      <input class="btn btn-primary" type="submit" value="Register">
-  </form>
-
-  Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+  <div class="container-form-login">
+    <form action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <input class="form-control" type="email" name="email" placeholder="Email Address">
+        </div>
+        <div class="mb-3">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+        </div>
+        <div class="mb-3">
+            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+        </div>
+        <div class="d-flex justify-content-center">
+          <input class="btn btn-primary" type="submit" value="Register">
+        </div>
+    </form>
+    <div class="registered">
+      Already have registered? <a href="{% url 'login' %}">Log In here.</a>
+    </div>
+  </div>
 
 {% endblock %}
