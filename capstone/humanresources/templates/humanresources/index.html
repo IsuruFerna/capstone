@@ -6,7 +6,6 @@
 {% endblock %}
 
 {% block body %}
-  {% comment %} <div id="profile" data-account="{{ user.acc_email.account_type }}"></div> {% endcomment %}
 
   {% comment %} Employer account {% endcomment %}
   {% if user.acc_email.account_type == '3' %}
@@ -29,9 +28,6 @@
         <button class="btn btn-primary" name="taskArrange" type="submit">Save</button>
       </form>
     </div>
-
-
-    {% comment %} <h1>This is accout id: {{ user.acc_email.pk }}</h1> {% endcomment %}
 
     <!-- Flexbox container for aligning the toasts -->
     <div id="request-task" aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
@@ -78,7 +74,6 @@
             </div>
 
             <div class="mb-3">
-              {% comment %} <label for="req-w-description" class="form-label">Description</label> {% endcomment %}
               {{ form.task }}
             </div>
 
@@ -88,9 +83,12 @@
       </div>
     </div>
 
+  {% comment %} Employee Account {% endcomment %}
   {% elif user.acc_email.account_type == '2' %}
     <div id="view-employee"></div>
     <div id="view-employer-details"></div>
+
+  {% comment %} Main Account {% endcomment %}
   {% else %}
     <div id="view-dashboard"></div>
     <div id="view-workArrange" class="container overflow-x-auto">
@@ -98,15 +96,11 @@
         <div id="view-workArrange-info" class="col-md"></div>
         <div class="col-md">
           <form id="view-available-workers" method="post">
-            {% comment %} {% csrf_token %} {% endcomment %}
             <button id="btn-worker-connect" class="btn btn-primary btn-submit-workers" name="connectWorkersWithTasks" type="submit">Add</button>
           </form>
         </div>
       </div>
     </div>
   {% endif %}
-
-
-  
 
 {% endblock %}

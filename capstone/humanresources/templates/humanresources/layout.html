@@ -7,11 +7,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  {% comment %} <link id="logo" href="#"  rel="stylesheet"> {% endcomment %}
   <title>{% block title %}ABC{% endblock %}</title>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
   <link href="{% static 'humanresources/styles.css' %}" rel="stylesheet">
-  {% comment %} <script src="{% static 'humanresources/script.js' %}"></script> {% endcomment %}
 
   {% block script %}
   {% endblock %}
@@ -42,18 +41,14 @@
               <a id="requested" class="nav-link" aria-current="page" href="#">Requested</a>
             </li>
 
-            {% comment %} <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="{% url 'index' %}">Register</a>
-            </li> {% endcomment %}
-
             <li class="nav-item" hidden>
               <a class="nav-link" aria-current="page" href="{% url 'index' %}">Labour request</a>
             </li> 
 
             {% comment %} Employee account {% endcomment %}
             {% elif user.acc_email.account_type == '2' %}
-
-            
+            {% comment %} There is no nav buttons {% endcomment %}
+          
             {% comment %} Main account {% endcomment %}
             {% else %}
 
@@ -81,7 +76,6 @@
 
             {% endif %}
 
-
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="{% url 'logout' %}">Logout</a>
             </li>
@@ -91,10 +85,10 @@
     </nav>
     <div id="info" data-accountid="{{ user.acc_email.id }}" data-account="{{ user.acc_email.account_type }}" hidden></div>
   {% endif %}
+
   {% block body %}
   {% endblock %}
 
-  {% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script> {% endcomment %}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
   <script type="module" src="{% static 'humanresources/pack.js' %}"></script>
 </body>
