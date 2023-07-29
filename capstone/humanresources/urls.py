@@ -13,6 +13,7 @@ urlpatterns = [
     path("employees", views.employees, name="employees"),
     path("employers", views.employers, name="employers"),
     path("arranged", views.arranged_works, name="arrangedWorks"),
+    path("setpassword", views.set_password, name="set_password"),
 
 
     # API

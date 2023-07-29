@@ -18,9 +18,14 @@ body {
   flex-direction: column;
 }
 
-#link-forgot-password {
+.href-register_forgot{
   margin-top: -30px;
   font-size: 0.8rem;
+}
+
+.registered {
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
 }
 
 .msg-warning {
