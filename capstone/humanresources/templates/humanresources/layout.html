@@ -7,13 +7,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
   {% comment %} <link id="logo" href="#"  rel="stylesheet"> {% endcomment %}
   <title>{% block title %}ABC{% endblock %}</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
   <link href="{% static 'humanresources/styles.css' %}" rel="stylesheet">
   {% comment %} <script src="{% static 'humanresources/script.js' %}"></script> {% endcomment %}
-  <script type="module" src="{% static 'humanresources/pack.js' %}"></script>
 
   {% block script %}
   {% endblock %}
@@ -23,7 +21,7 @@
   <div id="profile" data-account="{{ user.acc_email.account_type }}"></div>
   {% if user.is_authenticated  %}
   
-    <nav class="navbar navbar-expand-lg bg-body-tertiary nav">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'index' %}">ABC</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,21 +33,21 @@
             {% comment %} Employer profile {% endcomment %}
             {% if user.acc_email.account_type == '3' %}
             <li class="nav-item">
-              <a id="home" class="nav-link active" aria-current="page" href="#">Home</a>
+              <a id="home" class="nav-link" aria-current="page" href="#">Home</a>
             </li>
             <li class="nav-item">
-              <a id="work-arrange" class="nav-link active" aria-current="page" href="{% url 'index' %}">Work Arrange</a>
+              <a id="work-arrange" class="nav-link" aria-current="page" href="{% url 'index' %}">Work Arrange</a>
             </li>
             <li class="nav-item">
-              <a id="requested" class="nav-link active" aria-current="page" href="#">Requested</a>
+              <a id="requested" class="nav-link" aria-current="page" href="#">Requested</a>
             </li>
 
             {% comment %} <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Register</a>
+              <a class="nav-link" aria-current="page" href="{% url 'index' %}">Register</a>
             </li> {% endcomment %}
 
             <li class="nav-item" hidden>
-              <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Labour request</a>
+              <a class="nav-link" aria-current="page" href="{% url 'index' %}">Labour request</a>
             </li> 
 
             {% comment %} Employee account {% endcomment %}
@@ -60,7 +58,7 @@
             {% else %}
 
             <li class="nav-item">
-              <a id="dashboard" class="nav-link active" aria-current="page" href="{% url 'index' %}">Dashboard</a>
+              <a id="dashboard" class="nav-link" aria-current="page" href="{% url 'index' %}">Dashboard</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'employees' %}">Employees</a>
@@ -85,7 +83,7 @@
 
 
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{% url 'logout' %}">Logout</a>
+              <a class="nav-link" aria-current="page" href="{% url 'logout' %}">Logout</a>
             </li>
           </ul>
         </div>
@@ -98,5 +96,6 @@
 
   {% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script> {% endcomment %}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  <script type="module" src="{% static 'humanresources/pack.js' %}"></script>
 </body>
 </html>

@@ -2,34 +2,36 @@
 {% load static %}
 
 {% block body %}
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">Company</th>
-      <th scope="col">Email</th>
-      <th scope="col">Phone 1</th>
-      <th scope="col">Phone 2</th>
-      <th scope="col">City</th>
-      <th scope="col">Zip</th>
-      <th scope="col">Address</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for employer in employer_detail %}
+<div class="overflow-x-auto">
+  <table class="table table-striped">
+    <thead>
       <tr>
-        <th scope="row">{{ employer.email.id }}</th>
-        <td>{{ employer.company|title }}</td>
-        <td>{{ employer.email.email }}</td>
-        <td>{{ employer.phone1 }}</td>
-        <td>{{ employer.phone2 }}</td>
-        <td>{{ employer.city|title }}</td>
-        <td>{{ employer.zip }}</td>
-        <td>{{ employer.address|title }}</td>
+        <th scope="col">ID</th>
+        <th scope="col">Company</th>
+        <th scope="col">Email</th>
+        <th scope="col">Phone 1</th>
+        <th scope="col">Phone 2</th>
+        <th scope="col">City</th>
+        <th scope="col">Zip</th>
+        <th scope="col">Address</th>
       </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {% for employer in employer_detail %}
+        <tr>
+          <th scope="row">{{ employer.email.id }}</th>
+          <td>{{ employer.company|title }}</td>
+          <td>{{ employer.email.email }}</td>
+          <td>{{ employer.phone1 }}</td>
+          <td>{{ employer.phone2 }}</td>
+          <td>{{ employer.city|title }}</td>
+          <td>{{ employer.zip }}</td>
+          <td>{{ employer.address|title }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
 
 {% endblock %}

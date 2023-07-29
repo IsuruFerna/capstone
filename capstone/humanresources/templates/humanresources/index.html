@@ -6,12 +6,7 @@
 {% endblock %}
 
 {% block body %}
-  hello {{ request.user.email }} this is dash board
-  account type: {{ user.acc_email.account_type }}
-  employer id: {{ user.acc_email.id }}
-
   {% comment %} <div id="profile" data-account="{{ user.acc_email.account_type }}"></div> {% endcomment %}
-
 
   {% comment %} Employer account {% endcomment %}
   {% if user.acc_email.account_type == '3' %}
@@ -98,10 +93,10 @@
     <div id="view-employer-details"></div>
   {% else %}
     <div id="view-dashboard"></div>
-    <div id="view-workArrange" class="container">
+    <div id="view-workArrange" class="container overflow-x-auto">
       <div class="row">
-        <div id="view-workArrange-info" class="col"></div>
-        <div id="" class="col">
+        <div id="view-workArrange-info" class="col-md"></div>
+        <div class="col-md">
           <form id="view-available-workers" method="post">
             {% comment %} {% csrf_token %} {% endcomment %}
             <button id="btn-worker-connect" class="btn btn-primary btn-submit-workers" name="connectWorkersWithTasks" type="submit">Add</button>
