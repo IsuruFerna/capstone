@@ -43,6 +43,7 @@ class Email(models.Model):
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)
+    password_reset = models.BooleanField(default=False, blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']

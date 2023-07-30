@@ -5,6 +5,12 @@
 {% endblock %}
 
 {% block body %}
+  <div class="alert alert-warning register-alert" role="alert">
+    <h4 class="alert-heading">Alert!</h4>
+    <p>You can't register if ABC Ltd haven't listed you yet in their system!</p>
+    <hr>
+    <p class="mb-0">If you get any error messsage while you're trying to register, please inform ABC Ltd</p>
+  </div>
 
   {% if message %}
     <div class="alert alert-danger" role="alert">{{ message }}</div>

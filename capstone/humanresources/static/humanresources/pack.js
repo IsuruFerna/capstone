@@ -4,6 +4,16 @@ const account = parseInt(document.querySelector('#profile').dataset.account);
 
 document.addEventListener('DOMContentLoaded', ()=> {
   activeButton();
+
+  // when user clicked on forgot password show them instructions via alert
+  const alertPasswordForgot = document.querySelector('#password-reset-req');
+  alertPasswordForgot.style.display = 'none';
+
+  document.querySelector('#link-forgot-password').addEventListener('click', function(e) {
+    e.preventDefault();
+    alertPasswordForgot.style.display = 'block';
+    document.querySelector('#conataner-form-login').classList.remove('container-form-login-top');
+  })
 })
 
 // highlight the clicked button on the nav

@@ -19,6 +19,10 @@ from .models import Email, User, Employer, Task, RequestWorker, User_details
 @login_required(login_url="login")
 def index(request):
 
+    print('user password reset', request.user.password_reset)
+    if request.user.password_reset == True:
+        return HttpResponseRedirect(reverse('set_password'))
+
     # check the worker request form
     if request.method == "POST":
 
@@ -121,8 +125,10 @@ def set_password(request):
     except ObjectDoesNotExist:
         acc_type = 1
 
-    # only Main accounts can modify the password(accout type = 1)
-    if acc_type != 1:
+    # user can't modify there password without letting know the Main account holders(account type = 1).
+    # Main account holders must modify the password and must let know the user about the new password
+    # Once user logged into the profile with modified password by Main accout holdes, the are get redirected to set_password to choose new password
+    if acc_type != 1 and request.user.password_reset == False:
         return HttpResponseRedirect(reverse('index'))
 
     # validate and reset password
@@ -159,6 +165,14 @@ def set_password(request):
             # set new password
             set_user = User.objects.get(email=email)
             set_user.set_password(new_password)
+
+            # need to toggle the value
+            if acc_type == 1:
+                set_user.password_reset = True
+
+            else:
+                set_user.password_reset = False
+
             set_user.save()
 
             return HttpResponseRedirect(reverse('index'))
@@ -427,7 +441,6 @@ def connect_workers(request, requestWorker_id):
     workers = data.get("workers", "")
     task = RequestWorker.objects.get(id=requestWorker_id)
     max_workers_amount = task.amount - task.workers.count()
-    print(max_workers_amount, requestWorker_id, workers)
 
     # user can not add more than required workers amount
     if len(workers) > max_workers_amount:
@@ -435,14 +448,14 @@ def connect_workers(request, requestWorker_id):
 
     # adding workers to RequestWorker table
     employee = Email.objects.filter(id__in=workers)
-    task.workers.set(employee)
+
+    for worker in employee:
+        task.workers.add(worker)
 
     if task.workers.count() == task.amount:
         task.filled = True
 
     task.save()
-
-    print(task.workers.count())
 
     return JsonResponse({"message": "Workers connected to task successfully"}, status=201)
 

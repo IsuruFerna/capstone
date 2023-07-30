@@ -6,16 +6,19 @@ body {
 }
 
 .container-form-login {
-  align-items: center;
   position: absolute;
-  top: 45vh;
   right: 50vw;
-  transform: translate(50%, -50% );
+  align-items: center;
+  transform: translate(50% );
 
-  width: 30vw;
   height: 30vh;
   display: flex;
   flex-direction: column;
+}
+
+.container-form-login-top {
+  transform: translate(50%, -50% );
+  top: 45vh;
 }
 
 .href-register_forgot{
@@ -83,7 +86,7 @@ body {
   padding: 10%;
 }
 
-#tasks, #view-requested, #view-dashboard, #view-arranged, #view-employee {
+#tasks, #view-requested, #view-dashboard, #view-arranged, #view-employee, .register-alert {
   margin-left: auto;
   margin-right: auto;
   width: 90%;

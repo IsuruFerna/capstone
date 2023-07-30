@@ -5,7 +5,20 @@
 {% endblock %}
 
 {% block body %}
-  <div class="container-form-login">
+  <div id="password-reset-req" class="alert alert-primary register-alert" role="alert">
+      <h4 class="alert-heading">Did you forget your password?</h4>
+      <p>Please cantact ABC Ltd to reset your password. Make sure to contact them with your provided email or phone number. They will instruct you set a new password</p>
+      <ul>
+        <li>They will provide you a new password once you contact them</li>
+        <li>Once you logged in with the provided password, you will be able to choose a new password</li>
+      </ul>
+      <hr>
+      <p class="mb-0">Email: abc@example.com</p>
+      <p class="mb-0">Phone: 123456789</p>
+      <p class="mb-0">Phone: 987654321</p>
+  </div>
+  
+  <div id="conataner-form-login" class="container-form-login container-form-login-top container-md">
     <h1 class="g-col-6">Welcome to ABC</h1>
     <form method="post" action="{% url 'login' %}">
       {% csrf_token %}
