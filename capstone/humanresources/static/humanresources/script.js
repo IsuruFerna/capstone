@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // const account = parseInt(document.querySelector('#profile').dataset.account);
   const account = pack.account;
 
+  console.log("this is account type", account);
+
   // Employer account
   if (account === 3) {
     // document.querySelector('#btn-worker-connect').style.display = 'none';
@@ -22,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
     // disable home anchor on the nav when page is loaded as default
     // btnHome.removeAttribute('href');
-    btnHome.classList.add('disabled');
+    btnHome.classList.add('disabled', 'active');
 
 
   } else if (account === 2) {
@@ -88,6 +90,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const dashboard = document.querySelector('#dashboard');
     dashboard.addEventListener('click', e => load_view_main('requestedWorker', e));
 
+    // avoid loading multiple fetched data disable dashboard button
+    dashboard.classList.add('disabled', 'active');
+
     // arrange works by connecting available users to the task
     const taskContainer = document.querySelector('#view-dashboard');
     let dataTaskContainer = false;
@@ -99,8 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     taskContainer.addEventListener('click', event => {
       if (event.target.matches('#btnArrange')) {
-
-          
+    
         const parentElement = event.target.parentElement;
         const requestedTaskId = parentElement.querySelector('#requested-task-id').textContent;
         const viewAvailableWorkers = document.querySelector('#view-available-workers');
@@ -242,44 +246,27 @@ function load_view_main(view, e) {
     fetch(`task/${view}`)
     .then(response => response.json())
     .then(tasks => {
-      
-      dataRequestedWorkers = tasks;
-      tasks.forEach(task => {
-        const element = document.createElement('div');
-        element.innerHTML = `<div id="testing" class="card mb-3">
-                                <div class="card-body">
-                                  <div class="card-title d-flex justify-content-start">
-                                    <h5 id="card-employer" class="text-capitalize fw-bold">${task.employer} <span id="card-zone" class="align-bottom fw-normal fs-6">${task.task}</span></h5>
-                                  </div>
-                                  <p id="task-amount"><strong>Amount: ${task.amount === 1 ? task.amount + ' worker' : task.amount + ' workers'}</strong></p>
-                                  <ul class="list-unstyled">
-                                    <li id="card-description">${task.description}</li>
-                                      <ul>
-                                        <li id="card-date">Date: ${task.start_date} - ${task.end_date}</li>
-                                        <li id="card-time">Time: ${task.start_time} - ${task.end_time}</li>
-                                      </ul>
-                                    <li id="card-created"><small>Created: ${task.created}</small></li>
-                                  </ul>
-                                  <p id="requested-task-id" hidden>${task.id}</p>
-                                
-                                  <button type="button" id="btnArrange" class="btn-request btn btn-primary">Arrange</button>
-                                </div>
-                              </div>`;
-        viewDashboard.append(element);
-      })
+      dataRequestedWorkers = tasks
+      renderRequestedWorkers(dataRequestedWorkers, viewDashboard);
     })
 
   } else if (view === 'requestedWorker' && dataRequestedWorkers) {
+
+
     viewDashboard.style.display = 'block';
     document.querySelector('#view-workArrange').style.display = 'none';
     document.querySelector('#testing').style.display = 'none';
   }
+
+  console.log("this is view dashboard", viewDashboard.innerHTML);
 
   // // notify user if there arn't any requested worker by any employer
   // if (!viewDashboard.querySelector('div')) {
   //   viewDashboard.innerHTML = `<div class="alert alert-warning" role="alert">There arn't any requested workers by any employer!</div>`;
   // }
 }
+
+
 
 // this function prevent default when click on an anchor on the nav and using the 'dataFetch' load the page via API
 function load_view(view, e) {
@@ -506,4 +493,31 @@ function renderRequestedTasks(tasks, viewRequested) {
                         </div>`;
   viewRequested.append(element);
 })
+}
+
+// render each requested worker in main account dashboard
+function renderRequestedWorkers(dataRequestedWorkers, viewDashboard) {
+  dataRequestedWorkers.forEach(task => {
+    const element = document.createElement('div');
+    element.innerHTML = `<div id="testing" class="card mb-3">
+                            <div class="card-body">
+                              <div class="card-title d-flex justify-content-start">
+                                <h5 id="card-employer" class="text-capitalize fw-bold">${task.employer} <span id="card-zone" class="align-bottom fw-normal fs-6">${task.task}</span></h5>
+                              </div>
+                              <p id="task-amount"><strong>Amount: ${task.amount === 1 ? task.amount + ' worker' : task.amount + ' workers'}</strong></p>
+                              <ul class="list-unstyled">
+                                <li id="card-description">${task.description}</li>
+                                  <ul>
+                                    <li id="card-date">Date: ${task.start_date} - ${task.end_date}</li>
+                                    <li id="card-time">Time: ${task.start_time} - ${task.end_time}</li>
+                                  </ul>
+                                <li id="card-created"><small>Created: ${task.created}</small></li>
+                              </ul>
+                              <p id="requested-task-id" hidden>${task.id}</p>
+                            
+                              <button type="button" id="btnArrange" class="btn-request btn btn-primary">Arrange</button>
+                            </div>
+                          </div>`;
+    viewDashboard.append(element);
+  })
 }
