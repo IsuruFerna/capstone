@@ -3,7 +3,6 @@
 let account = parseInt(document.querySelector('#profile').dataset.account);
 
 document.addEventListener('DOMContentLoaded', ()=> {
-  activeButton();
 
   // Available on Login page
   // when user clicked on forgot password show them instructions via alert
@@ -19,18 +18,6 @@ document.addEventListener('DOMContentLoaded', ()=> {
   }
 
 })
-
-// highlight the clicked button on the nav
-function activeButton() {
-  const navLink = document.querySelectorAll('.nav-link');
-
-  navLink.forEach(e => {
-    e.addEventListener('click', () => {
-      console.log("this is clicked nav btn", e);
-      e.classList.add('active');
-    })
-  })
-}
 
 // i must optimize code removing repetition
 // after the cancelation re-fetch data via main functions instead of using re-directing pages to index
@@ -89,4 +76,4 @@ function cancel_task(containerRequestedTasks, action) {
   })
 }
 
-export {account, cancel_task, activeButton}
+export {account, cancel_task}
