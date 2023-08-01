@@ -1,4 +1,9 @@
 {% extends 'humanresources/layout.html' %}
+{% load static %}
+
+{% block script %}
+   <script type="module" src="{% static 'humanresources/addEmployer.js' %}"></script>
+{% endblock %}
 
 {% block body %}
   {% if message %}

@@ -1,6 +1,10 @@
 {% extends 'humanresources/layout.html' %}
 {% load static %}
 
+{% block script %}
+   <script type="module" src="{% static 'humanresources/employers.js' %}"></script>
+{% endblock %}
+
 {% block body %}
 <div class="overflow-x-auto">
   <table class="table table-striped">

@@ -3,32 +3,30 @@ import * as pack from './pack.js';
 document.addEventListener('DOMContentLoaded', function() {
 
   // getting the account type
-  // const account = parseInt(document.querySelector('#profile').dataset.account);
   const account = pack.account;
 
   // Employer account
   if (account === 3) {
-    // document.querySelector('#btn-worker-connect').style.display = 'none';
 
     // use buttons to toggle between views
     const btnHome =  document.querySelector('#home');
+    
     btnHome.addEventListener('click', e => load_view('created', e));
     document.querySelector('#requested').addEventListener('click', e => load_view('requested', e));
     document.querySelector('#work-arrange').addEventListener('click', e => load_view('work-arrange', e));
   
     // render home as default
     dataFetch('created');
-    // load_view('created');
   
     // disable home anchor on the nav when page is loaded as default
     // btnHome.removeAttribute('href');
-    btnHome.classList.add('disabled');
+    btnHome.classList.add('disabled', 'active');
 
 
   } else if (account === 2) {
     // Employee account
 
-    // render available works for accept
+    // render available works for the employee
     const viewEmployee = document.querySelector('#view-employee');
     const viewEmployerDetails = document.querySelector('#view-employer-details');
     viewEmployee.style.display = 'block';
@@ -38,7 +36,6 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(response => response.json())
     .then(works => {
       works.forEach(work => {
-        console.log("create div");
         
         const element = document.createElement('div');
         element.innerHTML = `<div class="card mb-3">
@@ -71,10 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
       })
     })
 
-    // console.log(viewEmployee.innerHTML);
     // notify the user if them haven't assigend to any work by rendering a message
     if (!viewEmployee.innerHTML) {
-      console.log("You haven't been asigned to any work yet!");
       viewEmployee.innerHTML = `<div class="alert alert-warning" role="alert">You haven't been asigned to any work yet!</div>`;
     }
       
@@ -88,23 +83,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const dashboard = document.querySelector('#dashboard');
     dashboard.addEventListener('click', e => load_view_main('requestedWorker', e));
 
+    // avoid loading multiple fetched data disable dashboard button
+    dashboard.classList.add('disabled', 'active');
+
     // arrange works by connecting available users to the task
     const taskContainer = document.querySelector('#view-dashboard');
     let dataTaskContainer = false;
 
-    // notify user if there arn't any requested worker by any employer
-    // if (!taskContainer.innerHTML) {
-    //   taskContainer.innerHTML = `<div class="alert alert-warning" role="alert">There arn't any requested workers by any employer!</div>`;
-    // }
-
     taskContainer.addEventListener('click', event => {
       if (event.target.matches('#btnArrange')) {
-
-          
+    
         const parentElement = event.target.parentElement;
         const requestedTaskId = parentElement.querySelector('#requested-task-id').textContent;
         const viewAvailableWorkers = document.querySelector('#view-available-workers');
-        console.log("id", requestedTaskId);
 
         if (!dataTaskContainer) {
 
@@ -112,13 +103,9 @@ document.addEventListener('DOMContentLoaded', function() {
           taskContainer.style.display = 'none';
           document.querySelector('#view-workArrange').style.display = 'block';
   
-          // const parentElement = event.target.parentElement;
-          // const requestedTaskId = parentElement.querySelector('#requested-task-id').textContent;
-  
           // disable arrange button and insert the clicked parent element into page(left side)
           parentElement.querySelector('#btnArrange').style.display = 'none';
           const viewArrangeInfo = document.querySelector('#view-workArrange-info');
-          // const viewAvailableWorkers = document.querySelector('#view-available-workers');
           viewArrangeInfo.append(parentElement);
           viewArrangeInfo.style.marginTop = '5%';
   
@@ -126,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
           fetch(`/task/${requestedTaskId}`)
           .then(response => response.json())
           .then(workers => {
-            console.log(workers);
+
             workers.forEach((worker, index) => {
               const viewEmployee = document.createElement('div');
               viewEmployee.innerHTML = `
@@ -169,7 +156,6 @@ document.addEventListener('DOMContentLoaded', function() {
               btnWorkerConnect.style.display = 'none';
               viewAvailableWorkers.parentElement.style.position = 'relative';
               viewAvailableWorkers.innerHTML = `<div class="alert alert-warning" role="alert">There arn't available workers!</div>`;
-              // viewAvailableWorkers.classList.add('not-available');
 
             } else {
               btnWorkerConnect.style.display = 'block';
@@ -215,8 +201,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     })
   };
-  
-  pack.activeButton();
 });
 
 // use global variables to store fetch data to avoid duplications
@@ -228,7 +212,6 @@ let dataRequestedWorkers = null;
 function load_view_main(view, e) {
   if (e) {
     e.preventDefault();
-    e.target.classList.add('active');
   }
   const viewDashboard = document.querySelector('#view-dashboard');
 
@@ -242,50 +225,25 @@ function load_view_main(view, e) {
     fetch(`task/${view}`)
     .then(response => response.json())
     .then(tasks => {
-      
-      dataRequestedWorkers = tasks;
-      tasks.forEach(task => {
-        const element = document.createElement('div');
-        element.innerHTML = `<div id="testing" class="card mb-3">
-                                <div class="card-body">
-                                  <div class="card-title d-flex justify-content-start">
-                                    <h5 id="card-employer" class="text-capitalize fw-bold">${task.employer} <span id="card-zone" class="align-bottom fw-normal fs-6">${task.task}</span></h5>
-                                  </div>
-                                  <p id="task-amount"><strong>Amount: ${task.amount === 1 ? task.amount + ' worker' : task.amount + ' workers'}</strong></p>
-                                  <ul class="list-unstyled">
-                                    <li id="card-description">${task.description}</li>
-                                      <ul>
-                                        <li id="card-date">Date: ${task.start_date} - ${task.end_date}</li>
-                                        <li id="card-time">Time: ${task.start_time} - ${task.end_time}</li>
-                                      </ul>
-                                    <li id="card-created"><small>Created: ${task.created}</small></li>
-                                  </ul>
-                                  <p id="requested-task-id" hidden>${task.id}</p>
-                                
-                                  <button type="button" id="btnArrange" class="btn-request btn btn-primary">Arrange</button>
-                                </div>
-                              </div>`;
-        viewDashboard.append(element);
-      })
+      dataRequestedWorkers = tasks
+      renderRequestedWorkers(dataRequestedWorkers, viewDashboard);
     })
 
   } else if (view === 'requestedWorker' && dataRequestedWorkers) {
+
     viewDashboard.style.display = 'block';
     document.querySelector('#view-workArrange').style.display = 'none';
     document.querySelector('#testing').style.display = 'none';
   }
-
-  // // notify user if there arn't any requested worker by any employer
-  // if (!viewDashboard.querySelector('div')) {
-  //   viewDashboard.innerHTML = `<div class="alert alert-warning" role="alert">There arn't any requested workers by any employer!</div>`;
-  // }
 }
+
+
 
 // this function prevent default when click on an anchor on the nav and using the 'dataFetch' load the page via API
 function load_view(view, e) {
   e.preventDefault();
-  e.target.classList.add('active');
-  console.log(e.target);
+
+  // fetch data
   dataFetch(view);
 }
 
@@ -297,7 +255,7 @@ function dataFetch(input) {
   const formWorkArrange = document.querySelector('#form-work-arrange');
 
   if (input !== 'created') {
-    document.querySelector('#home').classList.remove('disabled');
+    document.querySelector('#home').classList.remove('disabled', 'active');
   }
 
   // change the view
@@ -368,31 +326,6 @@ function dataFetch(input) {
 
   } 
 }
-
-// // cancel task 
-// function cancel_task(containerRequestedTasks) {
-//   containerRequestedTasks.addEventListener('click', event => {
-//     if(event.target.matches('#btnCancleRequest')) {
-
-//       const parentElement = event.target.parentElement;
-//       const taskId = parentElement.querySelector('#task-id').textContent;
-      
-//       // fetch data to delete the following task
-//       fetch(`/cancel/${taskId}`, {
-//         method: 'DELETE'
-//       })
-//       .then(response => response.json())
-//       .then(result => {
-
-//         console.log(result);
-//         // dataFetch('requested');
-//         // redirecting to the index
-//         // need to modify here
-//         window.location.href = '/';
-//       })
-//     };
-//   })
-// }
 
 function requestTask(taskContainer) {
   taskContainer.addEventListener('click', event => {
@@ -506,4 +439,31 @@ function renderRequestedTasks(tasks, viewRequested) {
                         </div>`;
   viewRequested.append(element);
 })
+}
+
+// render each requested worker in main account dashboard
+function renderRequestedWorkers(dataRequestedWorkers, viewDashboard) {
+  dataRequestedWorkers.forEach(task => {
+    const element = document.createElement('div');
+    element.innerHTML = `<div id="testing" class="card mb-3">
+                            <div class="card-body">
+                              <div class="card-title d-flex justify-content-start">
+                                <h5 id="card-employer" class="text-capitalize fw-bold">${task.employer} <span id="card-zone" class="align-bottom fw-normal fs-6">${task.task}</span></h5>
+                              </div>
+                              <p id="task-amount"><strong>Amount: ${task.amount === 1 ? task.amount + ' worker' : task.amount + ' workers'}</strong></p>
+                              <ul class="list-unstyled">
+                                <li id="card-description">${task.description}</li>
+                                  <ul>
+                                    <li id="card-date">Date: ${task.start_date} - ${task.end_date}</li>
+                                    <li id="card-time">Time: ${task.start_time} - ${task.end_time}</li>
+                                  </ul>
+                                <li id="card-created"><small>Created: ${task.created}</small></li>
+                              </ul>
+                              <p id="requested-task-id" hidden>${task.id}</p>
+                            
+                              <button type="button" id="btnArrange" class="btn-request btn btn-primary">Arrange</button>
+                            </div>
+                          </div>`;
+    viewDashboard.append(element);
+  })
 }
