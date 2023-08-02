@@ -29,7 +29,7 @@ Employers can list the work so they can use them to request employees for hire b
 
 ### Employer account
 
-It works as a single-page application. “Form-work-arrange” is already created using Django templates and visibility is directed by ‘script.js’.
+It works as a single-page application. “Form-work-arrange” is already created using Django templates and visibility is directed by <code>script.js</code>.
 
 > #### HTML ids:
 > 
@@ -41,21 +41,23 @@ It works as a single-page application. “Form-work-arrange” is already create
 >>
 >> It contains all the requested tasks by the employer and the employer can cancel them anytime. It also uses <code>dataFetch(view)</code> function in <code>script.js</code> 
 >
->> ##### form-work-arrange
+>> ##### <code>id="form-work-arrange"</code>
 >>
 >> It contains the form which use to list the tasks
 >
->> ##### ‎request-task
+>> ##### <code>id="‎request-task"</code>
 >>
 >> It uses to request tasks that have been listed by the employer. 
 
 
 > #### JavaScript functions
 > 
->> ##### dataFetch
+>> ##### <code>function dataFetch(view)</code>
 >> 
->> It requires a string that use to fetch data accordingly. According to the input it change the visibility of <code>div</code>s and render data.  
->
->> ##### View-requested
->> 
+>> It requires a string that use to fetch data according to the input. It changes the visibility of <code>div</code>s to <code>block</code> or <code>none</code> and renders data. Inside the <code>dataFetch(view)</code> function there are 3 other functions that help to **render**, **request** and **cancel** tasks  
+>>
+>>> ##### <code>renderTasks(dataHome, taskContainer)</code>
+>>> 
+>>> This renders all the created  task to <code>id="view-requested"</code>
+>>>
 >> When the user clicked on ‘requested’ 
