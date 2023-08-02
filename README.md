@@ -19,13 +19,13 @@ Employers can list the work so they can use them to request employees for hire b
 
 ## Functionality 
 
-### Index
-
-The same index function is used for all the account types. But in the template nav and some div s are customized according to the user.
-
-> ##### taskArrange 
+>### <code>def index</code>
 >
-> is used to list the tasks of the Employer
+> The same index function is used for all the account types. But in the template <code>nav</code> and some <code>div</code>s are customized according to the user.
+>
+>> ##### <code>name="taskArrange"</code> or <code>prefix="taskArrange"</code>
+>>
+>> is used to list the tasks of the Employer
 
 ### Employer account
 
@@ -33,13 +33,13 @@ It works as a single-page application. “Form-work-arrange” is already create
 
 > #### HTML ids:
 > 
->> ##### tasks
+>> ##### <code>id="tasks"</code>
 >>
->> It contains all the tasks listed by the employer and renders by fetching data using the link ‘tasks/created’ via dataFetch function in the script.js
+>> It contains all the tasks listed by the employer and renders by fetching data using the link [tasks/created]() via <code>dataFetch(view)</code> function in the script.js
 >
->> ##### view-requested
+>> ##### <code>id="view-requested"</code>
 >>
->> It contains all the requested tasks by the employer and the employer can cancel them anytime. It also uses dataFetch function in ‘script.js’. 
+>> It contains all the requested tasks by the employer and the employer can cancel them anytime. It also uses <code>dataFetch(view)</code> function in <code>script.js</code> 
 >
 >> ##### form-work-arrange
 >>
@@ -54,7 +54,8 @@ It works as a single-page application. “Form-work-arrange” is already create
 > 
 >> ##### dataFetch
 >> 
->> It requires a string that use to fetch data accordingly. According to the input it change the visibility of <div>s and render data.  
->>
-> When user clicked on ‘requested’ 
-View-requested 
+>> It requires a string that use to fetch data accordingly. According to the input it change the visibility of <code>div</code>s and render data.  
+>
+>> ##### View-requested
+>> 
+>> When the user clicked on ‘requested’ 
