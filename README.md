@@ -60,4 +60,8 @@ It works as a single-page application. “Form-work-arrange” is already create
 >>> 
 >>> This renders all the created  task to <code>id="view-requested"</code>
 >>>
+>>
+>>> ##### `requestTask(containerCreatedTasks)`
+>>>
+>>> When the user clicks on `<button name="requestWorkers">Request</button>`
 >> When the user clicked on ‘requested’ 
