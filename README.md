@@ -33,26 +33,28 @@ It works as a single-page application. “Form-work-arrange” is already create
 
 > #### HTML ids:
 > 
-> ##### Tasks
+>> ##### tasks
+>>
+>> It contains all the tasks listed by the employer and renders by fetching data using the link ‘tasks/created’ via dataFetch function in the script.js
 >
-> It contains all the tasks listed by the employer and renders by fetching data using the link ‘tasks/created’ via dataFetch function in the script.js
+>> ##### view-requested
+>>
+>> It contains all the requested tasks by the employer and the employer can cancel them anytime. It also uses dataFetch function in ‘script.js’. 
 >
-> ##### View-requested
+>> ##### form-work-arrange
+>>
+>> It contains the form which use to list the tasks
 >
-> It contains all the requested tasks by the employer and the employer can cancel them anytime. It also uses dataFetch function in ‘script.js’. 
->
-> ##### form-work-arrange
->
-> It contains the form which use to list the tasks
->
-> ##### ‎request-task
->
-> It use to request tasks that have been listed by the employer. 
+>> ##### ‎request-task
+>>
+>> It uses to request tasks that have been listed by the employer. 
 
 
-
-Function dataFetch
-	It requires a string that use to fetch data accordingly. According to the input it change the visibility of <div>s and render data.  
-
-	When user clicked on ‘requested’ 
+> #### JavaScript functions
+> 
+>> ##### dataFetch
+>> 
+>> It requires a string that use to fetch data accordingly. According to the input it change the visibility of <div>s and render data.  
+>>
+> When user clicked on ‘requested’ 
 View-requested 
