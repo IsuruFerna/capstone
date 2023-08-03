@@ -39,6 +39,12 @@ Employers can list the work so they can use them to request employees for hire b
 >
 > This is available only in the **Main account** to reset the password. Once the password is reset it also set `password_reset` to `True` of the user's(Employer/Employee) table. When it is `True`, The users have to use the temporary password provided by the **Main account** to login. Once they logged in, they will get redirected to a page to customize the password. This process is handled by the `def index` and set the user's `password_reset` to `False`
 
+> ### `def register`
+>
+> This checks if the user that trying to register is already in the database. If so the user can register, else they can't
+
+
+
 ### Employer account
 
 It works as a single-page application. “Form-work-arrange” is already created using Django templates and visibility is directed by <code>script.js</code>.
