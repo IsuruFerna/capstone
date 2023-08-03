@@ -63,8 +63,16 @@ It works as a single-page application. “Form-work-arrange” is already create
 >>
 >>> ##### `requestTask(containerCreatedTasks)`
 >>>
->>> When the user clicks on `<button id="requestBtn">Request</button>` a class called `show` is added to `id="toast"` and becomes visible. On this `form` user can add dates and times and also modify the data. By clicking on `<button name="requestWorkers">Request</button>` saves data to `RequestWorker` model through `def index`
+>>> When the user clicks on `<button id="requestBtn">Request</button>` a class called `show` is added to `id="toast"` and becomes visible. On this `form` user can add dates and times and also modify the data. By clicking on `<button name="requestWorkers">Request</button>` saves data to the `RequestWorker` model through `def index`
 >>
 >>> ##### `cancel_task(containerRequestedTasks, action)`
 >>>
->>> By clicking on any `cancel` button, this function calls and deletes them immediately from the database. This function is originally located in the `pack.js`  
+>>> By clicking on any `cancel` button, this function calls and deletes them immediately from the database. This function is originally located in the `pack.js`
+
+### Employee account
+
+> #### HTML ids:
+>
+>> ##### `id="view-employee"`
+>>
+>> It shows a list of work that the employee has to attend which fetches data via `script.js`
