@@ -81,6 +81,14 @@ It works as a single-page application. “Form-work-arrange” is already create
 
 > #### HTML ids:
 >
->> `id="view-dashboard"`
+>> ##### `id="view-dashboard"`
 >>
->> On this `div` renders all the requested employee details by employers. When user click on `<button id="btnArrange">Araange</button>`, `id="view-workArrange"` appears and the user can choose available employees.
+>> On this `div` renders all the requested employee details by employers. When the user clicks on `<button id="btnArrange">Araange</button>`, it copies the data and puts it into `<div id="view-workArrange-info"></div>` and renders at the left side of the `id="view-workArrange"` and the right side `<form id="view-available-workers"></form> Which contains available workers via fetching [task/task_id]().
+>
+>> ##### id="view-workArrange-info"
+>>
+>> On this `div` renders the information about the employer 
+
+> #### JavaScript functions
+>
+>>  
