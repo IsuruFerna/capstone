@@ -76,3 +76,11 @@ It works as a single-page application. “Form-work-arrange” is already create
 >> ##### `id="view-employee"`
 >>
 >> It shows a list of work that the employee has to attend which fetches data via `script.js`
+
+### Main account/ Management Account
+
+> #### HTML ids:
+>
+>> `id="view-dashboard"`
+>>
+>> On this `div` renders all the requested employee details by employers. When user click on `<button id="btnArrange">Araange</button>`, `id="view-workArrange"` appears and the user can choose available employees.
