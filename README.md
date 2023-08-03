@@ -67,6 +67,17 @@ Employers can list the work so they can use them to request employees for hire b
 
 ### APIs
 
+> ### `def available_workers`
+>
+> This requires a `<int:task_id>` to retrive available employees to hire. Available in **Main account** only
+
+> ### `def connect_workers`
+>
+> This also requires a `<int:requestWorker_id>` to get the `RequestWorker` model and checks the maximum amount of employees requested by employers. When it filled the required amount sets `RequestWorker.filled` to `True` and saves the data. Available in **Main account** only
+
+> ### `def cancel_workarrange`
+> 
+
 
 
 
