@@ -3,22 +3,22 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("login", views.login_view, name="login"),
-    path("logout", views.logout_view, name="logout"),
-    path("register", views.register, name="register"),
-    path("addEmployee", views.add_employee, name="add_employee"),
-    path("addEmployer", views.add_employer, name="add_employer"),
+    path("login", views.login_view, name="login"),  # available
+    path("logout", views.logout_view, name="logout"),  # available
+    path("register", views.register, name="register"),  # available
+    path("addEmployee", views.add_employee, name="add_employee"),  # available
+    path("addEmployer", views.add_employer, name="add_employer"),  # available
     path("workArrange", views.work_arrange,
          name="work_arrange"),  # not available
-    path("employees", views.employees, name="employees"),
-    path("employers", views.employers, name="employers"),
-    path("arranged", views.arranged_works, name="arrangedWorks"),
-    path("setpassword", views.set_password, name="set_password"),
+    path("employees", views.employees, name="employees"),  # available
+    path("employers", views.employers, name="employers"),  # available
+    path("arranged", views.arranged_works, name="arrangedWorks"),  # available
+    path("setpassword", views.set_password, name="set_password"),  # available
 
 
     # API
-    path("tasks/created", views.employer_tasks, name="employer_tasks"),
-    path("tasks/requested", views.requested, name="requested"),
+    path("tasks/created", views.employer_tasks, name="employer_tasks"),  # sus
+    path("tasks/requested", views.requested, name="requested"),  # sus
     path("task/requestedWorker", views.requested_workers,
          name="requested_workers"),  # not available
     path("task/<int:task_id>", views.available_workers, name="availableWorkers"),

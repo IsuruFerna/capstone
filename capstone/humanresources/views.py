@@ -374,8 +374,10 @@ def work_arrange(request):
         'form_task': FormTask()
     })
 
-
+# sus
 # @csrf_exempt
+
+
 @login_required
 def employer_tasks(request):
     # select the employer to complete the model Task
@@ -387,6 +389,8 @@ def employer_tasks(request):
 
     # tasks = tasks.order_by("-timestamp").all()
     return JsonResponse([task.serialize() for task in tasks], safe=False)
+
+# sus
 
 
 @csrf_exempt
