@@ -27,6 +27,18 @@ Employers can list the work so they can use them to request employees for hire b
 >>
 >> is used to list the tasks of the Employer
 
+> ### `def login_view`
+>
+> This simply renders the login page and checks the validity
+
+> ### `def logout_view`
+>
+> When the user clicks on the `Logout` in the `nav`, the user logs out
+
+> ### `def set_password`
+>
+> This is available only in the **Main account** to reset the password. Once the password is reset it also set `password_reset` to `True` of the user's(Employer/Employee) table. When it is `True`, The users have to use the temporary password provided by the **Main account** to login. Once they logged in, they will get redirected to a page to customize the password. This process is handled by the `def index` and set the user's `password_reset` to `False`
+
 ### Employer account
 
 It works as a single-page application. “Form-work-arrange” is already created using Django templates and visibility is directed by <code>script.js</code>.
@@ -89,6 +101,4 @@ It works as a single-page application. “Form-work-arrange” is already create
 >>
 >> On this `div` renders the information about the employer 
 
-> #### JavaScript functions
->
->>  
+
