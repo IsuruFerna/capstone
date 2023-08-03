@@ -19,6 +19,8 @@ Employers can list the work so they can use them to request employees for hire b
 
 ## Functionality 
 
+### Main functions
+
 >### <code>def index</code>
 >
 > The same index function is used for all the account types. But in the template <code>nav</code> and some <code>div</code>s are customized according to the user.
@@ -42,6 +44,29 @@ Employers can list the work so they can use them to request employees for hire b
 > ### `def register`
 >
 > This checks if the user that trying to register is already in the database. If so the user can register, else they can't
+
+> ### `def add_employee`
+>
+> This is available only for the **Main account** to add employees
+
+> ### `def add_employer`
+>
+> This is also available only for the **Main account** to add employers
+
+> ### `def employees`
+>
+> This renders a table of employees' information. Available in **Main account** only
+
+> ### `def employers`
+>
+> This renders a table of employers' information. Available in **Main account** only
+
+> ### `def work_arrange`
+>
+> This renders all the information about arranged work by the **Main account**. Available in **Main account** only
+
+### APIs
+
 
 
 
