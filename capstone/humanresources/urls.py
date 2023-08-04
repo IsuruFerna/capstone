@@ -23,12 +23,12 @@ urlpatterns = [
          name="availableWorkers"),  # available
     path("workers/<int:requestWorker_id>",
          views.connect_workers, name="connectWorkers"),  # available
-    path("worker", views.worker, name="worker"),  # sus
-    path("worker/<int:workerRequest_id>",
-         views.employer_details, name="employerDetails"),
+    #     path("worker", views.worker, name="worker"),  # sus
+    #     path("worker/<int:workerRequest_id>",
+    #          views.employer_details, name="employerDetails"),
     path("cancel-workarrange/<int:task_id>",
-         views.cancel_workarrange, name="cancel_workarrange"),
+         views.cancel_workarrange, name="cancel_workarrange"),  # available
     path("cancel-task/<int:task_id>",
-         views.cancel_task, name="cancel_task"),
+         views.cancel_task, name="cancel_task"),  # available
 
 ]

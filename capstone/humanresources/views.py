@@ -374,6 +374,8 @@ def work_arrange(request):
         'form_task': FormTask()
     })
 
+######################### API ###########################
+
 # sus
 # @csrf_exempt
 
@@ -502,14 +504,14 @@ def cancel_task(request, task_id):
     return JsonResponse({"error": "Required DELETE request!"})
 
 
-@login_required
-@csrf_exempt
-def worker(request):
-    # retreave available works to the employee
-    tasks = Email.objects.get(email=request.user.email)
-    works = RequestWorker.objects.filter(workers=tasks, filled=False)
+# @login_required
+# @csrf_exempt
+# def worker(request):
+#     # retreave available works to the employee
+#     tasks = Email.objects.get(email=request.user.email)
+#     works = RequestWorker.objects.filter(workers=tasks, filled=False)
 
-    return JsonResponse([work.serialize() for work in works], safe=False)
+#     return JsonResponse([work.serialize() for work in works], safe=False)
 
 
 @login_required
@@ -521,9 +523,9 @@ def arranged_works(request):
     })
 
 
-@login_required
-@csrf_exempt
-def employer_details(request, workerRequest_id):
-    employer_task = RequestWorker.objects.get(pk=workerRequest_id)
+# @login_required
+# @csrf_exempt
+# def employer_details(request, workerRequest_id):
+#     employer_task = RequestWorker.objects.get(pk=workerRequest_id)
 
-    return JsonResponse([employer.serialize() for employer in employer_task])
+#     return JsonResponse([employer.serialize() for employer in employer_task])
