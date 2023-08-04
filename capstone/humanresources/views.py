@@ -406,13 +406,7 @@ def requested(request):
     print("requested employer id", employer)
     return JsonResponse([requested_worker.serialize() for requested_worker in requested_workers], safe=False)
 
-
-@csrf_exempt
-@login_required
-def requested_workers(request):
-    # works = RequestWorker.objects.all()
-    works = RequestWorker.objects.filter(filled=False)
-    return JsonResponse([work.serialize() for work in works], safe=False)
+# this was a challenging part
 
 
 @csrf_exempt
@@ -432,6 +426,7 @@ def available_workers(request, task_id):
     return JsonResponse([worker.serialize() for worker in available], safe=False)
 
 
+# this was a challenging part
 @login_required
 @csrf_exempt
 def connect_workers(request, requestWorker_id):
