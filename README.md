@@ -81,7 +81,11 @@ Employers can list the work so they can use them to request employees for hire b
 
 > ### `def cancel-task`
 >
-> It requires a `DELETE` request and deletes the tasks requested by the employer(Available only in **Employer account**). 
+> It requires a `DELETE` request and deletes the tasks requested by the employer(Available only in **Employer account**).
+
+> ### `def worker`
+>
+> Request all the tasks that the employee has relationships with 
 
 
 
