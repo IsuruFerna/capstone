@@ -77,7 +77,7 @@ Employers can list the work so they can use them to request employees for hire b
 
 > ### `def cancel_workarrange`
 >
-> If the request is `DELETE`, it deletes the data from `RequestWorker` model, and if the request is `PUT`(available only in **Main account"), it removes all the connected employees to the employer request.
+> If the request is `DELETE`, it deletes the data from `RequestWorker` model, and if the request is `PUT`(available only in **Main account**), it removes all the connected employees to the employer request.
 
 > ### `def cancel-task`
 >
