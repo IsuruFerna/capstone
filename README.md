@@ -76,7 +76,12 @@ Employers can list the work so they can use them to request employees for hire b
 > This also requires a `<int:requestWorker_id>` to get the `RequestWorker` model and checks the maximum amount of employees requested by employers. When it filled the required amount sets `RequestWorker.filled` to `True` and saves the data. Available in **Main account** only
 
 > ### `def cancel_workarrange`
-> 
+>
+> If the request is `DELETE`, it deletes the data from `RequestWorker` model, and if the request is `PUT`(available only in **Main account"), it removes all the connected employees to the employer request.
+
+> ### `def cancel-task`
+>
+> It requires a `DELETE` request and deletes the tasks requested by the employer(Available only in **Employer account**). 
 
 
 
