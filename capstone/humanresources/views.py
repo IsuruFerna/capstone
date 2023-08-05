@@ -19,7 +19,6 @@ from .models import Email, User, Employer, Task, RequestWorker, User_details
 @login_required(login_url="login")
 def index(request):
 
-    print('user password reset', request.user.password_reset)
     if request.user.password_reset == True:
         return HttpResponseRedirect(reverse('set_password'))
 
@@ -246,14 +245,12 @@ def add_employee(request):
                 user_details_instance.user = email_instance
                 user_details_instance.save()
 
-                print("employee saved")
                 return HttpResponseRedirect(reverse('index'))
 
             else:
                 message = "Something is wrong with the inserted data. Please recheck the form!"
 
         else:
-            print(form_email.errors)
             message = "Email is already taken!"
 
         # render site with error messages if any of form isn't valid
@@ -274,11 +271,9 @@ def add_employer(request):
     if request.method == "POST":
         form = Form_employer(request.POST)
         form_email = User_email(request.POST)
-        print("User_email: ", form_email)
 
         # validate form and save into databass
         if form_email.is_valid():
-            print('form_email is valid')
 
             # changing account type to Employer and save
             email_instance = form_email.save(commit=False)
@@ -286,10 +281,8 @@ def add_employer(request):
             email_instance.save()
 
             email = form_email.cleaned_data['email']
-            print("email: ", email)
 
             if form.is_valid():
-                print("form is valid")
 
                 # save form. since it requred ID because of forginkey, we use 'email_instance'
                 company_instance = form.save(commit=False)
@@ -299,15 +292,12 @@ def add_employer(request):
                 return HttpResponseRedirect(reverse('index'))
 
             else:
-                print("form isn't valid")
                 message = "Something is wrong with the inserted data or the Company already registered. Please recheck the form!"
 
         else:
-            print("form_email isn't valid")
             message = "Email is already taken. Company might already registered!"
 
         # render site with error messages if any of form isn't valid
-        print("passed to render")
         return render(request, "humanresources/addEmployer.html", {
             'message': message,
             'form_employer': Form_employer,
@@ -360,7 +350,6 @@ def work_arrange(request):
                 amount=form.cleaned_data['amount']
             )
             task.save()
-            print("saved successfully", task)
 
             return HttpResponseRedirect(reverse('index'))
 
@@ -385,10 +374,8 @@ def arranged_works(request):
 
 ######################### API ###########################
 
-# sus
-# @csrf_exempt
 
-
+@csrf_exempt
 @login_required
 def employer_tasks(request):
     # select the employer to complete the model Task
@@ -401,8 +388,6 @@ def employer_tasks(request):
     # tasks = tasks.order_by("-timestamp").all()
     return JsonResponse([task.serialize() for task in tasks], safe=False)
 
-# sus
-
 
 @csrf_exempt
 @login_required
@@ -414,7 +399,6 @@ def requested(request):
     requested_workers = RequestWorker.objects.filter(
         requested_by=employer, filled=False)
 
-    print("requested employer id", employer)
     return JsonResponse([requested_worker.serialize() for requested_worker in requested_workers], safe=False)
 
 
@@ -424,8 +408,6 @@ def requested_workers(request):
     # works = RequestWorker.objects.all()
     works = RequestWorker.objects.filter(filled=False)
     return JsonResponse([work.serialize() for work in works], safe=False)
-
-# this was a challenging part
 
 
 @csrf_exempt
@@ -445,7 +427,6 @@ def available_workers(request, task_id):
     return JsonResponse([worker.serialize() for worker in available], safe=False)
 
 
-# this was a challenging part
 @login_required
 @csrf_exempt
 def connect_workers(request, requestWorker_id):
@@ -500,7 +481,6 @@ def cancel_workarrange(request, task_id):
         task.workers.clear()
         task.save()
 
-        print("this is data", filled, task)
         return JsonResponse({"status": "successfully dismissed task request!"})
         # return HttpResponseRedirect(reverse('index'))
 
@@ -527,8 +507,6 @@ def worker(request):
     # retreave available works to the employee
     tasks = Email.objects.get(email=request.user.email)
     works = RequestWorker.objects.filter(workers=tasks)
-
-    print("these are the works", works)
 
     return JsonResponse([work.serialize() for work in works], safe=False)
 
