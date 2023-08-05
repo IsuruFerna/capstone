@@ -374,6 +374,15 @@ def work_arrange(request):
         'form_task': FormTask()
     })
 
+
+@login_required
+def arranged_works(request):
+    tasks = RequestWorker.objects.filter(filled=True)
+
+    return render(request, 'humanresources/arrangedWork.html', {
+        "tasks": tasks
+    })
+
 ######################### API ###########################
 
 # sus
@@ -407,6 +416,14 @@ def requested(request):
 
     print("requested employer id", employer)
     return JsonResponse([requested_worker.serialize() for requested_worker in requested_workers], safe=False)
+
+
+@csrf_exempt
+@login_required
+def requested_workers(request):
+    # works = RequestWorker.objects.all()
+    works = RequestWorker.objects.filter(filled=False)
+    return JsonResponse([work.serialize() for work in works], safe=False)
 
 # this was a challenging part
 
@@ -504,23 +521,16 @@ def cancel_task(request, task_id):
     return JsonResponse({"error": "Required DELETE request!"})
 
 
-# @login_required
-# @csrf_exempt
-# def worker(request):
-#     # retreave available works to the employee
-#     tasks = Email.objects.get(email=request.user.email)
-#     works = RequestWorker.objects.filter(workers=tasks, filled=False)
-
-#     return JsonResponse([work.serialize() for work in works], safe=False)
-
-
 @login_required
-def arranged_works(request):
-    tasks = RequestWorker.objects.filter(filled=True)
+@csrf_exempt
+def worker(request):
+    # retreave available works to the employee
+    tasks = Email.objects.get(email=request.user.email)
+    works = RequestWorker.objects.filter(workers=tasks)
 
-    return render(request, 'humanresources/arrangedWork.html', {
-        "tasks": tasks
-    })
+    print("these are the works", works)
+
+    return JsonResponse([work.serialize() for work in works], safe=False)
 
 
 # @login_required

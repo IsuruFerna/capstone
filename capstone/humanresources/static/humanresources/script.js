@@ -36,8 +36,9 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(response => response.json())
     .then(works => {
       works.forEach(work => {
-        
+
         const element = document.createElement('div');
+        element.classList.add('card-list');
         element.innerHTML = `<div class="card mb-3">
                                 <div class="card-body">
                                   <div class="card-title d-flex justify-content-start">
@@ -53,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <li class="list-skip"></li>
                                     <li class="fw-semibold">Employer Details</li>
                                       <ul class="text-capitalize">
+                                        <li>Employer: ${work.employer}</li>
                                         <li>Address: ${work.employer_address}</li>
                                         <li>City: ${work.employer_city}</li>
                                         <li>Zip: ${work.employer_zip}</li>
@@ -68,11 +70,12 @@ document.addEventListener('DOMContentLoaded', function() {
       })
     })
 
-    // notify the user if them haven't assigend to any work by rendering a message
-    if (!viewEmployee.innerHTML) {
-      viewEmployee.innerHTML = `<div class="alert alert-warning" role="alert">You haven't been asigned to any work yet!</div>`;
-    }
-      
+    // // this is a confusion
+    // console.log(viewEmployee.childNodes);
+    // // notify the user if them haven't assigend to any work by rendering a message
+    // if (!viewEmployee.childNodes) {
+    //   viewEmployee.innerHTML = `<div class="alert alert-warning" role="alert">You haven't been asigned to any work yet!</div>`;
+    // }
  
   } else {
     // Main account
@@ -105,9 +108,14 @@ document.addEventListener('DOMContentLoaded', function() {
   
           // disable arrange button and insert the clicked parent element into page(left side)
           parentElement.querySelector('#btnArrange').style.display = 'none';
+          const msgWarning = parentElement.querySelector('#warning-msg');
           const viewArrangeInfo = document.querySelector('#view-workArrange-info');
           viewArrangeInfo.append(parentElement);
           viewArrangeInfo.style.marginTop = '5%';
+          
+          if (msgWarning) {
+            msgWarning.style.display = 'none';
+          }
   
           // getting available workers and setting right side of the page
           fetch(`/task/${requestedTaskId}`)
@@ -195,7 +203,8 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(result);
 
             // go back to the default page
-            load_view_main('requestedWorker');
+            // load_view_main('requestedWorker');
+            window.location.href = '/';
           })
         })
       }
@@ -207,6 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
 let dataCreatedTasks = null;
 let dataRequestedTasks = null;
 let dataRequestedWorkers = null;
+let available_works = null;
 
 // Main account dashboard
 function load_view_main(view, e) {
@@ -444,11 +454,15 @@ function renderRequestedTasks(tasks, viewRequested) {
 // render each requested worker in main account dashboard
 function renderRequestedWorkers(dataRequestedWorkers, viewDashboard) {
   dataRequestedWorkers.forEach(task => {
+    let filled = false;
+    if (task.available !== 0 && task.available < task.amount) {
+      filled = true;
+    }
     const element = document.createElement('div');
-    element.innerHTML = `<div id="testing" class="card mb-3">
+    element.innerHTML = `<div id="testing" class="card mb-3  ${filled ? "bg-warning" : ""}">
                             <div class="card-body">
                               <div class="card-title d-flex justify-content-start">
-                                <h5 id="card-employer" class="text-capitalize fw-bold">${task.employer} <span id="card-zone" class="align-bottom fw-normal fs-6">${task.task}</span></h5>
+                                <h5 id="card-employer" class="text-capitalize fw-bold">${task.employer} <span id="card-zone" class="align-bottom fw-normal fs-6">${task.task}</span>${filled ? "<span id='warning-msg' class='text-danger fs-6 fw-normal text-lowercase position-absolute end-0 mx-3'>--- More workers needed!</span>" : ""}</h5>
                               </div>
                               <p id="task-amount"><strong>Amount: ${task.amount === 1 ? task.amount + ' worker' : task.amount + ' workers'}</strong></p>
                               <ul class="list-unstyled">

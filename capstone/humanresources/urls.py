@@ -17,13 +17,16 @@ urlpatterns = [
 
 
     # API
-    path("tasks/created", views.employer_tasks, name="employer_tasks"),  # sus
-    path("tasks/requested", views.requested, name="requested"),  # sus
+    path("tasks/created", views.employer_tasks,
+         name="employer_tasks"),  # available
+    path("tasks/requested", views.requested, name="requested"),  # available
+    path("task/requestedWorker", views.requested_workers,
+         name="requested_workers"),  # available
     path("task/<int:task_id>", views.available_workers,
          name="availableWorkers"),  # available
     path("workers/<int:requestWorker_id>",
          views.connect_workers, name="connectWorkers"),  # available
-    #     path("worker", views.worker, name="worker"),  # sus
+    path("worker", views.worker, name="worker"),  # available
     #     path("worker/<int:workerRequest_id>",
     #          views.employer_details, name="employerDetails"),
     path("cancel-workarrange/<int:task_id>",
