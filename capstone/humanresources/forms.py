@@ -5,31 +5,6 @@ from django.http import request
 import datetime
 from django.db.models import Q
 
-# DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
-
-
-# class RegisterUser(UserCreationForm):
-#     password1 = forms.CharField(min_length=8, label="Password",
-#                                 strip=False,
-#                                 validators=[validate_password],
-#                                 help_text="Your password must contain atleast one Uppercase letter, one lowercase letter, one digit and symbol!",
-#                                 widget=forms.PasswordInput(attrs={'class': 'form-control',
-#                                                                   'placeholder': 'Password'}))
-#     password2 = forms.CharField(min_length=8, label="Confirm Password",
-#                                 strip=False,
-#                                 widget=forms.PasswordInput(attrs={'class': 'form-control',
-#                                                                   'placeholder': 'Confirm Password'}))
-
-#     class Meta:
-#         model = User
-#         fields = ('email', 'password1', 'password2')
-
-#         widgets = {
-#             'email': forms.TextInput(attrs={'class': 'form-control',
-#                                             'placeholder': 'Email'}),
-#             # account_type is selected automatically by backend
-#         }
-
 
 class FormEmployeeDetails(forms.ModelForm):
     class Meta:
@@ -59,8 +34,6 @@ class User_email(forms.ModelForm):
         widgets = {
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
             'account_type': forms.HiddenInput(),
-            # 'account_type': forms.Select(attrs={'class': 'form-select form-select-lg mb-3', 'aria-label': '.form-select-lg example', 'visibility': 'hidden'})
-
         }
 
 
@@ -97,39 +70,6 @@ class FormTask(forms.Form):
         attrs={'class': 'form-control', 'placeholder': 'Describe the work or task'}))
 
 
-# class Form_RequestWorker(forms.ModelForm):
-
-    # class Meta:
-    #     model = RequestWorker
-    #     # fields = (
-    #     #     'amount',
-    #     #     'start_date',
-    #     #     'end_date',
-    #     #     'start_time',
-    #     #     'end_time',
-    #     #     'description',
-    #     #     'requseted_by'
-    #     # )
-    #     # exclude = ["created"]
-    #     fields = '__all__'
-
-    #     widgets = {
-    #         'amount': forms.NumberInput(attrs={'class': 'form-control', 'id': 'req-w-amount', 'min': '1'}),
-    #         'start_date': forms.DateInput(attrs={'class': 'form-control', 'id': 'req-w-start_date', 'type': 'date'}),
-    #         'end_date': forms.DateInput(attrs={'class': 'form-control', 'id': 'req-w-end_date', 'type': 'date'}),
-    #         'start_time': forms.TimeInput(attrs={'class': 'form-control', 'id': 'req-w-start_time', 'type': 'time'}),
-    #         'end_time': forms.TimeInput(attrs={'class': 'form-control', 'id': 'req-w-end_time', 'type': 'time'}),
-    #         'description': forms.Textarea(attrs={'class': 'form-control text-area_height', 'id': 'req-w-description'}),
-    #         'requested_by': forms.HiddenInput(),
-    #         'created': forms.HiddenInput()
-    #     }
-
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     employer = Employer.objects.first()
-    #     self.fields['requested_by'].initial = employer
-
-
 class Form_RequestWorker(forms.Form):
     task = forms.CharField(max_length=254, widget=forms.HiddenInput(
         attrs={'class': 'form-control', 'id': 'req-w-task'}))
@@ -156,29 +96,3 @@ class PasswordReset(forms.Form):
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     confirm_password = forms.CharField(
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-
-
-# class Form_EmployeeMultipleChoice(forms.ModelForm):
-
-#     workers = forms.ModelMultipleChoiceField(queryset=Email.objects.filter(
-#         ~Q(workers__isnull=False), account_type='2').distinct(), widget=forms.CheckboxSelectMultiple, required=False, to_field_name='id')
-
-#     class Meta:
-#         model = RequestWorker
-#         fields = ['workers']
-#         # i need ID
-
-#     def available_workers(self, start_date_str, end_date_str):
-
-#         # converting dates to required format
-#         def convert_date_format(date):
-#             parse_date_string = datetime.strptime(date, "%b, %d, %Y")
-#             formated__date = parse_date_string.strftime("%Y, %m, %d")
-#             return formated__date
-
-#         start_date = convert_date_format(start_date_str)
-#         end_date = convert_date_format(end_date_str)
-
-#         Email.objects.filter(
-#             ~Q(workers__isnull=False), ,account_type='2'
-#         )

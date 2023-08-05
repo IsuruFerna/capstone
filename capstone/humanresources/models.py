@@ -1,13 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-# from phonenumber_field.modelfields import PhoneNumberField
-
-# automatically generate passwords for employee for the first time
-# use emails as login insted username(username not needed)
-# create custom user
-# Create your models here.
-
 
 class Email(models.Model):
     MAIN = '1'
@@ -51,9 +44,6 @@ class User(AbstractUser):
     # to get the account info directly to layout
     def acc_email(self):
         return Email.objects.get(email=self.email)
-
-    # def acc_type(self):
-    #     return Email.objects.get(email=self.username).account_type
 
     def __str__(self):
         return f"email: {self.email}"
@@ -122,13 +112,6 @@ class RequestWorker(models.Model):
     workers = models.ManyToManyField(Email, related_name="workers")
     filled = models.BooleanField(default=False, blank=True, null=True)
 
-    # def set_filled(self):
-    #     if self.amount == self.workers.count():
-    #         self.filled = True
-    #     else:
-    #         self.filled = False
-    #     self.save()
-
     def serialize(self):
         return {
             "id": self.pk,
@@ -146,11 +129,3 @@ class RequestWorker(models.Model):
             "description": self.description,
             "created": self.created.strftime("%b %d %Y, %I:%M %p")
         }
-
-
-# class WorkAvailability(models.Model):
-#     employee = models.ForeignKey(Email, on_delete=models.CASCADE)
-#     start_date = models.DateField()
-#     end_date = models.DateField()
-#     start_time = models.TimeField()
-#     end_time = models.TimeField()
