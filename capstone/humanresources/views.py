@@ -509,11 +509,3 @@ def worker(request):
     works = RequestWorker.objects.filter(workers=tasks)
 
     return JsonResponse([work.serialize() for work in works], safe=False)
-
-
-# @login_required
-# @csrf_exempt
-# def employer_details(request, workerRequest_id):
-#     employer_task = RequestWorker.objects.get(pk=workerRequest_id)
-
-#     return JsonResponse([employer.serialize() for employer in employer_task])
