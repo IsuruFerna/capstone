@@ -150,6 +150,19 @@ It works as a single-page application. “Form-work-arrange” is already create
 >
 >> ##### id="view-workArrange-info"
 >>
->> On this `div` renders the information about the employer 
+>> On this `div` renders the information about the employer
+
+## Distinctiveness and complexity
+
+The index function handles three types of accounts and renders according to the account type. It also checks whether the user is logged in with a temporary password or not. If so it redirects the user to choose a new password. 
+
+In this project, resetting passwords follows a different process than how we usually do. When the user needs to reset it, he or she has to inform the Main account holders(HR Management). So they provide a temporary password to log in and after that users get immediately redirected to a page where they can choose their own. 
+
+The most challenging part was creating the `def available_workers`. In this case, I used multiple querying. For that, I used `Q`. When the **Main account** clicks to `Arrange` a request of workers, the available workers haven't been included in any other work during that requested time period. This took me several days to figure out and completely implemented the function. During that, I focused on other implementations too. 
+
+The next part was `connect_workers`. I used `set` to connect multiple workers for the first time. But then I realized that I can not add later a worker if the first time I added 2 workers but which requires 3 workers to work. So I used for loop and used `add` to add workers. The next problem was identifying the requested workers if they haven't filled with the required amount of workers. So I used Bootstrap background colors and a warning message
+
+This is not a part of the project but this took me 2 months to finish and I have more ideas to add as features in **Employee account**. During this time I had to have a replacement operation on my knee and femur and for that, I had to have chemical therapies since April 2022.
+
 
 
