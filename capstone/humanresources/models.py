@@ -138,6 +138,7 @@ class RequestWorker(models.Model):
             "employer_zip": self.requested_by.zip,
             "task": self.task,
             "amount": self.amount,
+            "available": self.workers.count(),
             "start_date": self.start_date.strftime("%b %d %Y"),
             "end_date": self.end_date.strftime("%b %d %Y"),
             "start_time": self.start_time.strftime("%I:%M %p"),

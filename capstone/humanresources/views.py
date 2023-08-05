@@ -375,7 +375,20 @@ def work_arrange(request):
     })
 
 
+@login_required
+def arranged_works(request):
+    tasks = RequestWorker.objects.filter(filled=True)
+
+    return render(request, 'humanresources/arrangedWork.html', {
+        "tasks": tasks
+    })
+
+######################### API ###########################
+
+# sus
 # @csrf_exempt
+
+
 @login_required
 def employer_tasks(request):
     # select the employer to complete the model Task
@@ -387,6 +400,8 @@ def employer_tasks(request):
 
     # tasks = tasks.order_by("-timestamp").all()
     return JsonResponse([task.serialize() for task in tasks], safe=False)
+
+# sus
 
 
 @csrf_exempt
@@ -410,6 +425,8 @@ def requested_workers(request):
     works = RequestWorker.objects.filter(filled=False)
     return JsonResponse([work.serialize() for work in works], safe=False)
 
+# this was a challenging part
+
 
 @csrf_exempt
 @login_required
@@ -428,6 +445,7 @@ def available_workers(request, task_id):
     return JsonResponse([worker.serialize() for worker in available], safe=False)
 
 
+# this was a challenging part
 @login_required
 @csrf_exempt
 def connect_workers(request, requestWorker_id):
@@ -508,23 +526,16 @@ def cancel_task(request, task_id):
 def worker(request):
     # retreave available works to the employee
     tasks = Email.objects.get(email=request.user.email)
-    works = RequestWorker.objects.filter(workers=tasks, filled=False)
+    works = RequestWorker.objects.filter(workers=tasks)
+
+    print("these are the works", works)
 
     return JsonResponse([work.serialize() for work in works], safe=False)
 
 
-@login_required
-def arranged_works(request):
-    tasks = RequestWorker.objects.filter(filled=True)
+# @login_required
+# @csrf_exempt
+# def employer_details(request, workerRequest_id):
+#     employer_task = RequestWorker.objects.get(pk=workerRequest_id)
 
-    return render(request, 'humanresources/arrangedWork.html', {
-        "tasks": tasks
-    })
-
-
-@login_required
-@csrf_exempt
-def employer_details(request, workerRequest_id):
-    employer_task = RequestWorker.objects.get(pk=workerRequest_id)
-
-    return JsonResponse([employer.serialize() for employer in employer_task])
+#     return JsonResponse([employer.serialize() for employer in employer_task])
