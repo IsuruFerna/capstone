@@ -407,7 +407,7 @@ def available_workers(request, task_id):
     available = Email.objects.filter(
         Q(account_type='2', workers__start_date__lt=end_date) | Q(
             workers__isnull=True, account_type='2')
-    )
+    ).distinct()
 
     return JsonResponse([worker.serialize() for worker in available], safe=False)
 
