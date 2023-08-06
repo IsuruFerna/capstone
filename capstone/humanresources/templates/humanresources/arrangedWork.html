@@ -13,7 +13,7 @@
       {% for task in tasks %}
         <div class="card mb-3">
           <div class="card-body">
-            <h5 id="task-name" class="card-title">{{ task.task }}</h5>
+            <h5 id="task-name" class="card-title text-capitalize">{{ task.requested_by.company }} - {{ task.task }}</h5>
             <p id="task-amount"><strong>Amount: {% if task.amount == 1 %} {{ task.amount }} worker {% else %} {{task.amount}} workers {% endif %}</strong></p>
             <ul class="list-unstyled">
               <li>{{ task.description }}</li>
