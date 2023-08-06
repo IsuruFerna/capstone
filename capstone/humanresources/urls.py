@@ -8,8 +8,6 @@ urlpatterns = [
     path("register", views.register, name="register"),  # available
     path("addEmployee", views.add_employee, name="add_employee"),  # available
     path("addEmployer", views.add_employer, name="add_employer"),  # available
-    path("workArrange", views.work_arrange,
-         name="work_arrange"),  # not available
     path("employees", views.employees, name="employees"),  # available
     path("employers", views.employers, name="employers"),  # available
     path("arranged", views.arranged_works, name="arrangedWorks"),  # available
@@ -27,8 +25,6 @@ urlpatterns = [
     path("workers/<int:requestWorker_id>",
          views.connect_workers, name="connectWorkers"),  # available
     path("worker", views.worker, name="worker"),  # available
-    #     path("worker/<int:workerRequest_id>",
-    #          views.employer_details, name="employerDetails"),
     path("cancel-workarrange/<int:task_id>",
          views.cancel_workarrange, name="cancel_workarrange"),  # available
     path("cancel-task/<int:task_id>",
