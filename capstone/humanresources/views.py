@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
@@ -12,8 +12,6 @@ import json
 
 from .forms import FormEmployeeDetails, User_email, Form_employer, FormTask, Form_RequestWorker, PasswordReset
 from .models import Email, User, Employer, Task, RequestWorker, User_details
-
-# Create your views here.
 
 
 @login_required(login_url="login")
@@ -117,7 +115,7 @@ def logout_view(request):
 
 @login_required
 def set_password(request):
-    acc_type = ''
+    # acc_type = ''
 
     try:
         acc_type = Email.objects.get(email=request.user.email).account_type
@@ -222,7 +220,17 @@ def register(request):
     return render(request, 'humanresources/register.html')
 
 
+@login_required
 def add_employee(request):
+
+    # only main account can add employee
+    try:
+        acc_type = Email.objects.get(email=request.user.email).account_type
+    except ObjectDoesNotExist:
+        acc_type = 1
+
+    if acc_type != 1:
+        return HttpResponseForbidden()
 
     if request.method == "POST":
         form_email = User_email(request.POST)
@@ -267,7 +275,18 @@ def add_employee(request):
     })
 
 
+@login_required
 def add_employer(request):
+
+    # only main account can add employee
+    try:
+        acc_type = Email.objects.get(email=request.user.email).account_type
+    except ObjectDoesNotExist:
+        acc_type = 1
+
+    if acc_type != 1:
+        return HttpResponseForbidden()
+
     if request.method == "POST":
         form = Form_employer(request.POST)
         form_email = User_email(request.POST)
@@ -327,40 +346,6 @@ def employers(request):
 
     return render(request, "humanresources/employers.html", {
         "employer_detail": all_employers
-    })
-
-
-def work_arrange(request):
-
-    if request.method == 'POST':
-
-        # select the employer to complete the model Task
-        user = Email.objects.get(email=request.user.email)
-        employer = Employer.objects.get(email=user)
-
-        form = FormTask(request.POST)
-
-        # validate form and save into database
-        if form.is_valid():
-
-            task = Task(
-                company=employer,
-                task=form.cleaned_data['task'],
-                description=form.cleaned_data['description'],
-                amount=form.cleaned_data['amount']
-            )
-            task.save()
-
-            return HttpResponseRedirect(reverse('index'))
-
-        else:
-            return render(request, "humanresources/workArrange.html", {
-                'message': "Something wrong with your inserted data. Please recheck and try again!",
-                'form_task': FormTask
-            })
-
-    return render(request, "humanresources/workArrange.html", {
-        'form_task': FormTask()
     })
 
 
