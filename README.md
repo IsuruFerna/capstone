@@ -67,6 +67,14 @@ Employers can list the work so they can use them to request employees for hire b
 
 ### APIs
 
+> ### `def employer_tasks`
+>
+> Requests all the tasks listed by the employer
+
+> ### `def requested`
+>
+> Requests all the requests that have been requested to hire employees(requests asked from **Main account**)
+
 > ### `def available_workers`
 >
 > This requires a `<int:task_id>` to retrive available employees to hire. Available in **Main account** only
